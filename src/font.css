@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Gentium-Basic-Regular';
+    src: url('../font/GenBasR.ttf');
+  }
+@font-face {
+font-family: 'Gentium-Basic-Bold';
+src: url('../font/GenBasB.ttf');
+}
+.Gentium-R{
+    font-family: 'Gentium-Basic-Regular', sans-serif;
+  }
+.Gentium-B{
+font-family: 'Gentium-Basic-Bold', sans-serif;
+}
