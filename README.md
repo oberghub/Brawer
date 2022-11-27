@@ -4,5 +4,5 @@
 ### Framework ที่ใช้
 - React.js
 #### CSS framework
-- TailWindCss
+- TailwindCss
 - MaterialUi
