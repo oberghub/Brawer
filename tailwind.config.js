@@ -7,6 +7,12 @@ module.exports = {
     extend: {
       width : {
         '1440' : '1440px'
+      },
+      colors : {
+        'DFEEEA' : '#DFEEEA', //เบาสุด
+        'A7C4BC' : '#A7C4BC',
+        '5E8B7E' : '#5E8B7E',
+        '2F5D62' : '#2F5D62', //เข้มสุด
       }
     },
   },

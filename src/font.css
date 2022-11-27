@@ -6,9 +6,9 @@
 font-family: 'Gentium-Basic-Bold';
 src: url('../font/GenBasB.ttf');
 }
-.Gentium-R{
+.Gentium-R-font{
     font-family: 'Gentium-Basic-Regular', sans-serif;
   }
-.Gentium-B{
+.Gentium-B-font{
 font-family: 'Gentium-Basic-Bold', sans-serif;
 }
