@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
     return(
@@ -16,11 +17,11 @@ export const Home = () => {
                         {/* text */}
                         <p className="text-6xl sm:text-7xl lg:text-8xl text-white Gentium-B-font">To Be A BookWorm!</p>
                         {/* button */}
-                        <div className="w-60 h-14 bg-[#A7C4BC] flex justify-center items-center mt-4 ml-4 cursor-pointer
+                        <Link to={"all-books"} className="w-60 h-14 bg-[#A7C4BC] flex justify-center items-center mt-4 ml-4 cursor-pointer
                                         hover:bg-[#98b3ab]" 
                                         onClick={() => {console.log("Hi")}}>
                             <p className="Gentium-B-font text-white text-xl">Get Started</p>
-                        </div>
+                        </Link>
                     </div>
                     {/* <img src={require('../local_image/book_bg.jpg')} className="bg-cover opacity-50" alt='book_bg' /> */}
                 </div>

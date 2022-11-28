@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, Routes, Route } from "react-router-dom";
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { BsBookmark } from 'react-icons/bs'
 
@@ -41,7 +42,7 @@ export const Book = () => {
                         <p className="Gentium-B-font text-4xl ml-7">Books</p>
                     </div>
                 </div>
-                <div className="w-full h-auto flex justify-center">
+                <div className="w-full h-auto flex justify-center pb-20">
                     <div className="grid 
                                     grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4
                                     gap-10 
@@ -50,10 +51,13 @@ export const Book = () => {
                             <div key={index} className="w-[300px]
                                 h-[530px]
                                 border-[1px]
-                                border-black
+                                border-black drop-shadow-lg
                                 p-5">
                                 {/* Book Image */}
-                                <img src={require('../local_image/book_ex.jpg')} className="w-[300px] h-[360px]" alt='book' />
+                                <Link to={'book-info'}>
+                                    <img src={require('../local_image/book_ex.jpg')} className="w-[300px] h-[360px] cursor-pointer" alt='book'
+                                    onClick={() => {console.log("Go to book detail.")}} />
+                                </Link>
                                 {/* Book Title */}
                                 <div className="w-[255px]
                                                 h-[60px]
@@ -63,7 +67,7 @@ export const Book = () => {
                                 <div className="w-[255px]
                                                 h-[40px]
                                                 mt-5 pl-2 relative">
-                                    <BsBookmark size={25} className="absolute left-1" />                
+                                    <BsBookmark size={25} className="absolute left-1 cursor-pointer" onClick={() => {console.log("added to bookmark")}} />                
                                 </div>
                             </div>)}
                     </div>
