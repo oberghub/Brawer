@@ -12,7 +12,7 @@ export const Home = () => {
                     <div className="absolute 
                                     top-1/3 sm:top-1/4 md:right-14 lg:right-20
                                     lg:top-1/3
-                                    px-10 md:px-0">
+                                    px-4 sm:px-10 md:px-0">
                         {/* text */}
                         <p className="text-6xl sm:text-7xl lg:text-8xl text-white Gentium-B-font">To Be A BookWorm!</p>
                         {/* button */}
