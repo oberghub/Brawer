@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Routes, Route } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { BsBookmark } from 'react-icons/bs'
 
@@ -8,8 +8,8 @@ export const Book = () => {
         {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
         },
-        {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
-         desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+        {title : 'Think Java: How to Think Like a Computer Scientist 2nd Edition',
+         desc : 'Think Java is a hands-on introduction to computer science and programming used by many universities and high schools around the world. Its conciseness, emphasis on vocabulary, and informal tone make it particularly appealing for readers with little or no experience. The book starts with the most basic programming concepts and gradually works its way to advanced object-oriented techniques. In this fully updated and expanded edition, authors Allen Downey and Chris Mayfield introduce programming as a means for solving interesting problems. Each chapter presents material for one week of a college course and includes exercises to help you practice what you have learned. Along the way, you’ll see nearly every topic required for the AP Computer Science A exam and Java SE Programmer I certification.',
         },
         {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
@@ -30,9 +30,7 @@ export const Book = () => {
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
         }
     ])
-    const test = () => {
-        console.log(BookData)
-    }
+    const navigate = useNavigate()
     return (
         <>
             <div className="w-full">
@@ -54,10 +52,8 @@ export const Book = () => {
                                 border-black drop-shadow-lg
                                 p-5">
                                 {/* Book Image */}
-                                <Link to={'book-info'}>
-                                    <img src={require('../local_image/book_ex.jpg')} className="w-[300px] h-[360px] cursor-pointer" alt='book'
-                                    onClick={() => {console.log("Go to book detail.")}} />
-                                </Link>
+                                <img src={require('../local_image/book_ex.jpg')} className="w-[300px] h-[360px] cursor-pointer" alt='book'
+                                onClick={() => {navigate("/book-info")}} />
                                 {/* Book Title */}
                                 <div className="w-[255px]
                                                 h-[60px]
