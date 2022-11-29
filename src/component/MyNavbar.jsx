@@ -7,9 +7,9 @@ export const MyNavbar = () => {
     return (
         <>
             {/* Navbar */}
-            <div className='relative'>
+            <div className='sticky top-0 z-50'>
                 <div className='w-full h-10 sm:h-16 px-5 lg:px-10 drop-shadow flex justify-center
-                                bg-white sticky'>
+                                bg-white'>
                     <div className='w-[1920px]
                                 h-10 sm:h-16
                                 flex items-center bg-red relative'>

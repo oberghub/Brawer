@@ -8,14 +8,12 @@ import { Route, Routes } from 'react-router-dom';
 import { Home } from './screen/Home';
 import { Book } from './screen/Book';
 import { BookInfo } from './screen/BookInfo';
-import { MyNavbar } from './component/navbar';
+import { MyNavbar } from './component/MyNavbar';
 function App() {
   return (
-    <div className='Gentium-R-font'>
-
+    <div className='Gentium-R-font relative'>
       {/* navbar */}
       <MyNavbar />
-
 
       {/* Route Page */}
       <Routes>
@@ -23,8 +21,6 @@ function App() {
         <Route path='/all-books' element={<Book />} />
         <Route path='/book-info' element={<BookInfo />} />
       </Routes>
-
-
     </div>
   );
 }

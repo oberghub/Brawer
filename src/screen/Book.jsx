@@ -7,33 +7,41 @@ export const Book = () => {
     const BookData = useState([
         {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+         img : '../local_image/book_ex.jpg'
         },
         {title : 'Think Java: How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Java is a hands-on introduction to computer science and programming used by many universities and high schools around the world. Its conciseness, emphasis on vocabulary, and informal tone make it particularly appealing for readers with little or no experience. The book starts with the most basic programming concepts and gradually works its way to advanced object-oriented techniques. In this fully updated and expanded edition, authors Allen Downey and Chris Mayfield introduce programming as a means for solving interesting problems. Each chapter presents material for one week of a college course and includes exercises to help you practice what you have learned. Along the way, you’ll see nearly every topic required for the AP Computer Science A exam and Java SE Programmer I certification.',
+         img : '../local_image/think_java_covr_large.png'
         },
         {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+         img : '../local_image/book_ex.jpg'
         },
         {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+         img : '../local_image/book_ex.jpg'
         },
         {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+         img : '../local_image/book_ex.jpg'
+        },
+        {title : 'Think Java: How to Think Like a Computer Scientist 2nd Edition',
+         desc : 'Think Java is a hands-on introduction to computer science and programming used by many universities and high schools around the world. Its conciseness, emphasis on vocabulary, and informal tone make it particularly appealing for readers with little or no experience. The book starts with the most basic programming concepts and gradually works its way to advanced object-oriented techniques. In this fully updated and expanded edition, authors Allen Downey and Chris Mayfield introduce programming as a means for solving interesting problems. Each chapter presents material for one week of a college course and includes exercises to help you practice what you have learned. Along the way, you’ll see nearly every topic required for the AP Computer Science A exam and Java SE Programmer I certification.',
+         img : '../local_image/think_java_covr_large.png'
         },
         {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+         img : '../local_image/book_ex.jpg'
         },
         {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
          desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+         img : '../local_image/book_ex.jpg'
         },
-        {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
-         desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
-        }
     ])
     const navigate = useNavigate()
     return (
         <>
-            <div className="w-full">
+            <div className="w-full relative">
                 <div className="w-full h-48 px-5 sm:px-[60px] flex items-center">
                     <div className="flex">
                         <GiHamburgerMenu size={30} className="cursor-pointer" onClick={() => {test()}} />
@@ -53,7 +61,7 @@ export const Book = () => {
                                 p-5">
                                 {/* Book Image */}
                                 <img src={require('../local_image/book_ex.jpg')} className="w-[300px] h-[360px] cursor-pointer" alt='book'
-                                onClick={() => {navigate("/book-info")}} />
+                                onClick={() => {navigate("/book-info", {state : {item : book}} )}} />
                                 {/* Book Title */}
                                 <div className="w-[255px]
                                                 h-[60px]
@@ -68,6 +76,12 @@ export const Book = () => {
                             </div>)}
                     </div>
                 </div>
+
+                {/* <div className="w-[300px] h-screen bg-white drop-shadow fixed top-[6.8%]">
+                    <div className="w-[200px] h-[40px] bg-red-100">
+                        <p className="text-black text-xl">asdsadsa</p>
+                    </div>
+                </div> */}
             </div>
         </>
     )

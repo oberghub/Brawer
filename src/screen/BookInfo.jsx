@@ -1,9 +1,8 @@
 import React, {useState} from "react";
+import { useLocation } from "react-router-dom";
 import { BsBookmark } from 'react-icons/bs'
 export const BookInfo = () => {
-    const BookData = useState(
-        {title : 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
-         desc : 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',})
+    const location = useLocation()
     return (
         <>
             <div className="w-full h-auto xl:h-[890px] flex justify-center item-center xl:items-end">
@@ -23,7 +22,7 @@ export const BookInfo = () => {
                             <div className="w-[365px] 
                                             h-[535px] 
                                             border-[1px] border-black absolute right-0 hidden xl:flex"></div>
-                            <img src={require('../local_image/book_ex.jpg')} className="w-[295px] xl:w-[365px] 
+                            <img src={require('../local_image/think_java_covr_large.png')} className="w-[295px] xl:w-[365px] 
                                                                                         h-[435px] xl:h-[535px]  
                                                                                         absolute bottom-0" alt='book' />
                         </div>
@@ -38,7 +37,7 @@ export const BookInfo = () => {
                                     ml-[3em] xl:ml-0">
                         {/* Text Title */}
                         <div className="w-full h-[100px]">
-                            <p className="text-4xl line-clamp-2">{BookData[0].title}</p>
+                            <p className="text-4xl line-clamp-2">{location.state.item.title}</p>
                         </div>
                         {/* Add to list button */}
                         <div className="w-full h-auto flex">
@@ -48,14 +47,14 @@ export const BookInfo = () => {
                             </div>
                             {/* Bookmark icon */}
                             <div className="md:w-[20%] md:h-[50px] flex items-center">
-                                <BsBookmark size={25} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => {console.log("added to bookmark")}} />
+                                <BsBookmark size={25} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => {console.log(location.state.item.img)}} />
                             </div>
                         </div>
                         {/* Description */}
                         <div className="w-full mt-[2em]">
                             <p className="text-4xl mb-[0.5em] Gentium-B-font">Description</p>
                             <div className="w-full h-auto">
-                                <p className="text-xl line-clamp-6 xl:line-clamp-none">{BookData[0].desc}</p>
+                                <p className="text-xl line-clamp-6 xl:line-clamp-none">{location.state.item.desc}</p>
                             </div>
                         </div>
                     </div>
