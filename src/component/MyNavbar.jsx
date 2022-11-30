@@ -4,9 +4,8 @@ import { TextField } from '@mui/material';
 import { AiOutlineSearch } from 'react-icons/ai'
 import { GiHamburgerMenu } from 'react-icons/gi'
 export const MyNavbar = () => {
-    const [acc, setAcc] = useState(false)
+    const [acc, setAcc] = useState(true)
     const toggleslide = () => {
-        console.log('hi')
         document.getElementById('slide-profile').classList.toggle('invisible')
         document.getElementById('slide-profile').classList.toggle('translate-y-[-100%]');
     }
@@ -68,7 +67,12 @@ export const MyNavbar = () => {
                 </div>
                 {/* Bottom of menu */}
                 <div className="w-full border-t-[0.5px] border-gray-400 mt-[1em] sm:mt-0 flex">
-                    <img src={require('../local_image/sek.jpg')} className="w-10 h-10 rounded-full mt-4 mr-3 block sm:hidden" alt='profile-pic' />
+                    <div className="relative block sm:hidden">
+                        <img src={require('../local_image/sek.jpg')} className="w-10 h-10 rounded-full mt-4 mr-3" alt='profile-pic' />
+                        <div className="w-5 h-5 rounded-full bg-red-500 flex justify-center items-center absolute right-0 bottom-[-5px]">
+                            <p className="text-lg text-white Gentium-B-font">1</p>
+                        </div>
+                    </div>
                     <p className="text-lg mt-6 sm:mt-3 cursor-pointer">Sign Out</p>
                 </div>
                     </>
@@ -102,7 +106,13 @@ export const MyNavbar = () => {
                             {!acc ?
                             <div className="w-10 h-10 rounded-full bg-gray-200"></div>
                             :
+                            <>
                             <img src={require('../local_image/sek.jpg')} className="w-10 h-10 rounded-full" alt='profile-pic' />
+                            {/* ถ้ามีการ Add Item เข้า Cart จะขึ้นตุ่มแดงๆมีเลข */}
+                            <div className="w-5 h-5 rounded-full bg-red-500 flex justify-center items-center absolute right-[-10px] bottom-[-5px]">
+                                <p className="text-lg text-white Gentium-B-font">1</p>
+                            </div>
+                            </>
                             }
                         </div>
                         {/* content > 1024px */}

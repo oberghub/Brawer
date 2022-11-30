@@ -3,6 +3,14 @@ import { useLocation } from "react-router-dom";
 import { BsBookmark } from 'react-icons/bs'
 export const BookInfo = () => {
     const location = useLocation()
+    const [addState, setAddState] = useState("Add to Cart")
+    const addToCart = () => {
+        console.log("Added " + location.state.item.title + " Complete.")
+        setAddState("Add to cart completed.")
+        setTimeout(() => {
+            setAddState("Add to Cart")
+        }, 2000)
+    }
     return (
         <>
             <div className="w-full h-auto xl:h-[890px] flex justify-center item-center xl:items-end">
@@ -42,8 +50,8 @@ export const BookInfo = () => {
                         {/* Add to list button */}
                         <div className="w-full h-auto flex">
                             {/* Button */}
-                            <div className="w-[80%] h-[50px] flex justify-center items-center bg-black cursor-pointer">
-                                <p className="text-white text-lg">Add to Cart</p>
+                            <div className="w-[80%] h-[50px] flex justify-center items-center bg-black cursor-pointer" onClick={() => {addToCart()}}>
+                                <p className="text-white text-lg">{addState}</p>
                             </div>
                             {/* Bookmark icon */}
                             <div className="md:w-[20%] md:h-[50px] flex items-center">
