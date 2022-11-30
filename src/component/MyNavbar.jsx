@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { TextField } from '@mui/material';
 import { AiOutlineSearch } from 'react-icons/ai'
 import { GiHamburgerMenu } from 'react-icons/gi'
 export const MyNavbar = () => {
+    const [acc, setAcc] = useState(false)
     const toggleslide = () => {
         console.log('hi')
         document.getElementById('slide-profile').classList.toggle('invisible')
@@ -12,6 +13,8 @@ export const MyNavbar = () => {
     return (
         <>
             {/* Navbar */}
+
+            {/* Menu Slider */}
             <div id="slide-profile" className="w-full sm:w-[250px] h-auto sm:h-[300px] bg-white fixed right-0 drop-shadow-lg mt-[32px] sm:mt-[64px] p-[2em] sm:p-[1em]
                                                   transition-all duration-300 ease-out translate-y-[-100%] invisible z-40">
                 {/* Top of menu */}
@@ -23,6 +26,30 @@ export const MyNavbar = () => {
                         </svg>
                     </div>
                 </div>
+                {!acc ?
+                    <>
+                {/* Body of menu */}
+                <div className="mt-[1em] h-[100px] sm:h-[175px] flex justify-center items-center">
+                    <p>You haven't logged in yet.</p>
+                </div>
+                {/* small screen */}
+                <p className="block sm:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
+                <div className="block sm:hidden mt-[0.5em] border-t-[0.5px] border-gray-400">
+                    <Link to={'all-books'}>
+                        <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Book</p>
+                    </Link>
+                    <Link>
+                        <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpace</p>
+                    </Link>
+                </div>
+                {/* Bottom of menu */}
+                <div className="w-full border-t-[0.5px] border-gray-400 mt-[1em] sm:mt-0 flex">
+                    <div className="w-10 h-10 rounded-full bg-gray-200 mt-4 mr-3 block sm:hidden"></div>
+                    <p className="text-lg mt-6 sm:mt-3 cursor-pointer">Sign In</p>
+                </div>
+                    </>
+                :
+                    <>
                 {/* Body of menu */}
                 <div className="mt-[1em] sm:h-[175px]">
                     <p className="text-lg cursor-pointer">Profile</p>
@@ -44,6 +71,8 @@ export const MyNavbar = () => {
                     <img src={require('../local_image/sek.jpg')} className="w-10 h-10 rounded-full mt-4 mr-3 block sm:hidden" alt='profile-pic' />
                     <p className="text-lg mt-6 sm:mt-3 cursor-pointer">Sign Out</p>
                 </div>
+                    </>
+                }
 
             </div>
             <div className='sticky top-0 z-50'>
@@ -70,7 +99,11 @@ export const MyNavbar = () => {
                         </div>
                         {/* Image Profile */}
                         <div className='absolute right-0 cursor-pointer hidden sm:flex' onClick={() => {toggleslide()}}>
+                            {!acc ?
+                            <div className="w-10 h-10 rounded-full bg-gray-200"></div>
+                            :
                             <img src={require('../local_image/sek.jpg')} className="w-10 h-10 rounded-full" alt='profile-pic' />
+                            }
                         </div>
                         {/* content > 1024px */}
 
