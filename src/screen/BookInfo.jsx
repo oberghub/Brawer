@@ -34,7 +34,7 @@ export const BookInfo = () => {
                     {/* Text Container */}
                     <div className="w-[80%] sm:w-[60%] 
                                     h-[560px] pt-[2em]
-                                    ml-[3em] xl:ml-0">
+                                    ml-auto mr-auto xl:ml-0 xl:mr-0">
                         {/* Text Title */}
                         <div className="w-full h-[100px]">
                             <p className="text-4xl line-clamp-2">{location.state.item.title}</p>
