@@ -31,7 +31,6 @@ export const BookCart = () => {
     const incrementQuantity = (ind) => {
         setBookData(BookData.map((item, index) => {
             if(index == ind){
-                console.log({...item, quantity : item.quantity + 1})
                 return {...item, quantity : item.quantity + 1}
             }
             else{
@@ -43,8 +42,8 @@ export const BookCart = () => {
     const decrementQuantity = (ind) => {
         setBookData(BookData.map((item, index) => {
             if(index == ind){
-                if(item.quantity === 0){
-                    return {...item, quantity : 0}
+                if(item.quantity === 1){
+                    return {...item, quantity : 1}
                 }
                 return {...item, quantity : item.quantity - 1}
             }

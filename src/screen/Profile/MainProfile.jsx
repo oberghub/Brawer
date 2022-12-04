@@ -33,15 +33,14 @@ export const MainProfile = () => {
             {/* Menu Navigate */}
             <div className="w-full h-auto md:flex md:mt-5 md:p-5">
                 <div className="w-[200px]">
-                    <div className="flex cursor-pointer" onClick={() => {toggleMenu()}}>
+                    <div className="flex cursor-pointer">
                         <p className="text-3xl Gentium-B-font mb-3">Menu</p>
-                        <AiOutlineDown className="ml-3 mt-1" size={30}/>
+                        {/* <AiOutlineDown className="ml-3 mt-1" size={30}/> */}
                     </div>
-                    <div id="mainprofile-menu-toggle" className="p-2 text-[22px] hidden">
+                    <div id="mainprofile-menu-toggle" className="p-2 text-[22px]">
                         <p className="mb-3 cursor-pointer"><Link to={"borrow-list"}>Borrow List</Link></p>
                         <p className="mb-3 cursor-pointer">Booking Space</p>
                         <p className="mb-3 cursor-pointer"><Link to={"favourite"}>Favourite</Link></p>
-                        <p className="mb-3 cursor-pointer">Contact Info</p>
                         <p className="mb-3 cursor-pointer">Edit Profile</p>
                     </div>
                 </div>
