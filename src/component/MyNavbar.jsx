@@ -54,7 +54,7 @@ export const MyNavbar = () => {
                 {/* Body of menu */}
                 <div className="mt-[1em] sm:h-[175px]">
                     <p className="text-lg cursor-pointer" onClick={() => {navigate("/profile")}}>Profile</p>
-                    <p className="text-lg cursor-pointer mt-[0.3em]">Your Cart (1)</p>
+                    <p className="text-lg cursor-pointer mt-[0.3em]" onClick={() => {navigate("/borrow-cart")}}>Your Cart (1)</p>
                     <p className="text-lg cursor-pointer mt-[0.3em]">Your Favourite</p>
                 </div>
                 {/* small screen */}

@@ -11,6 +11,7 @@ import { BookInfo } from './screen/BookInfo';
 import { MainProfile } from './screen/Profile/MainProfile';
 import { BorrowList } from './screen/Profile/BorrowList';
 import { Favourite } from './screen/Profile/Favourite';
+import { BookCart } from './screen/cart/BookCart';
 
 //component
 import { MyNavbar } from './component/MyNavbar';
@@ -29,6 +30,7 @@ function App() {
           <Route path='borrow-list' element={<BorrowList />} />
           <Route path='favourite' element={<Favourite />} />
         </Route>
+        <Route path='borrow-cart' element={<BookCart />} />
       </Routes>
     </div>
   );
