@@ -38,11 +38,11 @@ export const Favourite = () => {
                         {BookData[0].map((book, index) =>
                             <div key={index} className="w-full
                                     h-auto
-                                    border-[1px]
-                                    border-black drop-shadow-lg
+                                    bg-white
+                                    drop-shadow-xl
                                     p-5 md:p-2 lg:p-5">
                                 {/* Book Image */}
-                                <img src={require('../../local_image/book_ex.jpg')} className="w-full h-auto cursor-pointer" alt='book'
+                                <img src={require('../../local_image/think_python.png')} className="w-full h-auto cursor-pointer" alt='book'
                                     onClick={() => { navigate("/book-info", { state: { item: book } }) }} />
                                 {/* Book Title */}
                                 <div className="w-full

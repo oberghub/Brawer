@@ -19,7 +19,7 @@ export const MyNavbar = () => {
             <div id="slide-profile" className="w-full sm:w-[250px] h-auto sm:h-[300px] bg-white fixed right-0 drop-shadow-lg mt-[32px] sm:mt-[64px] p-[2em] sm:p-[1em]
                                                   transition-all duration-300 ease-out translate-y-[-100%] invisible z-40">
                 {/* Top of menu */}
-                <div className="relative w-full h-[40px] border-b-[0.5px] border-gray-400 flex">
+                <div className="relative w-full h-[40px] border-b-[0.5px] border-gray-200 flex">
                     <p className="text-2xl Gentium-B-font">Menu</p>
                     <div className="absolute right-0 cursor-pointer m-1" onClick={() => {toggleslide()}}>
                         <svg height="20px" viewBox="0 0 512 512" width="20px">
@@ -53,9 +53,12 @@ export const MyNavbar = () => {
                     <>
                 {/* Body of menu */}
                 <div className="mt-[1em] sm:h-[175px]">
-                    <p className="text-lg cursor-pointer" onClick={() => {navigate("/profile")}}>Profile</p>
-                    <p className="text-lg cursor-pointer mt-[0.3em]" onClick={() => {navigate("/borrow-cart")}}>Your Cart (1)</p>
-                    <p className="text-lg cursor-pointer mt-[0.3em]">Your Favourite</p>
+                    <p className="text-lg cursor-pointer" onClick={() => {navigate("/profile") 
+                                                                          toggleslide()}}>Profile</p>
+                    <p className="text-lg cursor-pointer mt-[0.3em]" onClick={() => {navigate("/borrow-cart")
+                                                                                     toggleslide()}}>Your Cart (1)</p>
+                    <p className="text-lg cursor-pointer mt-[0.3em]"onClick={() => {navigate("/profile/favourite")
+                                                                                     toggleslide()}}>Your Favourite</p>
                 </div>
                 {/* small screen */}
                 <p className="block sm:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
@@ -68,7 +71,7 @@ export const MyNavbar = () => {
                     </Link>
                 </div>
                 {/* Bottom of menu */}
-                <div className="w-full border-t-[0.5px] border-gray-400 mt-[1em] sm:mt-0 flex">
+                <div className="w-full border-t-[0.5px] border-gray-200 mt-[1em] sm:mt-0 flex">
                     <div className="relative block sm:hidden">
                         <img src={require('../local_image/sek.jpg')} className="w-10 h-10 rounded-full mt-4 mr-3" alt='profile-pic' />
                         <div className="w-5 h-5 rounded-full bg-red-500 flex justify-center items-center absolute right-0 bottom-[-5px]">

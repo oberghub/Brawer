@@ -30,14 +30,15 @@ export const BookInfo = () => {
                             <div className="w-[365px] 
                                             h-[535px] 
                                             border-[1px] border-black absolute right-0 hidden xl:flex"></div>
-                            <img src={require('../local_image/think_java_covr_large.png')} className="w-[295px] xl:w-[365px] 
+                            <img src={require('../local_image/think_python.png')} className="w-[295px] xl:w-[365px] 
                                                                                         h-[435px] xl:h-[535px]  
+                                                                                        xl:border-[1px] border-black
                                                                                         absolute bottom-0" alt='book' />
                         </div>
                     </div>
                     {/* Book Container < sm */}
                     <div className="w-full flex justify-center mt-[2em] sm:hidden">
-                        <img src={require('../local_image/book_ex.jpg')} className="w-[80%] h-auto" alt='book' />
+                        <img src={require('../local_image/think_python.png')} className="w-[80%] h-auto" alt='book' />
                     </div>
                     {/* Text Container */}
                     <div className="w-[80%] sm:w-[60%] 

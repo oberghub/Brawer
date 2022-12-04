@@ -26,11 +26,11 @@ function App() {
         <Route index path='/' element={<Home />} />
         <Route path='/all-books' element={<Book />} />
         <Route path='/book-info' element={<BookInfo />} />
+        <Route path='/borrow-cart' element={<BookCart />} />
         <Route path='profile' element={<MainProfile />}>
           <Route path='borrow-list' element={<BorrowList />} />
           <Route path='favourite' element={<Favourite />} />
         </Route>
-        <Route path='borrow-cart' element={<BookCart />} />
       </Routes>
     </div>
   );
