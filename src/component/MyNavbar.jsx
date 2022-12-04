@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { TextField } from '@mui/material';
 import { AiOutlineSearch } from 'react-icons/ai'
 import { GiHamburgerMenu } from 'react-icons/gi'
+import { useNavigate } from "react-router-dom";
 export const MyNavbar = () => {
     const [acc, setAcc] = useState(true)
+    const navigate = useNavigate()
     const toggleslide = () => {
         document.getElementById('slide-profile').classList.toggle('invisible')
         document.getElementById('slide-profile').classList.toggle('translate-y-[-100%]');
@@ -51,7 +53,7 @@ export const MyNavbar = () => {
                     <>
                 {/* Body of menu */}
                 <div className="mt-[1em] sm:h-[175px]">
-                    <p className="text-lg cursor-pointer">Profile</p>
+                    <p className="text-lg cursor-pointer" onClick={() => {navigate("/profile")}}>Profile</p>
                     <p className="text-lg cursor-pointer mt-[0.3em]">Your Cart (1)</p>
                     <p className="text-lg cursor-pointer mt-[0.3em]">Your Favourite</p>
                 </div>

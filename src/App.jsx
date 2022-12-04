@@ -4,10 +4,15 @@ import './font.css'
 
 import { Route, Routes } from 'react-router-dom';
 
-//screen or component
+//screen
 import { Home } from './screen/Home';
 import { Book } from './screen/Book';
 import { BookInfo } from './screen/BookInfo';
+import { MainProfile } from './screen/Profile/MainProfile';
+import { BorrowList } from './screen/Profile/BorrowList';
+import { Favourite } from './screen/Profile/Favourite';
+
+//component
 import { MyNavbar } from './component/MyNavbar';
 function App() {
   return (
@@ -20,6 +25,10 @@ function App() {
         <Route index path='/' element={<Home />} />
         <Route path='/all-books' element={<Book />} />
         <Route path='/book-info' element={<BookInfo />} />
+        <Route path='profile' element={<MainProfile />}>
+          <Route path='borrow-list' element={<BorrowList />} />
+          <Route path='favourite' element={<Favourite />} />
+        </Route>
       </Routes>
     </div>
   );
