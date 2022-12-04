@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
 import { BsCheckCircleFill } from 'react-icons/bs'
+import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
+
 
 export const BookCart = () => {
     const [isActiveModal, setIsActiveModal] = useState(false)
-    let [countDown, setCountDown] = useState(3)
-    const BookData = useState([
+    const [BookData, setBookData] = useState([
         {
             title: 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
             desc: 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
@@ -27,6 +28,31 @@ export const BookCart = () => {
         //     console.log(countDown)
         // }, 3000);
     }
+    const incrementQuantity = (ind) => {
+        setBookData(BookData.map((item, index) => {
+            if(index == ind){
+                console.log({...item, quantity : item.quantity + 1})
+                return {...item, quantity : item.quantity + 1}
+            }
+            else{
+                return item
+            }
+        }))
+        // console.log(BookData[index])
+    }
+    const decrementQuantity = (ind) => {
+        setBookData(BookData.map((item, index) => {
+            if(index == ind){
+                if(item.quantity === 0){
+                    return {...item, quantity : 0}
+                }
+                return {...item, quantity : item.quantity - 1}
+            }
+            else{
+                return item
+            }
+        }))
+    }
     return (
         <>
             {isActiveModal ?
@@ -46,13 +72,17 @@ export const BookCart = () => {
                 <div className="md:w-[70%] p-10 md:border-r-[1px] md:border-gray-200">
                     <p className="text-4xl Gentium-B-font">My Cart</p>
                     <div className="mt-5 w-full grid grid-cols-1 min-[440px]:grid-cols-2 gap-3 md:block">
-                        {BookData[0].map((item, index) =>
+                        {BookData.map((item, index) =>
                             <>
                                 <div className="bg-white drop-shadow-xl md:flex mt-5" key={index}>
                                     <img src={require('../../local_image/think_python.png')} className="w-full md:w-[180px] md:h-[220px]" alt="profile-pic" />
                                     <div className="w-full md:w-[70%] p-5 md:m-0 m-auto">
                                         <p className="text-xl line-clamp-4 lg:text-2xl">{item.title}</p>
-                                        <p className="text-xl mt-5">x{item.quantity}</p>
+                                        <div className="flex">
+                                            <AiOutlineMinus className="mt-5 mr-5 cursor-pointer" onClick={() => {decrementQuantity(index)}} size={25} />
+                                            <p className="text-xl mt-5">x{item.quantity}</p>
+                                            <AiOutlinePlus className="mt-5 ml-5 cursor-pointer" onClick={() => {incrementQuantity(index)}} size={25} />
+                                        </div>
                                     </div>
                                 </div>
                             </>
@@ -62,7 +92,7 @@ export const BookCart = () => {
                 <div className="w-full md:w-[500px] p-10 bg-white fixed md:static left-0 bottom-0 z-30">
                     <p className="Gentium-B-font text-4xl">Cart Totals</p>
                     <div className="mt-5">
-                        {BookData[0].map((item, index) => 
+                        {BookData.map((item, index) => 
                         <>
                         <div className="relative flex">
                             <div className="w-[350px]">
@@ -74,7 +104,7 @@ export const BookCart = () => {
                         )}
                         <div className="mt-5 relative flex">
                             <p className="text-xl Gentium-B-font">Total</p>
-                            <p className="absolute right-0">x{BookData[0].map(item => item.quantity).reduce((a, b) => a+b)}</p>
+                            <p className="absolute right-0">x{BookData.map(item => item.quantity).reduce((a, b) => a+b)}</p>
                         </div>
                     </div>
                     <div className="w-[100%] h-[50px] flex items-center justify-center bg-black mt-5 cursor-pointer"
