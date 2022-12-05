@@ -45,7 +45,7 @@ export const BorrowList = () => {
                         <div className="w-full text-2xl">
                             {/* Borrow Date */}
                             <div className="w-full flex relative">
-                                <div className="flex slide-in-l">
+                                <div className="flex">
                                     <div className="w-[150px] Gentium-B-font">
                                         <p>Borrow Date</p>
                                     </div>
@@ -53,12 +53,12 @@ export const BorrowList = () => {
                                         <p>{item.b_date}</p>
                                     </div>
                                 </div>
-                                <div className="hidden lg:block lg:absolute right-0 slide-in-r">
+                                <div className="hidden lg:block lg:absolute right-0">
                                     <p>Total : {item.books.map(item => item.quantity).reduce((a, b) => a+b)} ea</p>
                                 </div>
                             </div>
                             <div className="w-full lg:flex relative mb-10">
-                                <div className="flex slide-in-l">
+                                <div className="flex">
                                     <div className="w-[150px] Gentium-B-font">
                                         <p>Due Date</p>
                                     </div>
@@ -66,12 +66,12 @@ export const BorrowList = () => {
                                         <p>{item.d_date}</p>
                                     </div>
                                 </div>
-                                <div className="lg:hidden slide-in-r">
+                                <div className="lg:hidden">
                                     <p>Total : {item.books.map(item => item.quantity).reduce((a, b) => a+b)} ea</p>
                                 </div>
                             {item.late ?
                             <>
-                            <div className="lg:absolute right-0 slide-in-r">
+                            <div className="lg:absolute right-0">
                                 <p>You are lated! <u className="text-red-500 cursor-pointer ml-3">Pay a fine</u></p>
                             </div>
                             </>
@@ -82,7 +82,7 @@ export const BorrowList = () => {
                         </div>
                         {item.books.map((books, index) =>
                             <>
-                            <div className="w-full sm:h-auto bg-white drop-shadow min-[450px]:flex mt-3 p-0 slide-in-r">
+                            <div className="w-full sm:h-auto bg-white drop-shadow min-[450px]:flex mt-3 p-0">
                                 <div className="w-auto">
                                     <img src={require('../../local_image/think_python.png')} className="min-[450px]:w-[180px] min-[450px]:h-[220px] cursor-pointer" alt='book' />
                                 </div>

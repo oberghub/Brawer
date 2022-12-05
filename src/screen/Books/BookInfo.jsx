@@ -16,7 +16,7 @@ export const BookInfo = () => {
             <div className="w-full h-auto xl:h-[890px] flex justify-center item-center xl:items-end">
 
                 {/* Content container */}
-                <div className="w-full xl:w-[1280px] down-scale
+                <div className="w-full xl:w-[1280px]
                                 h-auto xl:h-[755px] 
                                 mt-[3em]
                                 block sm:flex
@@ -24,7 +24,7 @@ export const BookInfo = () => {
                                 p-0 sm:p-[1.5em] xl:p-[3em] 
                                 xl:border-t-[1px] xl:border-l-[1px] xl:border-r-[1px] border-black">
                     {/* Book Container */}
-                    <div className="hidden sm:flex w-auto xl:w-[40%] relative slide-in-l">
+                    <div className="hidden sm:flex w-auto xl:w-[40%] relative">
                         <div className="w-[300px] xl:w-[400px] 
                                         h-[460px] xl:h-[560px] relative">
                             {/* Book Image */}
@@ -42,7 +42,7 @@ export const BookInfo = () => {
                         <img src={require('../../local_image/think_python.png')} className="w-[80%] h-auto" alt='book' />
                     </div>
                     {/* Text Container */}
-                    <div className="w-[80%] sm:w-[60%] slide-in-r
+                    <div className="w-[80%] sm:w-[60%]
                                     h-[560px] pt-[2em]
                                     ml-auto mr-auto xl:ml-0 xl:mr-0">
                         {/* Text Title */}

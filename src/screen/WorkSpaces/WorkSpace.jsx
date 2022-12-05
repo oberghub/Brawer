@@ -21,7 +21,7 @@ function WorkSpace() {
                     {/* Bg Image */}
                     <img src={require('../../local_image/hot-desk.jpg')} className="w-[1280px] h-[450px] xl:h-[550px]" />
                     {/* Card */}
-                    <div className='absolute right-[1%] top-[10%] xl:top-[15%] w-[400px] h-[350px] bg-white drop-shadow p-8'>
+                    <div className='absolute right-[1%] inset-y-[20%] w-[400px] h-[350px] bg-white drop-shadow p-8'>
                         <p className='Kanit-B-font text-3xl'>Hot Desk คืออะไร?</p>
                         <p className='Kanit-R-font indent-5 mt-3'>Hot Desk หรือโต๊ะทำงานแบบไม่เจาะจงที่ สามารถเปลี่ยนโต๊ะทำงานได้ตามต้องการ ใครมาก่อนได้เลือกก่อน</p>
                         <div className='mt-3 Kanit-R-font'>
