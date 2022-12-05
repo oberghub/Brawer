@@ -8,9 +8,9 @@ export const MainProfile = () => {
     }
     return(
         <>
-        <div className="xl:w-[90%] h-screen m-auto p-[2em] mt-[3em]">
+        <div className="xl:w-[90%] h-screen m-auto p-[2em]">
             {/* Profile Header */}
-            <div className="w-full sm:h-[100px] border-b-[1px] border-gray sm:flex items-center relative">
+            <div className="w-full sm:h-[100px] border-b-[1px] mt-[3em] border-gray sm:flex items-center relative">
                 <p className="slide-in-l text-4xl Gentium-B-font">My Profile</p>
                 <div className="slide-in-r w-[150px] h-[45px] my-5 sm:my-0 sm:ml-5 bg-white drop-shadow-xl rounded-lg flex items-center justify-center sm:absolute right-0 cursor-pointer">
                     <p className="text-xl Gentium-B-font">Sign Out</p>
