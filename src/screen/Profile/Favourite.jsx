@@ -36,7 +36,7 @@ export const Favourite = () => {
                                     gap-3
                                     ">
                         {BookData[0].map((book, index) =>
-                            <div key={index} className="w-full
+                            <div key={index} className="w-full slide-in-r
                                     h-auto
                                     bg-white
                                     drop-shadow-xl

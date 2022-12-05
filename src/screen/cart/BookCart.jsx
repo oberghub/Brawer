@@ -67,8 +67,8 @@ export const BookCart = () => {
                     </div>
                 </>
                 : null}
-            <div className="w-full h-screen m-auto flex relative">
-                <div className="md:w-[70%] p-10 md:border-r-[1px] md:border-gray-200">
+            <div className="w-full h-screen m-auto flex relative mt-[4em]">
+                <div className="md:w-[70%] p-10 md:border-r-[1px] md:border-gray-200 slide-in-l">
                     <p className="text-4xl Gentium-B-font">My Cart</p>
                     <div className="mt-5 w-full grid grid-cols-1 min-[440px]:grid-cols-2 gap-3 md:block">
                         {BookData.map((item, index) =>
@@ -88,7 +88,7 @@ export const BookCart = () => {
                         )}
                     </div>
                 </div>
-                <div className="w-full md:w-[500px] p-10 bg-white fixed md:static left-0 bottom-0 z-30">
+                <div className="slide-in-r w-full md:w-[500px] p-10 bg-white fixed md:static left-0 bottom-0 z-30">
                     <p className="Gentium-B-font text-4xl">Cart Totals</p>
                     <div className="mt-5">
                         {BookData.map((item, index) => 

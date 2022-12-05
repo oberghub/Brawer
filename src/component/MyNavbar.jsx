@@ -16,7 +16,7 @@ export const MyNavbar = () => {
             {/* Navbar */}
 
             {/* Menu Slider */}
-            <div id="slide-profile" className="w-full sm:w-[250px] h-auto sm:h-[300px] bg-white fixed right-0 drop-shadow-lg mt-[32px] sm:mt-[64px] p-[2em] sm:p-[1em]
+            <div id="slide-profile" className="w-full sm:w-[250px] h-auto lg:h-[300px] bg-white fixed right-0 drop-shadow-lg mt-[32px] sm:mt-[64px] p-[2em] sm:p-[1em]
                                                   transition-all duration-300 ease-out translate-y-[-100%] invisible z-40">
                 {/* Top of menu */}
                 <div className="relative w-full h-[40px] border-b-[0.5px] border-gray-200 flex">
@@ -39,7 +39,7 @@ export const MyNavbar = () => {
                     <Link to={'all-books'}>
                         <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Book</p>
                     </Link>
-                    <Link>
+                    <Link to={'all-spaces'}>
                         <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpace</p>
                     </Link>
                 </div>
@@ -52,7 +52,7 @@ export const MyNavbar = () => {
                 :
                     <>
                 {/* Body of menu */}
-                <div className="mt-[1em] sm:h-[175px]">
+                <div className="mt-[1em] lg:h-[175px]">
                     <p className="text-lg cursor-pointer" onClick={() => {navigate("/profile") 
                                                                           toggleslide()}}>Profile</p>
                     <p className="text-lg cursor-pointer mt-[0.3em]" onClick={() => {navigate("/borrow-cart")
@@ -60,13 +60,13 @@ export const MyNavbar = () => {
                     <p className="text-lg cursor-pointer mt-[0.3em]"onClick={() => {navigate("/profile/favourite")
                                                                                      toggleslide()}}>Your Favourite</p>
                 </div>
-                {/* small screen */}
-                <p className="block sm:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
-                <div className="block sm:hidden mt-[0.5em] border-t-[0.5px] border-gray-400">
+                {/* < lg */}
+                <p className="block lg:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
+                <div className="block lg:hidden mt-[0.5em] border-t-[0.5px] border-gray-400 mb-[1em]">
                     <Link to={'all-books'}>
                         <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Book</p>
                     </Link>
-                    <Link>
+                    <Link to={'all-spaces'}>
                         <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpace</p>
                     </Link>
                 </div>
@@ -84,7 +84,8 @@ export const MyNavbar = () => {
                 }
 
             </div>
-            <div className='sticky top-0 z-50'>
+            {/* Navbar */}
+            <div className='w-full fixed top-0 z-50'>
                 <div className='w-full h-10 sm:h-16 px-5 lg:px-10 drop-shadow flex justify-center
                                 bg-white relative'>
                     <div className='w-full
@@ -104,7 +105,7 @@ export const MyNavbar = () => {
                         {/* Choice to loan item */}
                         <div className='hidden lg:flex'>
                             <Link to={"all-books"} className='text-2xl mr-10 cursor-pointer'>Book</Link>
-                            <p className='text-2xl cursor-pointer'>WorkSpace</p>
+                            <Link to={'all-spaces'} className='text-2xl cursor-pointer'>WorkSpace</Link>
                         </div>
                         {/* Image Profile */}
                         <div className='absolute right-0 cursor-pointer hidden sm:flex' onClick={() => {toggleslide()}}>

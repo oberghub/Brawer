@@ -47,7 +47,7 @@ export const Book = () => {
         <>
             <div className="w-full flex relative">
                 {/* Filter Bar */}
-                <div id="slide-toggle" className="w-full sm:w-[280px] h-screen bg-white fixed left-0 z-30 drop-shadow-2xl p-[1.5em] duration-300 ease-out transition-all translate-x-[-100%] invisible">
+                <div id="slide-toggle" className="w-full sm:w-[280px] h-screen bg-white fixed left-0 mt-[32px] sm:mt-[64px] z-30 drop-shadow-2xl p-[1.5em] duration-300 ease-out transition-all translate-x-[-100%] invisible">
                     {/* Top of bar */}
                     <div className="relative flex border-b-[1px] border-gray-400">
                         <p className="text-4xl Gentium-B-font mb-3">Filters</p>
@@ -61,7 +61,7 @@ export const Book = () => {
 
                 {/* Book grid */}
                 <div className="ml-auto mr-auto">
-                    <div className="w-full h-[100px] lg:h-[200px] flex items-center p-5 min-[945px]:p-10">
+                    <div className="w-full h-[100px] lg:h-[200px] flex items-center p-5 min-[945px]:p-10 mt-[3em] slide-in-l">
                         <GiHamburgerMenu size={30} className="cursor-pointer mr-5" onClick={() => {toggleslide()}} />
                         <p className="text-4xl Gentium-B-font">All Books</p>
                     </div>
@@ -72,13 +72,13 @@ export const Book = () => {
                                         p-5 min-[945px]:p-10
                                         ">
                                 {BookData[0].map((book, index) =>                             
-                                <div key={index} className="w-full
+                                <div key={index} className="down-scale-2 w-full
                                     h-auto
                                     bg-white
                                     drop-shadow-xl
                                     p-5">
                                     {/* Book Image */}
-                                    <img src={require('../local_image/think_python.png')} className="w-full h-auto cursor-pointer" alt='book'
+                                    <img src={require('../../local_image/think_python.png')} className="w-full h-auto cursor-pointer" alt='book'
                                     onClick={() => {navigate("/book-info", {state : {item : book}} )}} />
                                     {/* Book Title */}
                                     <div className="w-full

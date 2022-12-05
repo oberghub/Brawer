@@ -16,21 +16,22 @@ export const BookInfo = () => {
             <div className="w-full h-auto xl:h-[890px] flex justify-center item-center xl:items-end">
 
                 {/* Content container */}
-                <div className="w-full xl:w-[1280px] 
+                <div className="w-full xl:w-[1280px] down-scale
                                 h-auto xl:h-[755px] 
+                                mt-[3em]
                                 block sm:flex
                                 justify-center
                                 p-0 sm:p-[1.5em] xl:p-[3em] 
                                 xl:border-t-[1px] xl:border-l-[1px] xl:border-r-[1px] border-black">
                     {/* Book Container */}
-                    <div className="hidden sm:flex w-auto xl:w-[40%] relative">
+                    <div className="hidden sm:flex w-auto xl:w-[40%] relative slide-in-l">
                         <div className="w-[300px] xl:w-[400px] 
                                         h-[460px] xl:h-[560px] relative">
                             {/* Book Image */}
                             <div className="w-[365px] 
                                             h-[535px] 
                                             border-[1px] border-black absolute right-0 hidden xl:flex"></div>
-                            <img src={require('../local_image/think_python.png')} className="w-[295px] xl:w-[365px] 
+                            <img src={require('../../local_image/think_python.png')} className="w-[295px] xl:w-[365px] 
                                                                                         h-[435px] xl:h-[535px]  
                                                                                         xl:border-[1px] border-black
                                                                                         absolute bottom-0" alt='book' />
@@ -38,10 +39,10 @@ export const BookInfo = () => {
                     </div>
                     {/* Book Container < sm */}
                     <div className="w-full flex justify-center mt-[2em] sm:hidden">
-                        <img src={require('../local_image/think_python.png')} className="w-[80%] h-auto" alt='book' />
+                        <img src={require('../../local_image/think_python.png')} className="w-[80%] h-auto" alt='book' />
                     </div>
                     {/* Text Container */}
-                    <div className="w-[80%] sm:w-[60%] 
+                    <div className="w-[80%] sm:w-[60%] slide-in-r
                                     h-[560px] pt-[2em]
                                     ml-auto mr-auto xl:ml-0 xl:mr-0">
                         {/* Text Title */}

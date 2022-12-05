@@ -6,9 +6,23 @@
   font-family: 'Gentium-Basic-Bold';
   src: url('../font/GenBasB.ttf');
 }
+@font-face {
+  font-family: 'Kanit-Regular';
+  src: url('../font/Kanit/Kanit-Regular.ttf');
+}
+@font-face {
+  font-family: 'Kanit-Bold';
+  src: url('../font/Kanit/Kanit-Bold.ttf');
+}
 .Gentium-R-font{
   font-family: 'Gentium-Basic-Regular', sans-serif;
 }
 .Gentium-B-font{
   font-family: 'Gentium-Basic-Bold', sans-serif;
+}
+.Kanit-R-font{
+  font-family: 'Kanit-Regular', sans-serif;
+}
+.Kanit-B-font{
+  font-family: 'Kanit-Bold', sans-serif;
 }
