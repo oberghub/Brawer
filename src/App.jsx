@@ -15,6 +15,7 @@ import { Favourite } from './screen/Profile/Favourite';
 import { BookCart } from './screen/Cart/BookCart';
 import WorkSpace from './screen/WorkSpaces/WorkSpace';
 import WorkSpaceDetail from './screen/WorkSpaces/WorkSpaceDetail';
+import FindARoom from './screen/WorkSpaces/FindARoom';
 
 //component
 import { MyNavbar } from './component/MyNavbar';
@@ -32,6 +33,9 @@ function App() {
         <Route path='/borrow-cart' element={<BookCart />} />
         <Route path='/all-spaces' element={<WorkSpace />} />
         <Route path='/space-info' element={<WorkSpaceDetail />} />
+        <Route path='/find-a-room' element={<FindARoom />}>
+          
+        </Route>
         <Route path='profile' element={<MainProfile />}>
           <Route path='borrow-list' element={<BorrowList />} />
           <Route path='favourite' element={<Favourite />} />

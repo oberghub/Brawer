@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function WorkSpaceDetail() {
+  const navigate = useNavigate()
   const [imgData, setImgData] = useState([
     "https://image.thepeople.co/uploads/2019/03/download-1-44.jpg",
     "https://img.soccersuck.com/images/2020/07/30/FB_IMG_1596085181720.jpg",
@@ -50,7 +52,7 @@ function WorkSpaceDetail() {
         <div className='sm:w-[700px] sm:h-[500px] p-3 xl:p-10 sm:mt-[5em]'>
             <p className='text-4xl'>Meeting Room</p>
             <p className='indent-5 text-xl mt-5'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dignissimos nulla nisi ut recusandae tempora at, assumenda quasi amet ullam quia ipsam nostrum voluptates corrupti maiores expedita! Velit repellat asperiores ipsam!</p>
-            <div className='w-[100%] h-[50px] mt-[3em] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center cursor-pointer'>
+            <div onClick={() => {navigate('/find-a-room')}} className='w-[100%] h-[50px] mt-[3em] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center cursor-pointer'>
                 <p className='text-2xl text-white'>Reserve</p>
             </div>
         </div>
