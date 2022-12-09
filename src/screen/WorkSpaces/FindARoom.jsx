@@ -29,7 +29,6 @@ function FindARoom() {
             timeRent: [
                 { date: "Dec 10 2022", timeStart: "10:00", timeEnd: "15:00" },
                 { date: "Dec 12 2022", timeStart: "11:00", timeEnd: "19:00" },
-                { date: "Dec 13 2022", timeStart: "10:00", timeEnd: "13:00" }
             ]
         }
     ]
