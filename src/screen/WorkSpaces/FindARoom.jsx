@@ -4,7 +4,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Autocomplete from '@mui/material/Autocomplete';
+import { AbortedDeferredError, useNavigate } from 'react-router-dom'
 function FindARoom() {
+    const navigate = useNavigate()
     let currentTime = new Date()
     const [date, setDate] = useState(currentTime)
     const [timeStart, setTimeStart] = useState(null)
@@ -33,7 +35,6 @@ function FindARoom() {
         }
     ]
     )
-    const [hasfiltered, setFilterState] = useState(false)
     const timeRange = [
         { label: '09:00' },
         { label: '10:00' },
@@ -50,108 +51,106 @@ function FindARoom() {
         { label: '21:00' },
         { label: '22:00' },
     ]
+    const [selectedRoom, setSelectedRoom] = useState(false);
     const forTimeStart = timeRange.filter(item => item.label <= "20:00")
     const timeRangeFilter = timeStart == null ? timeRange : timeRange.filter(item => item.label > timeStart.label)
-    const findARoom = () => {
-        //2ตัวนี้ทำไว้เช็คเฉยๆไม่มีไร
-        let a = []
-        let b = true;
-
-        //select วันที่  date.$d -> $d เป็น property ของตอนที่เราลือกวันที่ที่ไม่ใช่ปัจจุบันมาตอน setValue ใน datepicker --วัน Default เป็นวันปัจจุบัน--
-        let selectDate = !date.$d ? date.toString().substring(4, 15) : date.$d.toString().substring(4, 15)
-        for (let i = 0; i < allRooms.length; i++) {
-            for (let j = 0; j < allRooms[i].timeRent.length; j++) {
-
-                let start = allRooms[i].timeRent[j].timeStart
-                let end = allRooms[i].timeRent[j].timeEnd
-
-                //ถ้าจองในวันที่มีคนจองจะเข้าเงื่อนไขนี้มาเช็ครอบจองว่าซ้ำกันมั้ย
-                if (allRooms[i].timeRent[j].date == selectDate) {
-                    // //ถ้าเวลาเริ่มจองมันคร่อมรอบของคนที่จองไว้ หมายถึง มีคนจอง 12-14 นาฬิกา เราเริ่มจอง 13 นาฬิกาคือไม่ได้
-                    // if(timeStart.label >= start){
-                    //     if(timeStart.label < end){
-                    //         b = false
-                    //         console.log("Hi")
-                    //         break
-                    //     }
-                    // }
-                    // //ถ้าเวลาเริ่มจองน้อยกว่ารอบที่มีคนจองไว้ เช่น จอง10โมง น้อยกว่ารอบ
-                    // else if(timeStart.label <= start){
-                    //     if(timeEnd.label >= start && timeEnd.label <= end){
-                    //         b = false
-                    //         console.log("Hello world")
-                    //         break
-                    //     }
-                    // }
-                }
-            }
-        }
-        console.log(b)
-        // console.log(allRooms.filter(room => {
-        //     for(let i=0;i<room.timeRent.length;i++){
-        //         if(room.timeRent[i].date == selectDate && (timeStart > room.timeRent[i].timeStart && timeEnd < room.timeRent[i].timeEnd)){
-        //             return false
-        //         }
-        //         else{
-        //             return true
-        //         }
-        //     }
-        // }))
-    }
     return (
         <div>
-            <div className='min-[1440px]:w-[1440px] m-auto'>
-                <div className='w-full sm:h-[100px] border-b-[1px] border-gray-300 mt-[5em] p-10 text-center'>
-                    <p className='text-3xl Gentium-B-font'>Find Available Room</p>
-                </div>
-                <div className='w-full md:h-[100px] md:flex md:gap-7 justify-center p-10'>
-                    <p className='text-2xl mb-3 md:mb-0' onClick={() => {
-                        console.log(!date.$d ? date : date.$d.toString().substring(4, 15))
-                        console.log(timeStart)
-                    }}>Select a time</p>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            className='w-full md:w-[260px]'
-                            label="Date"
-                            value={date}
-                            onChange={(newValue) => {
-                                setDate(newValue);
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </LocalizationProvider>
-                    <Autocomplete
-                        className='my-3 md:my-0 md:w-[260px]'
-                        disablePortal
-                        id="combo-box-timeStart"
-                        options={forTimeStart}
-                        value={timeStart}
-                        onChange={(event, newValue) => {
-                            setTimeStart(newValue);
+            <div className='w-full md:h-[100px] md:flex md:gap-7 justify-center p-10'>
+                <p className='text-2xl mb-3 md:mb-0' onClick={() => {
+                    console.log(!date.$d ? date : date.$d.toString().substring(4, 15))
+                    console.log(timeStart)
+                }}>Select a time</p>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        className='w-full md:w-[260px]'
+                        label="Date"
+                        value={date}
+                        onChange={(newValue) => {
+                            setDate(newValue);
                         }}
-                        renderInput={(params) => <TextField {...params} label="Time Start" />}
+                        renderInput={(params) => <TextField {...params} />}
                     />
-                    <Autocomplete
-                        className='my-3 md:my-0 md:w-[260px]'
-                        disablePortal
-                        id="combo-box-timeEnd"
-                        options={timeRangeFilter}
-                        disabled={timeStart == null ? true : false}
-                        value={timeEnd}
-                        onChange={(event, newValue) => {
-                            setTimeEnd(newValue);
-                        }}
-                        renderInput={(params) => <TextField {...params} label="Time End" />}
-                    />
-                    {timeStart !== null && timeEnd !== null ?
-                        <div onClick={findARoom} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center md:w-[150px] h-[50px] cursor-pointer'>
-                            <p className='text-2xl'>Find</p>
-                        </div>
-                        :
-                        null
-                    }
-                </div>
+                </LocalizationProvider>
+                <Autocomplete
+                    className='my-3 md:my-0 md:w-[260px]'
+                    disablePortal
+                    id="combo-box-timeStart"
+                    options={forTimeStart}
+                    value={timeStart}
+                    onChange={(event, newValue) => {
+                        setTimeStart(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Time Start" />}
+                />
+                <Autocomplete
+                    className='my-3 md:my-0 md:w-[260px]'
+                    disablePortal
+                    id="combo-box-timeEnd"
+                    options={timeRangeFilter}
+                    disabled={timeStart == null ? true : false}
+                    value={timeEnd}
+                    onChange={(event, newValue) => {
+                        setTimeEnd(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Time End" />}
+                />
+                {timeStart !== null && timeEnd !== null ?
+                    <div className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center md:w-[150px] h-[50px] cursor-pointer'>
+                        <p className='text-2xl'>Find</p>
+                    </div>
+                    :
+                    null
+                }
             </div>
+            <div className='w-full p-5'>
+                {allRooms.length !== 0 ?
+                    null
+                    :
+                    <div className='w-full text-center my-5'>
+                        <p className='Gentium-B-font text-3xl'>Not found a room, We are apologize;-;.</p>
+                    </div>
+                }
+                <div className='w-full mt-3 m-auto text-center'>
+                    <p className='text-3xl'>Available Rooms</p>
+                </div>
+                {allRooms.map((data, index) => <>
+                    <div onClick={() => {
+                        setSelectedRoom(index)
+                    }} className='cursor-pointer flex items-center rounded my-3 min-[1280px]:w-[980px] h-[120px] drop-shadow-xl bg-white m-auto p-4 relative'>
+                        <div>
+                            <p className='text-2xl'>{data.roomType} : Room {data.roomName}</p>
+                            <p className='text-xl'>Capacity : {data.roomCapacity} Person</p>
+                        </div>
+                        <div className='w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center absolute right-[3%]'>
+                            {index == selectedRoom ?
+                                <div className='w-5 h-5 rounded-full bg-green-400' />
+                                :
+                                null
+                            }
+                        </div>
+                    </div>
+                </>)}
+            </div>
+            {allRooms.length !== 0 ?
+                <>
+                    <div className='w-full flex justify-center mt-5 relative'>
+                        <div className="w-[400px] bg-gray-200 h-2 mb-6 flex">
+                            <div className="bg-[#2F5D62] h-2 w-[0%] relative" />
+                        </div>
+                    </div>
+                    <div className='w-full flex items-center justify-center gap-3 my-3'>
+                        <div className='rounded bg-[#EEE] hover:bg-[#E1E1E1] flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                            <p className='text-2xl'>Cancel</p>
+                        </div>
+                        <div onClick={() => { navigate('/booking/equipments') }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                            <p className='text-2xl'>Next</p>
+                        </div>
+                    </div>
+                </>
+                :
+                null
+            }
         </div>
     )
 }

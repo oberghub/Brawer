@@ -36,10 +36,10 @@ export const MyNavbar = () => {
                 {/* small screen */}
                 <p className="block sm:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
                 <div className="block sm:hidden mt-[0.5em] border-t-[0.5px] border-gray-400">
-                    <Link to={'all-books'}>
+                    <Link to={'all-books'} onClick={toggleslide}>
                         <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Book</p>
                     </Link>
-                    <Link to={'all-spaces'}>
+                    <Link to={'all-spaces'} onClick={toggleslide}>
                         <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpace</p>
                     </Link>
                 </div>
@@ -63,10 +63,10 @@ export const MyNavbar = () => {
                 {/* < lg */}
                 <p className="block lg:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
                 <div className="block lg:hidden mt-[0.5em] border-t-[0.5px] border-gray-400 mb-[1em]">
-                    <Link to={'all-books'}>
+                    <Link to={'all-books'} onClick={toggleslide}>
                         <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Book</p>
                     </Link>
-                    <Link to={'all-spaces'}>
+                    <Link to={'all-spaces'} onClick={toggleslide}>
                         <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpace</p>
                     </Link>
                 </div>
