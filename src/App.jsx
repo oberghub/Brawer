@@ -18,6 +18,13 @@ import WorkSpaceDetail from './screen/WorkSpaces/WorkSpaceDetail';
 import BookingWorkSpace from './screen/WorkSpaces/BookingWorkSpace';
 import FindARoom from './screen/WorkSpaces/FindARoom';
 import AddEquipments from './screen/WorkSpaces/AddEquipments';
+import Payment from './screen/WorkSpaces/Payment';
+import MainManage from './screen/Management/MainManage';
+import BookManage from './screen/Management/BookManage';
+import BorrowManage from './screen/Management/BorrowManage';
+import EquipmentsManage from './screen/Management/EquipmentsManage';
+import OrderManage from './screen/Management/OrderManage';
+import WorkSpaceManage from './screen/Management/WorkSpaceManage';
 
 //component
 import { MyNavbar } from './component/MyNavbar';
