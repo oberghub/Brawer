@@ -18,9 +18,9 @@ function FindARoom() {
             roomType: "Workstation",
             roomCapacity: "2 - 9",
             timeRent: [
-                { date: "Dec 10 2022", timeStart: "12:00", timeEnd: "14:00" },
-                { date: "Dec 10 2022", timeStart: "14:00", timeEnd: "15:00" },
-                { date: "Dec 10 2022", timeStart: "18:00", timeEnd: "19:00" }
+                { date: "2022-12-10", timeStart: "12:00", timeEnd: "14:00" },
+                { date: "2022-12-10", timeStart: "14:00", timeEnd: "15:00" },
+                { date: "2022-12-10", timeStart: "18:00", timeEnd: "19:00" }
             ]
         },
         {
@@ -29,12 +29,13 @@ function FindARoom() {
             roomType: "Workstation",
             roomCapacity: "2 - 9",
             timeRent: [
-                { date: "Dec 10 2022", timeStart: "10:00", timeEnd: "15:00" },
-                { date: "Dec 12 2022", timeStart: "11:00", timeEnd: "19:00" },
+                { date: "2022-12-10", timeStart: "10:00", timeEnd: "15:00" },
+                { date: "2022-12-12", timeStart: "11:00", timeEnd: "19:00" },
             ]
         }
     ]
     )
+    const [filterRooms, setFilterRooms] = useState(allRooms)
     const timeRange = [
         { label: '09:00' },
         { label: '10:00' },
@@ -54,6 +55,45 @@ function FindARoom() {
     const [selectedRoom, setSelectedRoom] = useState(false);
     const forTimeStart = timeRange.filter(item => item.label <= "20:00")
     const timeRangeFilter = timeStart == null ? timeRange : timeRange.filter(item => item.label > timeStart.label)
+    function findAvailableRooms(rooms, date = "2022-12-10", timeStart, timeEnd) {
+        let datebase = new Date();
+        if(date.constructor.name == "M"){
+            datebase = date.toDate().toISOString().slice(0,10)
+        }else{
+            datebase = new Date(date).toISOString().slice(0,10)
+        }
+
+        let start = new Date(datebase+"T"+timeStart.label)
+        let end = new Date(datebase+"T"+timeEnd.label)
+        const availableRooms = [];
+        for (const room of rooms) {
+            let occupied = false
+            for(const time of room.timeRent){
+                
+                let roombase = new Date(time.date).toISOString().slice(0,10)
+                let roomstart = new Date(roombase+"T"+time.timeStart)
+                let roomend = new Date(roombase+"T"+time.timeEnd)
+                console.log(roomstart, roomend)
+                if(roombase == datebase){
+                    if((start >= roomstart && start < roomend) || (end > roomstart && end <= roomend) ){
+                        occupied = true
+                        console.log(room, roomstart, roomend )
+                    }
+                    if(start < roomend && end > roomstart){
+                        occupied = true
+                        console.log(room, roomstart, roomend )
+                    }
+                }
+            }
+            if (!occupied) {
+                availableRooms.push(room);
+            }
+        }
+        console.log(availableRooms)
+        setFilterRooms(availableRooms)
+        return availableRooms;
+    }
+    
     return (
         <div>
             <div className='w-full md:h-[100px] md:flex md:gap-7 justify-center p-10'>
@@ -96,7 +136,7 @@ function FindARoom() {
                     renderInput={(params) => <TextField {...params} label="Time End" />}
                 />
                 {timeStart !== null && timeEnd !== null ?
-                    <div className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center md:w-[150px] h-[50px] cursor-pointer'>
+                    <div className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center md:w-[150px] h-[50px] cursor-pointer' onClick={()=>{findAvailableRooms(allRooms, date, timeStart, timeEnd)}}>
                         <p className='text-2xl'>Find</p>
                     </div>
                     :
@@ -104,7 +144,7 @@ function FindARoom() {
                 }
             </div>
             <div className='w-full p-5'>
-                {allRooms.length !== 0 ?
+                {filterRooms.length !== 0 ?
                     null
                     :
                     <div className='w-full text-center my-5'>
@@ -114,7 +154,7 @@ function FindARoom() {
                 <div className='w-full mt-3 m-auto text-center'>
                     <p className='text-3xl'>Available Rooms</p>
                 </div>
-                {allRooms.map((data, index) => <>
+                {filterRooms.map((data, index) => <>
                     <div onClick={() => {
                         setSelectedRoom(index)
                     }} className='cursor-pointer flex items-center rounded my-3 min-[1280px]:w-[980px] h-[120px] drop-shadow-xl bg-white m-auto p-4 relative'>
@@ -132,7 +172,7 @@ function FindARoom() {
                     </div>
                 </>)}
             </div>
-            {allRooms.length !== 0 ?
+            {filterRooms.length !== 0 ?
                 <>
                     <div className='w-full flex justify-center mt-5 relative'>
                         <div className="w-[400px] bg-gray-200 h-2 mb-6 flex">
