@@ -1,6 +1,6 @@
 import React from 'react'
 
-const OrderManage = () => {
+const EquipmentsStock = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const OrderManage = () => {
   )
 }
 
-export default OrderManage
+export default EquipmentsStock

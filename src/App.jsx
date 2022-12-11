@@ -22,10 +22,10 @@ import FindARoom from './screen/WorkSpaces/FindARoom';
 import AddEquipments from './screen/WorkSpaces/AddEquipments';
 import Payment from './screen/WorkSpaces/Payment';
 import MainManage from './screen/Management/MainManage';
-import BookManage from './screen/Management/BookManage';
+import BookStock from './screen/Management/BookStock';
 import BorrowManage from './screen/Management/BorrowManage';
-import EquipmentsManage from './screen/Management/EquipmentsManage';
-import OrderManage from './screen/Management/OrderManage';
+import EquipmentsStock from './screen/Management/EquipmentsStock';
+import BookingManage from './screen/Management/BookingManage';
 import WorkSpaceManage from './screen/Management/WorkSpaceManage';
 
 //component
@@ -54,6 +54,13 @@ function App() {
           <Route path='favourite' element={<Favourite />} />
           <Route path='booking-history' element={<BookingHistory />} />
           <Route path='edit-profile' element={<EditProfile />} />
+        </Route>
+        <Route path='management' element={<MainManage />}>
+          <Route path='booking-manage' element={<BookingManage />} />
+          <Route path='borrow-manage' element={<BorrowManage />} />
+          <Route path='book-stock' element={<BookStock />} />
+          <Route path='workspace-manage' element={<WorkSpaceManage />} />
+          <Route path='equipments-stock' element={<EquipmentsStock />} />
         </Route>
       </Routes>
     </div>

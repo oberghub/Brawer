@@ -1,8 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { CiEdit } from 'react-icons/ci'
 import { AiOutlineDown } from 'react-icons/ai'
 import { Link, Outlet } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 export const MainProfile = () => {
+    const selected = useLocation()
+    const [menu, setMenu] = useState([
+        {title : "Edit Profile", link : "edit-profile"},
+        {title : "Favourite", link : "favourite"},
+        {title : "Borrow List", link : "borrow-list"},
+        {title : "Booking History", link : "booking-history"}
+    ])
     return(
         <>
         <div className="xl:w-[90%] h-screen m-auto p-[2em]">
@@ -35,10 +43,15 @@ export const MainProfile = () => {
                         {/* <AiOutlineDown className="ml-3 mt-1" size={30}/> */}
                     </div>
                     <div id="mainprofile-menu-toggle" className="p-2 text-[22px]">
-                        <p className="slide-in-l mb-3 cursor-pointer"><Link to={"edit-profile"}>Edit Profile</Link></p>
-                        <p className="slide-in-l mb-3 cursor-pointer"><Link to={"favourite"}>Favourite</Link></p>
-                        <p className="slide-in-l mb-3 cursor-pointer"><Link to={"borrow-list"}>Borrow List</Link></p>
-                        <p className="slide-in-l mb-3 cursor-pointer"><Link to={"booking-history"}>Booking History</Link></p>
+                        {menu.map((item, index) => <>
+                            <div>
+                                {selected.pathname.substring(9) == item.link ?
+                                 <p className="slide-in-l mb-3 text-gray-300"><Link className="cursor-default" to={item.link}>{item.title}</Link></p>
+                                 :
+                                 <p className="slide-in-l mb-3 cursor-pointer"><Link to={item.link}>{item.title}</Link></p>
+                                }
+                            </div>
+                        </>)}
                     </div>
                 </div>
 
