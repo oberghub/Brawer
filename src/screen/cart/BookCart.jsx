@@ -67,7 +67,7 @@ export const BookCart = () => {
                     </div>
                 </>
                 : null}
-            <div className="w-full h-screen m-auto flex relative mt-[4em]">
+            <div className="w-full h-screen m-auto flex relative pt-[4em]">
                 <div className="md:w-[70%] p-10 md:border-r-[1px] md:border-gray-200 slide-in-l">
                     <p className="text-4xl Gentium-B-font">My Cart</p>
                     <div className="mt-5 w-full grid grid-cols-1 min-[440px]:grid-cols-2 gap-3 md:block">

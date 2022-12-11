@@ -23,16 +23,45 @@
     animation-duration: 1s;
 }
 .progress-bar-slide{
-    animation-name: prb-slide-in-l;
+    animation-name: prb-slide-in-l-half;
     animation-duration: 0.5s;
     width: 50%;
 }
-@keyframes prb-slide-in-l {
+.progress-bar-slide-full{
+    animation-name: prb-slide-in-l-full;
+    animation-duration: 0.5s;
+    width: 100%;
+}
+.slide-down-fade{
+    animation-name: slide-down-fade;
+    animation-duration: 0.5s;
+}
+@keyframes slide-down-fade {
+    0% {
+        transform: translateY(-20%);
+        opacity: 0;
+    }
+    100%{
+        transform: translateY(0%);
+        opacity: 1;
+        animation-timing-function: ease-in;
+    }
+}
+@keyframes prb-slide-in-l-half {
     0% {
         width: 0%;
     }
     100%{
         width: 50%;
+        animation-timing-function: ease-in;
+    }
+}
+@keyframes prb-slide-in-l-full {
+    0% {
+        width: 0%;
+    }
+    100%{
+        width: 100%;
         animation-timing-function: ease-in;
     }
 }

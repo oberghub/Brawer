@@ -30,6 +30,7 @@ export const Favourite = () => {
         <>
             {/* Book grid */}
             <div className="ml-auto mr-auto">
+                <p className='text-3xl Gentium-B-font'>Your Favourite</p>
                 <div className="w-full h-auto flex justify-center">
                     <div className="grid 
                                     grid-cols-1 min-[450px]:grid-cols-2 md:grid-cols-3 2xl:grid-cols-4

@@ -12,6 +12,8 @@ import { BookInfo } from './screen/Books/BookInfo';
 import { MainProfile } from './screen/Profile/MainProfile';
 import { BorrowList } from './screen/Profile/BorrowList';
 import { Favourite } from './screen/Profile/Favourite';
+import BookingHistory from './screen/Profile/BookingHistory';
+import EditProfile from './screen/Profile/EditProfile';
 import { BookCart } from './screen/Cart/BookCart';
 import WorkSpace from './screen/WorkSpaces/WorkSpace';
 import WorkSpaceDetail from './screen/WorkSpaces/WorkSpaceDetail';
@@ -45,10 +47,13 @@ function App() {
         <Route path='booking' element={<BookingWorkSpace />}>
           <Route path='find-a-room' element={<FindARoom />} />
           <Route path='equipments' element={<AddEquipments />} />
+          <Route path='payment' element={<Payment />} />
         </Route>
         <Route path='profile' element={<MainProfile />}>
           <Route path='borrow-list' element={<BorrowList />} />
           <Route path='favourite' element={<Favourite />} />
+          <Route path='booking-history' element={<BookingHistory />} />
+          <Route path='edit-profile' element={<EditProfile />} />
         </Route>
       </Routes>
     </div>

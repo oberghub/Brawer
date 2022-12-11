@@ -1,11 +1,8 @@
-import React, {useState} from "react";
+import React from "react";
 import { CiEdit } from 'react-icons/ci'
 import { AiOutlineDown } from 'react-icons/ai'
 import { Link, Outlet } from 'react-router-dom';
 export const MainProfile = () => {
-    const toggleMenu = () => {
-        document.getElementById('mainprofile-menu-toggle').classList.toggle('hidden')
-    }
     return(
         <>
         <div className="xl:w-[90%] h-screen m-auto p-[2em]">
@@ -38,10 +35,10 @@ export const MainProfile = () => {
                         {/* <AiOutlineDown className="ml-3 mt-1" size={30}/> */}
                     </div>
                     <div id="mainprofile-menu-toggle" className="p-2 text-[22px]">
-                        <p className="slide-in-l mb-3 cursor-pointer">Edit Profile</p>
+                        <p className="slide-in-l mb-3 cursor-pointer"><Link to={"edit-profile"}>Edit Profile</Link></p>
                         <p className="slide-in-l mb-3 cursor-pointer"><Link to={"favourite"}>Favourite</Link></p>
                         <p className="slide-in-l mb-3 cursor-pointer"><Link to={"borrow-list"}>Borrow List</Link></p>
-                        <p className="slide-in-l mb-3 cursor-pointer">Booking Space</p>
+                        <p className="slide-in-l mb-3 cursor-pointer"><Link to={"booking-history"}>Booking History</Link></p>
                     </div>
                 </div>
 
