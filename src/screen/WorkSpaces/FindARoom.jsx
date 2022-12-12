@@ -57,6 +57,8 @@ function FindARoom() {
     const [selectedRoom, setSelectedRoom] = useState(false);
     const forTimeStart = timeRange.filter(item => item.label <= "20:00")
     const timeRangeFilter = timeStart == null ? timeRange : timeRange.filter(item => item.label > timeStart.label)
+
+    //วันไม่เหมือนกันแต่เวลาจองทับกันก็ไม่ออกมาให้ (Bug)
     function findAvailableRooms(rooms, date = "2022-12-10", timeStart, timeEnd) {
         let datebase = new Date();
         if (date.constructor.name == "M") {

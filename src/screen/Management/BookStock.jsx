@@ -157,7 +157,7 @@ const BookStock = () => {
       }
       <div className="w-full h-screen pt-[6em] px-10">
         <div className="flex relative w-full">
-          <div className='absolute left-0 cursor-pointer md:hidden'>
+          <div className='absolute left-0 cursor-pointer lg:hidden'>
             <GiHamburgerMenu size={30} onClick={() => { toggleslide() }} />
           </div>
           <div onClick={() => { setIsActiveModal(true) }} className='absolute rounded cursor-pointer right-0 w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
@@ -167,9 +167,12 @@ const BookStock = () => {
           </div>
         </div>
         <div className="w-full p-5 bg-white drop-shadow-xl mt-[5em] relative">
-          <div onClick={() => { }} className='hidden lg:flex lg:absolute mt-[1em] lg:mt-0 rounded cursor-pointer right-[2%] w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] justify-center items-center'>
-            <div className="text-xl">
-              <p className='text-white'>Change</p>
+          <div className="hidden lg:flex lg:absolute right-[2%] relative flex">
+            <div onClick={() => { }} className='mr-3 mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+              <p className='text-white text-xl'>Change</p>
+            </div>
+            <div onClick={() => { }} className='mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
+              <p className='text-white text-xl'>Delete</p>
             </div>
           </div>
           <div className="w-full relative">
@@ -178,6 +181,11 @@ const BookStock = () => {
           <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
             <div className="text-xl">
               <p className='text-white'>Change</p>
+            </div>
+          </div>
+          <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
+            <div className="text-xl">
+              <p className='text-white'>Delete</p>
             </div>
           </div>
           <div className="mt-[2em] w-full">
