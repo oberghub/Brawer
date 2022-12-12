@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CiEdit } from 'react-icons/ci'
 import { AiOutlineDown } from 'react-icons/ai'
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 export const MainProfile = () => {
+    const navigate = useNavigate()
     const selected = useLocation()
     const [menu, setMenu] = useState([
         {title : "Edit Profile", link : "edit-profile"},
@@ -11,6 +12,11 @@ export const MainProfile = () => {
         {title : "Borrow List", link : "borrow-list"},
         {title : "Booking History", link : "booking-history"}
     ])
+    useEffect(() => {
+        if(selected.pathname == "/profile"){
+          navigate("/profile/edit-profile")
+        }
+      }, [])
     return(
         <>
         <div className="xl:w-[90%] h-screen m-auto p-[2em]">

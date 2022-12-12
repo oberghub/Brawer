@@ -37,7 +37,11 @@ function FindARoom() {
         }
     ]
     )
+    const [selectedRoomType, setSelectedRoomType] = useState(null)
     const [filterRooms, setFilterRooms] = useState(allRooms)
+    const roomType = [
+        {label : "Workstation"}, {label : "Meeting Room"}, {label : "Seminar Room"}
+    ]
     const timeRange = [
         { label: '09:00' },
         { label: '10:00' },
@@ -60,6 +64,8 @@ function FindARoom() {
 
     //วันไม่เหมือนกันแต่เวลาจองทับกันก็ไม่ออกมาให้ (Bug)
     function findAvailableRooms(rooms, date = "2022-12-10", timeStart, timeEnd) {
+        console.log(selectedRoomType)
+        let roomsT = rooms.filter(item => item.roomType == selectedRoomType.label)
         let datebase = new Date();
         if (date.constructor.name == "M") {
             datebase = date.toDate().toISOString().slice(0, 10)
@@ -70,7 +76,7 @@ function FindARoom() {
         let start = new Date(datebase + "T" + timeStart.label)
         let end = new Date(datebase + "T" + timeEnd.label)
         const availableRooms = [];
-        for (const room of rooms) {
+        for (const room of roomsT) {
             let occupied = false
             for (const time of room.timeRent) {
 
@@ -140,7 +146,17 @@ function FindARoom() {
                     }}
                     renderInput={(params) => <TextField {...params} label="Time End" />}
                 />
-                {timeStart !== null && timeEnd !== null ?
+                <Autocomplete
+                    className='my-3 md:my-0 md:w-[260px]'
+                    id="combo-box-roomType"
+                    options={roomType}
+                    value={selectedRoomType}
+                    onChange={(event, newValue) => {
+                        setSelectedRoomType(newValue);
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Room Type" />}
+                />
+                {timeStart !== null && timeEnd !== null && selectedRoomType !== null ?
                     <div className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center md:w-[150px] h-[50px] cursor-pointer' onClick={() => { findAvailableRooms(allRooms, date, timeStart, timeEnd) }}>
                         <p className='text-2xl'>Find</p>
                     </div>
@@ -156,7 +172,7 @@ function FindARoom() {
                         <p className='Gentium-B-font text-3xl'>Not found a room, We are apologize;-;.</p>
                     </div>
                 }
-                {isFiltered ?
+                {isFiltered && filterRooms.length != 0 ?
                     <div className='w-full mt-3 m-auto text-center'>
                         <p className='text-3xl'>Available Rooms</p>
                     </div>

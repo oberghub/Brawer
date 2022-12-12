@@ -22,8 +22,8 @@ function WorkSpace() {
                     <img src={require('../../local_image/hot-desk.jpg')} className="w-[1280px] h-[450px] xl:h-[550px]" />
                     {/* Card */}
                     <div className='absolute right-[1%] inset-y-[20%] w-[400px] h-[350px] bg-white drop-shadow p-8'>
-                        <p className='Kanit-B-font text-3xl'>Hot Desk คืออะไร?</p>
-                        <p className='Kanit-R-font indent-5 mt-3'>Hot Desk หรือโต๊ะทำงานแบบไม่เจาะจงที่ สามารถเปลี่ยนโต๊ะทำงานได้ตามต้องการ ใครมาก่อนได้เลือกก่อน</p>
+                        <p className='Kanit-B-font text-3xl'>Workspace คืออะไร?</p>
+                        <p className='Kanit-R-font indent-5 mt-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam reprehenderit doloremque autem sint quia molestias!</p>
                         <div className='mt-3 Kanit-R-font'>
                             <p className='text-2xl Kanit-B-font'>มาที่นี่แล้วได้อะไรบ้าง?</p>
                             <li>เครื่องดืม เช่น ชา กาแฟ ฟรี !</li>
@@ -31,7 +31,7 @@ function WorkSpace() {
                             <li>ใช้บริการเครื่องปริ้นท์ได้ไม่จำกัด</li>
                         </div>
                         <div className="w-[300px] h-[65px] bg-[#2F5D62] hover:bg-[#2B5155] absolute bottom-[-10%] right-[11%] flex justify-center items-center cursor-pointer">
-                            <p className='text-white text-xl Kanit-B-font'>สมัครสมาชิกเลย!</p>
+                            <p className='text-white text-xl Gentium-B-font'>Reserve Now!</p>
                         </div>
                     </div>
                 </div>

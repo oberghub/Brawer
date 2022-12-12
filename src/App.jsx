@@ -27,6 +27,7 @@ import BorrowManage from './screen/Management/BorrowManage';
 import EquipmentsStock from './screen/Management/EquipmentsStock';
 import BookingManage from './screen/Management/BookingManage';
 import WorkSpaceManage from './screen/Management/WorkSpaceManage';
+import NotFoundPage from './component/NotFoundPage';
 
 //component
 import { MyNavbar } from './component/MyNavbar';
@@ -44,6 +45,7 @@ function App() {
         <Route path='/borrow-cart' element={<BookCart />} />
         <Route path='/all-spaces' element={<WorkSpace />} />
         <Route path='/space-info' element={<WorkSpaceDetail />} />
+        <Route path="*" element={ <NotFoundPage />} />
         <Route path='booking' element={<BookingWorkSpace />}>
           <Route path='find-a-room' element={<FindARoom />} />
           <Route path='equipments' element={<AddEquipments />} />

@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
-import { Link, useLocation, Outlet } from "react-router-dom";
+import { Link, useLocation, Outlet, redirect, useNavigate } from "react-router-dom";
+import { GiHamburgerMenu } from 'react-icons/gi';
+import { useEffect } from 'react';
 const MainManage = () => {
   const selected = useLocation()
+  const navigate = useNavigate()
   const [menu, setMenu] = useState([
     { title: "Book Stock", link: 'book-stock' },
     { title: "Equipments Stock", link: 'equipments-stock' },
@@ -13,12 +16,17 @@ const MainManage = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('invisible')
     document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
   }
+  useEffect(() => {
+    if(selected.pathname == "/management"){
+      navigate("/management/book-stock")
+    }
+  }, [])
   return (
     <div>
       <div className="w-[100%] flex">
         {/* Menu ตอนจอใหญ่อยู่ */}
-      <div className="hidden lg:block w-[370px] h-screen bg-[#FCFCFC] drop-shadow-xl pt-[6em] pl-5">
-          <p className='text-3xl Gentium-B-font'>Management</p>
+        <div className="hidden lg:block w-[370px] h-screen bg-[#FCFCFC] drop-shadow-xl pt-[6em] pl-5">
+          <p className='text-3xl Gentium-B-font' onClick={() => {console.log(selected.pathname)}}>Management</p>
           <div className="indent-5 mt-[2em]">
             {menu.map((item, index) => <>
               <div>
