@@ -11,7 +11,7 @@
 
 # วิธีใช้งาน (FrontEnd)
 1. Clone Project
-2. เปิด Editor
+2. เปิด Editor เช่น VSCode
 3. เลือก Folder ที่ Clone ลงมา
 4. cd frontend
 5. npm install
