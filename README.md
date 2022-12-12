@@ -12,7 +12,8 @@
 # วิธีใช้งาน (FrontEnd)
 1. Clone Project
 2. เปิด Editor
-3. Select Path /frontend
-4. npm install
-5. npm start
-6. รอจนมันเปิด
+3. เลือก Folder ที่ Clone ลงมา
+4. cd frontend
+5. npm install
+6. npm start
+7. รอจนมันเปิด
