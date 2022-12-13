@@ -4,13 +4,18 @@ import { TextField } from '@mui/material';
 import { AiOutlineSearch } from 'react-icons/ai'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 export const MyNavbar = () => {
     const [acc, setAcc] = useState(true)
+    const [bookInCart, setBookInCart] = useState([])
     const navigate = useNavigate()
     const toggleslide = () => {
         document.getElementById('slide-profile').classList.toggle('invisible')
         document.getElementById('slide-profile').classList.toggle('translate-y-[-100%]');
     }
+    // useEffect(() => {
+    //     setBookInCart(JSON.parse(localStorage.getItem('books')).length)
+    // }, [JSON.parse(localStorage.getItem('books'))])
     return (
         <>
             {/* Navbar */}
@@ -60,7 +65,7 @@ export const MyNavbar = () => {
                     <p className="text-lg cursor-pointer mt-[0.3em]"onClick={() => {navigate("/profile/favourite")
                                                                                      toggleslide()}}>Your Favourite</p>
                     <p className="text-lg cursor-pointer mt-[0.3em]" onClick={() => {navigate("/borrow-cart" ) 
-                                                                                     toggleslide()}}>Your Book Cart (1)</p>
+                                                                                     toggleslide()}}>Your Book Cart ()</p>
                 </div>
                 {/* < lg */}
                 <p className="block lg:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
