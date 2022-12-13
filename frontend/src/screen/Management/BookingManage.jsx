@@ -113,8 +113,10 @@ const BookingManage = () => {
               <div className="">
                 <div className='w-full border-b-[1px] border-gray-300 relative'>
                   <p className='text-3xl Gentium-B-font mb-5'>Type To {confirmState} Booking</p>
-                  <div onClick={() => { setConfirmModal(false)
-                                        setConfirmText("") }} className="absolute right-0 top-0 cursor-pointer" >
+                  <div onClick={() => {
+                    setConfirmModal(false)
+                    setConfirmText("")
+                  }} className="absolute right-0 top-0 cursor-pointer" >
                     <svg height="20px" viewBox="0 0 512 512" width="20px">
                       <path d="M443.6,387.1L312.4,255.4l131.5-130c5.4-5.4,5.4-14.2,0-19.6l-37.4-37.6c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4  L256,197.8L124.9,68.3c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4L68,105.9c-5.4,5.4-5.4,14.2,0,19.6l131.5,130L68.4,387.1  c-2.6,2.6-4.1,6.1-4.1,9.8c0,3.7,1.4,7.2,4.1,9.8l37.4,37.6c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1L256,313.1l130.7,131.1  c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1l37.4-37.6c2.6-2.6,4.1-6.1,4.1-9.8C447.7,393.2,446.2,389.7,443.6,387.1z" />
                     </svg>
@@ -209,26 +211,34 @@ const BookingManage = () => {
                   </div>
                 </div>
                 {/* update status button */}
-                <div className="flex gap-5 mt-5">
-                  {/* confirm button */}
-                  <div onClick={() => { setIsActiveModal(false)
-                                        setConfirmModal(true)
-                                        setConfirmState("Confirm") }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
-                    <div className="text-xl">
-                      <p className='text-white'>Confirm</p>
+                {status != 'Success' ?
+                  <>
+                    <div className="flex gap-5 mt-5">
+                      {/* confirm button */}
+                      <div onClick={() => {
+                        setIsActiveModal(false)
+                        setConfirmModal(true)
+                        setConfirmState("Confirm")
+                      }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+                        <div className="text-xl">
+                          <p className='text-white'>Confirm</p>
+                        </div>
+                      </div>
+                      {/* cancel button */}
+                      <div onClick={() => {
+                        setIsActiveModal(false)
+                        setConfirmModal(true)
+                        setConfirmState("Cancel")
+                      }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#ff4d55] hover:bg-[#e0484f] flex justify-center items-center'>
+                        <div className="text-xl">
+                          <p className='text-white'>Cancel</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  {/* cancel button */}
-                  <div onClick={() => { 
-                    setIsActiveModal(false)
-                    setConfirmModal(true)
-                    setConfirmState("Cancel")
-                  }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#ff4d55] hover:bg-[#e0484f] flex justify-center items-center'>
-                    <div className="text-xl">
-                      <p className='text-white'>Cancel</p>
-                    </div>
-                  </div>
-                </div>
+                  </>
+                  :
+                  null
+                }
               </div>
             </div>
           </div>

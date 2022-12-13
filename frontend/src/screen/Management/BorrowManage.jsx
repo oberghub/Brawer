@@ -8,7 +8,7 @@ const BorrowManage = () => {
     {
       b_date: '15 December 2022',
       d_date: '16 December 2022',
-      late: true,
+      late: false,
       books: [
         {
           title: 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
@@ -197,28 +197,34 @@ const BorrowManage = () => {
                   )}
                 </div>
                 {/* update status button */}
-                <div className="flex gap-5 mt-5">
-                  {/* confirm button */}
-                  <div onClick={() => {
-                    setIsActiveModal(false)
-                    setConfirmModal(true)
-                    setConfirmState("Confirm")
-                  }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
-                    <div className="text-xl">
-                      <p className='text-white'>Confirm</p>
+                {status != 'Success' ?
+                  <>
+                    <div className="flex gap-5 mt-5">
+                      {/* confirm button */}
+                      <div onClick={() => {
+                        setIsActiveModal(false)
+                        setConfirmModal(true)
+                        setConfirmState("Confirm")
+                      }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+                        <div className="text-xl">
+                          <p className='text-white'>Confirm</p>
+                        </div>
+                      </div>
+                      {/* cancel button */}
+                      <div onClick={() => {
+                        setIsActiveModal(false)
+                        setConfirmModal(true)
+                        setConfirmState("Cancel")
+                      }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#ff4d55] hover:bg-[#e0484f] flex justify-center items-center'>
+                        <div className="text-xl">
+                          <p className='text-white'>Cancel</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  {/* cancel button */}
-                  <div onClick={() => {
-                    setIsActiveModal(false)
-                    setConfirmModal(true)
-                    setConfirmState("Cancel")
-                  }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#ff4d55] hover:bg-[#e0484f] flex justify-center items-center'>
-                    <div className="text-xl">
-                      <p className='text-white'>Cancel</p>
-                    </div>
-                  </div>
-                </div>
+                  </>
+                  :
+                  null
+                }
               </div>
             </div>
           </div>
