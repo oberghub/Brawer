@@ -16,8 +16,10 @@ export const BookCart = () => {
         // }, 3000);
     }
     const incrementQuantity = (ind) => {
+        let foundtitle;
         setBookData(BookData.map((item, index) => {
             if (index == ind) {
+                foundtitle = item.title
                 return { ...item, quantity: item.quantity + 1 }
             }
             else {
@@ -25,10 +27,23 @@ export const BookCart = () => {
             }
         }))
         // console.log(BookData[index])
+        if(!!foundtitle){
+            let arr = JSON.parse(localStorage.getItem("books"))
+            for(let book of arr){
+                if(book.title === foundtitle){
+                    book.quantity++
+                    break
+                }
+            }
+            localStorage.setItem('books', JSON.stringify(arr))
+        }
+        
     }
     const decrementQuantity = (ind) => {
+        let foundtitle;
         setBookData(BookData.map((item, index) => {
             if (index == ind) {
+                foundtitle = item.title
                 if (item.quantity === 1) {
                     return { ...item, quantity: 1 }
                 }
@@ -38,6 +53,18 @@ export const BookCart = () => {
                 return item
             }
         }))
+        if(!!foundtitle){
+            let arr = JSON.parse(localStorage.getItem("books"))
+            for(let book of arr){
+                if(book.title === foundtitle){
+                    if(book.quantity > 1){
+                        book.quantity--
+                        break
+                    }
+                }
+            }
+            localStorage.setItem('books', JSON.stringify(arr))
+        }
     }
     useEffect(() => {
         let books = JSON.parse(localStorage.getItem('books'))
