@@ -1,11 +1,38 @@
 import React, {useState} from "react";
 import { useLocation } from "react-router-dom";
 import { BsBookmark } from 'react-icons/bs'
+import { useEffect } from "react";
 export const BookInfo = () => {
     const location = useLocation()
     const [addState, setAddState] = useState("Add to Cart")
-    const addToCart = () => {
-        console.log("Added " + location.state.item.title + " Complete.")
+    const addToCart = (item) => {
+
+        //เช็คว่ายังไม่ได้สร้าง Localstorage 'books' ใช่มั้ย ถ้าไม่มีมัน return เป็น null ใส่ ! หน้า null จะ = true ก็คือ เข้าไปทำใน if
+        if(!JSON.parse(localStorage.getItem("books"))){
+            let arr = []
+            arr.push({...item, quantity : 1})
+            localStorage.setItem('books', JSON.stringify(arr))
+        }
+        else{
+            let arr = JSON.parse(localStorage.getItem("books"))
+            var isDouble = null
+            for(let book of arr){
+                //จำลองโดยการเช็คว่าชื่อหนังสือเหมือนกัน
+                if(book.title === item.title){
+                    book.quantity++
+                    isDouble = true
+                    break
+                }
+                else{
+                    isDouble = false
+                }
+            }
+            if(!isDouble){
+                arr.push({...item, quantity : 1})
+            }
+            localStorage.setItem('books', JSON.stringify(arr))
+        }
+
         setAddState("Add to cart completed.")
         setTimeout(() => {
             setAddState("Add to Cart")
@@ -52,7 +79,7 @@ export const BookInfo = () => {
                         {/* Add to list button */}
                         <div className="w-full h-auto flex">
                             {/* Button */}
-                            <div className="w-[80%] h-[50px] flex justify-center items-center bg-black cursor-pointer" onClick={() => {addToCart()}}>
+                            <div className="w-[80%] h-[50px] flex justify-center items-center bg-black cursor-pointer" onClick={() => {addToCart(location.state.item)}}>
                                 <p className="text-white text-lg">{addState}</p>
                             </div>
                             {/* Bookmark icon */}
