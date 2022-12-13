@@ -13,10 +13,10 @@ export const MyNavbar = () => {
         document.getElementById('slide-profile').classList.toggle('invisible')
         document.getElementById('slide-profile').classList.toggle('translate-y-[-100%]');
     }
-    useEffect(() => { //ติดWarning Maximum update depth exceeded. ใครก็ได้ฝากที TT
-        let arr = JSON.parse(localStorage.getItem('books'))
-        setBookInCart(() => !arr ? [] : arr)
-    }, [JSON.parse(localStorage.getItem('books'))])
+    // useEffect(() => { //ติดWarning Maximum update depth exceeded. ใครก็ได้ฝากที TT
+    //     let arr = JSON.parse(localStorage.getItem('books'))
+    //     setBookInCart(() => !arr ? [] : arr)
+    // }, [JSON.parse(localStorage.getItem('books'))])
     return (
         <>
             {/* Navbar */}
