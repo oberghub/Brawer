@@ -13,9 +13,10 @@ export const MyNavbar = () => {
         document.getElementById('slide-profile').classList.toggle('invisible')
         document.getElementById('slide-profile').classList.toggle('translate-y-[-100%]');
     }
-    // useEffect(() => {
-    //     setBookInCart(JSON.parse(localStorage.getItem('books')).length)
-    // }, [JSON.parse(localStorage.getItem('books'))])
+    useEffect(() => { //ติดWarning Maximum update depth exceeded. ใครก็ได้ฝากที TT
+        let arr = JSON.parse(localStorage.getItem('books'))
+        setBookInCart(() => !arr ? [] : arr)
+    }, [JSON.parse(localStorage.getItem('books'))])
     return (
         <>
             {/* Navbar */}
@@ -65,7 +66,7 @@ export const MyNavbar = () => {
                     <p className="text-lg cursor-pointer mt-[0.3em]"onClick={() => {navigate("/profile/favourite")
                                                                                      toggleslide()}}>Your Favourite</p>
                     <p className="text-lg cursor-pointer mt-[0.3em]" onClick={() => {navigate("/borrow-cart" ) 
-                                                                                     toggleslide()}}>Your Book Cart ()</p>
+                                                                                     toggleslide()}}>Your Book Cart ({bookInCart.length})</p>
                 </div>
                 {/* < lg */}
                 <p className="block lg:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>

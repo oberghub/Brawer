@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { BsCheckCircleFill } from 'react-icons/bs'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
-
+import {RiDeleteBin5Line} from 'react-icons/ri'
 
 export const BookCart = () => {
     const [isActiveModal, setIsActiveModal] = useState(false)
@@ -66,6 +66,14 @@ export const BookCart = () => {
             localStorage.setItem('books', JSON.stringify(arr))
         }
     }
+    const deleteBook = (index) => {
+        let arr = JSON.parse(localStorage.getItem("books"))
+        arr.splice(index, 1)
+        localStorage.setItem('books', JSON.stringify(arr))
+        let copyBooks = [...BookData]
+        copyBooks.splice(index, 1)
+        setBookData(copyBooks)
+    }
     useEffect(() => {
         let books = JSON.parse(localStorage.getItem('books'))
         setBookData(!books ? [] : books)
@@ -102,6 +110,7 @@ export const BookCart = () => {
                                                     <p className="text-xl mt-5">x{item.quantity}</p>
                                                     <AiOutlinePlus className="mt-5 ml-5 cursor-pointer" onClick={() => { incrementQuantity(index) }} size={25} />
                                                 </div>
+                                                <RiDeleteBin5Line onClick={() => deleteBook(index)} className="cursor-pointer mt-5" size={20} />
                                             </div>
                                         </div>
                                     </>
