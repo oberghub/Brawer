@@ -5,6 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react';
 function FindARoom() {
     const navigate = useNavigate()
     let currentTime = new Date()
@@ -40,32 +41,33 @@ function FindARoom() {
     const [selectedRoomType, setSelectedRoomType] = useState(null)
     const [filterRooms, setFilterRooms] = useState(allRooms)
     const roomType = [
-        {label : "Workstation"}, {label : "Meeting Room"}, {label : "Seminar Room"}
+        "Workstation", "Meeting Room", "Seminar Room"
     ]
     const timeRange = [
-        { label: '09:00' },
-        { label: '10:00' },
-        { label: '11:00' },
-        { label: '12:00' },
-        { label: '13:00' },
-        { label: '14:00' },
-        { label: '15:00' },
-        { label: '16:00' },
-        { label: '17:00' },
-        { label: '18:00' },
-        { label: '19:00' },
-        { label: '20:00' },
-        { label: '21:00' },
-        { label: '22:00' },
+        '09:00',
+        '10:00',
+        '11:00',
+        '12:00',
+        '13:00',
+        '14:00',
+        '15:00',
+        '16:00',
+        '17:00',
+        '18:00',
+        '19:00',
+        '20:00',
+        '21:00',
+        '22:00'
     ]
-    const [selectedRoom, setSelectedRoom] = useState(false);
-    const forTimeStart = timeRange.filter(item => item.label <= "20:00")
-    const timeRangeFilter = timeStart == null ? timeRange : timeRange.filter(item => item.label > timeStart.label)
+    const [selectedRoom, setSelectedRoom] = useState(null);
+    const [roomIndex, setRoomIndex] = useState(false)
+    const forTimeStart = timeRange.filter(item => item <= "20:00")
+    const timeRangeFilter = timeStart == null ? timeRange : timeRange.filter(item => item > timeStart)
 
-    //วันไม่เหมือนกันแต่เวลาจองทับกันก็ไม่ออกมาให้ (Bug)
+    //function หาห้องที่ยังว่าง
     function findAvailableRooms(rooms, date = "2022-12-10", timeStart, timeEnd) {
         console.log(selectedRoomType)
-        let roomsT = rooms.filter(item => item.roomType == selectedRoomType.label)
+        let roomsT = rooms.filter(item => item.roomType == selectedRoomType)
         let datebase = new Date();
         if (date.constructor.name == "M") {
             datebase = date.toDate().toISOString().slice(0, 10)
@@ -73,8 +75,8 @@ function FindARoom() {
             datebase = new Date(date).toISOString().slice(0, 10)
         }
 
-        let start = new Date(datebase + "T" + timeStart.label)
-        let end = new Date(datebase + "T" + timeEnd.label)
+        let start = new Date(datebase + "T" + timeStart)
+        let end = new Date(datebase + "T" + timeEnd)
         const availableRooms = [];
         for (const room of roomsT) {
             let occupied = false
@@ -102,9 +104,30 @@ function FindARoom() {
         console.log(availableRooms)
         setFilterRooms(availableRooms)
         setFiltered(true)
+        setSelectedRoom(allRooms[0])
         return availableRooms;
     }
-
+    //ตอนกด next หลังเลือกห้อง
+    const storeTimeRent = () => {
+        let data = { ...selectedRoom, date : date, timeStart : timeStart, timeEnd : timeEnd, equipments : []}
+        localStorage.setItem("myRoom", JSON.stringify(data))
+    }
+    //get ข้อมูลจาก localStorage
+    useEffect(() => {
+        let room = JSON.parse(localStorage.getItem("myRoom"))
+        if(!!room){
+            setDate(room.date)
+            setTimeStart(room.timeStart)
+            setTimeEnd(room.timeEnd)
+            setSelectedRoomType(room.roomType)
+        }
+        else{
+            setDate(currentTime)
+            setTimeStart(null)
+            setTimeEnd(null)
+            setSelectedRoomType(null)
+        }
+    }, [])
     return (
         <div>
             <div className='w-full md:h-[100px] md:flex md:gap-7 justify-center p-10'>
@@ -182,14 +205,16 @@ function FindARoom() {
                 {filterRooms.map((data, index) => <>
                     {isFiltered ?
                         <div onClick={() => {
-                            setSelectedRoom(index)
+                            setRoomIndex(index)
+                            setSelectedRoom(data)
+                            console.log(data)
                         }} className='cursor-pointer flex items-center rounded my-3 min-[1280px]:w-[980px] h-[120px] drop-shadow-xl bg-white m-auto p-4 relative'>
                             <div>
                                 <p className='text-2xl'>{data.roomType} : Room {data.roomName}</p>
                                 <p className='text-xl'>Capacity : {data.roomCapacity} Person</p>
                             </div>
                             <div className='w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center absolute right-[3%]'>
-                                {index == selectedRoom ?
+                                {index == roomIndex ?
                                     <div className='w-5 h-5 rounded-full bg-green-400' />
                                     :
                                     null
@@ -213,7 +238,8 @@ function FindARoom() {
                             <p className='text-2xl'>Cancel</p>
                         </div>
                         {isFiltered ?
-                            <div onClick={() => { navigate('/booking/equipments') }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                            <div onClick={() => { navigate('/booking/equipments')
+                                                  storeTimeRent() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
                                 <p className='text-2xl'>Next</p>
                             </div>
                             :

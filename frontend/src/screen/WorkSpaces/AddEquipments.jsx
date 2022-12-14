@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 const AddEquipments = () => {
@@ -23,6 +23,8 @@ const AddEquipments = () => {
             }
         }))
         // console.log(BookData[index])
+
+        //เพิ่ม จน. ของแล้วเก็บลง local
     }
     const decrementQuantity = (ind) => {
         setAdded(added.map((item, index) => {
@@ -36,6 +38,8 @@ const AddEquipments = () => {
                 return item
             }
         }))
+
+        //ลด จน. ของแล้วเก็บลง local
     }
     const delItem = (data, index) => {
         //คืนของเข้า modal
@@ -47,6 +51,8 @@ const AddEquipments = () => {
         let copyAddedItem = [...added]
         copyAddedItem.splice(index, 1)
         setAdded(copyAddedItem)
+
+        //ลบของออกจาก localStorage
     }
     const addItem = (data, index) => {
         //add ของเข้าไปใน added
@@ -58,7 +64,30 @@ const AddEquipments = () => {
         let copyEquipments = [...equipments]
         copyEquipments.splice(index, 1)
         setEquipments(copyEquipments)
+
     }
+    const storeEquipment = () => {
+        let room = JSON.parse(localStorage.getItem("myRoom"))
+        localStorage.setItem("myRoom", JSON.stringify({...room, equipments : added}))
+    }
+    useEffect(() => { //ติดบัคตรงพอกดเลือกของแล้วกด next แล้วกดกลับมาหน้าเดิม ใน click to add ของมันลบออกไม่หมด
+                      //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ลบโค้ดออกไปแล้ว ฝากทำใหม่ด้วย code ที่บัคคือใน comment**
+        let room = JSON.parse(localStorage.getItem("myRoom"))
+        if(!!room && room.length !== 0){
+            // let copyItem = [...equipments]
+            // let tempitems = []
+            // tempitems = copyItem.filter(item => {
+            //     for(let equ of room.equipments){
+            //         if(equ.itemName !== item.itemName){
+            //             return true
+            //         }
+            //         return false
+            //     }
+            // })
+            // console.log(tempitems)
+            setAdded(room.equipments)
+        }
+    }, [])
     return (
         <div>
             {isActiveModal ?
@@ -115,11 +144,13 @@ const AddEquipments = () => {
                     <p className='text-2xl'>Back</p>
                 </div>
                 {added.length === 0 ?
-                    <div onClick={() => { navigate("/booking/payment") }} className='rounded bg-[#EEE] hover:bg-[#E1E1E1] flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                    <div onClick={() => { navigate("/booking/payment")
+                                          storeEquipment() }} className='rounded bg-[#EEE] hover:bg-[#E1E1E1] flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
                         <p className='text-2xl'>Skip</p>
                     </div>
                     :
-                    <div onClick={() => { navigate("/booking/payment") }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                    <div onClick={() => { navigate("/booking/payment")
+                                          storeEquipment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
                         <p className='text-2xl'>Next</p>
                     </div>
                 }

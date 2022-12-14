@@ -3,12 +3,21 @@ import React, { useEffect, useState } from "react";
 import { BsCheckCircleFill } from 'react-icons/bs'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import {RiDeleteBin5Line} from 'react-icons/ri'
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const BookCart = () => {
+    const location = useLocation()
+    const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [BookData, setBookData] = useState([])
     const openModal = () => {
-        setIsActiveModal(true)
+        let arr = JSON.parse(localStorage.getItem("books"))
+        if(!arr || BookData.length === 0){
+            alert("ไม่มีของอยู่ในนี้")
+        }
+        else{
+            setIsActiveModal(true)
+        }
         // setTimeout(() => {
         //     setIsActiveModal(false)
         //     setCountDown(countDown--)
@@ -18,7 +27,7 @@ export const BookCart = () => {
     const incrementQuantity = (ind) => {
         let foundtitle;
         setBookData(BookData.map((item, index) => {
-            if (index == ind) {
+            if (index === ind) {
                 foundtitle = item.title
                 return { ...item, quantity: item.quantity + 1 }
             }
@@ -42,7 +51,7 @@ export const BookCart = () => {
     const decrementQuantity = (ind) => {
         let foundtitle;
         setBookData(BookData.map((item, index) => {
-            if (index == ind) {
+            if (index === ind) {
                 foundtitle = item.title
                 if (item.quantity === 1) {
                     return { ...item, quantity: 1 }
@@ -76,7 +85,12 @@ export const BookCart = () => {
     }
     useEffect(() => {
         let books = JSON.parse(localStorage.getItem('books'))
-        setBookData(!books ? [] : books)
+        if(location.pathname === "/borrow-cart" && !books){
+            navigate("/")
+        }
+        else{
+            setBookData(!books ? [] : books)
+        }
     }, [])
     return (
         <>
@@ -97,7 +111,7 @@ export const BookCart = () => {
                 <div className="md:w-[70%] p-10 md:border-r-[1px] md:border-gray-200 slide-in-l">
                     <p className="text-4xl Gentium-B-font">My Cart</p>
                     <div className="mt-5 w-full grid grid-cols-1 min-[440px]:grid-cols-2 gap-3 md:block">
-                        {BookData.length != 0 ?
+                        {BookData.length !== 0 ?
                             <>
                                 {BookData.map((item, index) =>
                                     <>
@@ -124,7 +138,7 @@ export const BookCart = () => {
                 <div className="slide-in-r w-full md:w-[500px] p-10 bg-white fixed md:static left-0 bottom-0 z-30">
                     <p className="Gentium-B-font text-4xl">Cart Totals</p>
                     <div className="mt-5">
-                        {BookData.length != 0 ?
+                        {BookData.length !== 0 ?
                             <>
                                 {BookData.map((item, index) =>
                                     <>
@@ -140,7 +154,7 @@ export const BookCart = () => {
                             : null}
                         <div className="mt-5 relative flex">
                             <p className="text-xl Gentium-B-font">Total</p>
-                            {BookData.length != 0 ?
+                            {BookData.length !== 0 ?
                                 <p className="absolute right-0">x{BookData.map(item => item.quantity).reduce((a, b) => a + b)}</p>
                                 : null}
                         </div>
