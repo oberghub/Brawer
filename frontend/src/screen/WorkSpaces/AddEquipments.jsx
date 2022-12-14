@@ -14,20 +14,24 @@ const AddEquipments = () => {
     const [added, setAdded] = useState([
     ])
     const incrementQuantity = (ind) => {
-        setAdded(added.map((item, index) => {
+        let newAdded = added.map((item, index) => {
             if (index == ind) {
                 return { ...item, quantity: item.quantity + 1 }
             }
             else {
                 return item
             }
-        }))
+        })
+        setAdded(newAdded)
         // console.log(BookData[index])
 
         //เพิ่ม จน. ของแล้วเก็บลง local
+        let room = JSON.parse(localStorage.getItem("myRoom"))
+        room.equipments = newAdded
+        localStorage.setItem("myRoom", JSON.stringify(room))
     }
     const decrementQuantity = (ind) => {
-        setAdded(added.map((item, index) => {
+        let newAdded = added.map((item, index) => {
             if (index == ind) {
                 if (item.quantity === 1) {
                     return { ...item, quantity: 1 }
@@ -37,9 +41,13 @@ const AddEquipments = () => {
             else {
                 return item
             }
-        }))
+        })
+        setAdded(newAdded)
 
         //ลด จน. ของแล้วเก็บลง local
+        let room = JSON.parse(localStorage.getItem("myRoom"))
+        room.equipments = newAdded
+        localStorage.setItem("myRoom", JSON.stringify(room))
     }
     const delItem = (data, index) => {
         //คืนของเข้า modal
@@ -53,6 +61,9 @@ const AddEquipments = () => {
         setAdded(copyAddedItem)
 
         //ลบของออกจาก localStorage
+        let room = JSON.parse(localStorage.getItem("myRoom"))
+        room.equipments = copyAddedItem
+        localStorage.setItem("myRoom", JSON.stringify(room))
     }
     const addItem = (data, index) => {
         //add ของเข้าไปใน added
@@ -64,6 +75,11 @@ const AddEquipments = () => {
         let copyEquipments = [...equipments]
         copyEquipments.splice(index, 1)
         setEquipments(copyEquipments)
+        
+        //เพิ่มของลง local
+        let room = JSON.parse(localStorage.getItem("myRoom"))
+        room.equipments = copyAddedItem
+        localStorage.setItem("myRoom", JSON.stringify(room))
 
     }
     const storeEquipment = () => {
@@ -74,17 +90,21 @@ const AddEquipments = () => {
                       //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ที่บัคคือใน comment**
         let room = JSON.parse(localStorage.getItem("myRoom"))
         if(!!room && room.length !== 0){
-            // let copyItem = [...equipments]
-            // let tempitems = []
-            // tempitems = copyItem.filter(item => {
-            //     for(let equ of room.equipments){
-            //         if(equ.itemName !== item.itemName){
-            //             return true
-            //         }
-            //         return false
-            //     }
-            // })
+            let copyItem = [...equipments]
+            let tempitems = []
+            tempitems = copyItem.filter(item => {
+                let canaddequipment = true
+                for(let equ of room.equipments){
+                    // console.log(item.itemName, equ.itemName, equ.itemName !== item.itemName)
+                    if(equ.itemName == item.itemName){
+                        canaddequipment = false
+                        break
+                    }
+                }
+                return canaddequipment
+            })
             // console.log(tempitems)
+            setEquipments(tempitems)
             setAdded(room.equipments)
         }
     }, [])
