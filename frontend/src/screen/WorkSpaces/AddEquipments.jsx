@@ -71,7 +71,7 @@ const AddEquipments = () => {
         localStorage.setItem("myRoom", JSON.stringify({...room, equipments : added}))
     }
     useEffect(() => { //ติดบัคตรงพอกดเลือกของแล้วกด next แล้วกดกลับมาหน้าเดิม ใน click to add ของมันลบออกไม่หมด
-                      //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ลบโค้ดออกไปแล้ว ฝากทำใหม่ด้วย code ที่บัคคือใน comment**
+                      //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ที่บัคคือใน comment**
         let room = JSON.parse(localStorage.getItem("myRoom"))
         if(!!room && room.length !== 0){
             // let copyItem = [...equipments]
