@@ -31,7 +31,7 @@ function WorkSpace() {
                             <li>ใช้บริการเครื่องปริ้นท์ได้ไม่จำกัด</li>
                         </div>
                         <div className="w-[300px] h-[65px] bg-[#2F5D62] hover:bg-[#2B5155] absolute bottom-[-10%] right-[11%] flex justify-center items-center cursor-pointer">
-                            <p className='text-white text-xl Gentium-B-font'>Reserve Now!</p>
+                            <p className='text-white text-xl Gentium-B-font'  onClick={() => {navigate('/booking/find-a-room')}}>Reserve Now!</p>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@ function WorkSpace() {
                                 <p className='text-4xl'>Workstation</p>
                                 <p className='mt-3 indent-5'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, ea rerum? Fugit amet beatae, a suscipit sunt voluptate consequuntur! Vero assumenda ullam dolorem facilis molestiae unde quis laboriosam sit esse!</p>
                             </div>
-                            <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info')}}>
+                            <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info', {state : {title : "Workstation", desc : "eiei"}})}}>
                                 <p className='text-xl text-white Gentium-B-font'>Learn More</p>
                             </div>
                         </div>
@@ -54,7 +54,7 @@ function WorkSpace() {
                                 <p className='text-4xl'>Meeting Room</p>
                                 <p className='mt-3 indent-5'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, ea rerum? Fugit amet beatae, a suscipit sunt voluptate consequuntur! Vero assumenda ullam dolorem facilis molestiae unde quis laboriosam sit esse!</p>
                             </div>
-                            <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info')}}>
+                            <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info', {state : {title : "Meeting Room", desc : "eiei"}})}}>
                                 <p className='text-xl text-white Gentium-B-font'>Learn More</p>
                             </div>
                         </div>
@@ -64,7 +64,7 @@ function WorkSpace() {
                                 <p className='text-4xl'>Seminar Room</p>
                                 <p className='mt-3 indent-5'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, ea rerum? Fugit amet beatae, a suscipit sunt voluptate consequuntur! Vero assumenda ullam dolorem facilis molestiae unde quis laboriosam sit esse!</p>
                             </div>
-                            <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info')}}>
+                            <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info', {state : {title : "Seminar Room", desc : "eiei"}})}}>
                                 <p className='text-xl text-white Gentium-B-font'>Learn More</p>
                             </div>
                         </div>

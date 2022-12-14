@@ -82,10 +82,10 @@ export const MyNavbar = () => {
                         <p className="block lg:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
                         <div className="block lg:hidden mt-[0.5em] border-t-[0.5px] border-gray-400 mb-[1em]">
                             <Link to={'all-books'} onClick={toggleslide}>
-                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Book</p>
+                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Books</p>
                             </Link>
                             <Link to={'all-spaces'} onClick={toggleslide}>
-                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpace</p>
+                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpaces</p>
                             </Link>
                         </div>
                         {/* Bottom of menu */}
@@ -116,16 +116,16 @@ export const MyNavbar = () => {
                             <Link to={"/"} className='Gentium-B-font text-3xl cursor-pointer'>BRAWER</Link>
                         </div>
                         {/* Nav Search Bar */}
-                        <div className='hidden sm:flex items-center lg:mr-14'>
+                        {/* <div className='hidden sm:flex items-center lg:mr-14'>
                             <TextField id="outlined-basic" variant="outlined" size='small' />
                             <AiOutlineSearch size={20} className='ml-4 cursor-pointer' />
-                        </div>
+                        </div> */}
 
                         {/* content > 1024px */}
                         {/* Choice to loan item */}
-                        <div className='hidden lg:flex'>
-                            <Link to={"all-books"} className='text-2xl mr-10 cursor-pointer'>Book</Link>
-                            <Link to={'all-spaces'} className='text-2xl cursor-pointer'>WorkSpace</Link>
+                        <div className='hidden lg:flex ml-[3em]'>
+                            <Link to={"all-books"} className='text-2xl mr-10 cursor-pointer'>Books</Link>
+                            <Link to={'all-spaces'} className='text-2xl cursor-pointer'>WorkSpaces</Link>
                         </div>
                         {/* Image Profile */}
                         <div className='absolute right-0 cursor-pointer hidden sm:flex' onClick={() => { toggleslide() }}>

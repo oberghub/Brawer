@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { AiOutlineCreditCard, AiOutlineBank, AiOutlineQrcode } from 'react-icons/ai'
 import { BsCheckCircleFill } from 'react-icons/bs'
@@ -12,7 +12,7 @@ const Payment = () => {
       roomType: "Workstation",
       roomCapacity: "2 - 9",
       timeRent: { date: "2022-12-11", timeStart: "14:00", timeEnd: "16:00" },
-      additionalItem: [
+      equipments: [
         { itemName: "Microphone", price: 150, quantity: 2 },
         { itemName: "Projector", price: 250, quantity: 1 },
       ]
@@ -35,6 +35,9 @@ const Payment = () => {
     setIsActiveModal(false)
     setConfirmModal(true)
   }
+  useEffect(() => {
+    setResultRoom(JSON.parse(localStorage.getItem("myRoom")))
+  }, [])
   return (
     <div>
       {confirmModal ?
@@ -103,25 +106,25 @@ const Payment = () => {
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Date :</p>
-                <p className='absolute right-[3%]'>{resultRoom.timeRent.date}</p>
+                <p className='absolute right-[3%]'>{resultRoom.date}</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Start :</p>
-                <p className='absolute right-[3%]'>{resultRoom.timeRent.timeStart}</p>
+                <p className='absolute right-[3%]'>{resultRoom.timeStart}</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>End :</p>
-                <p className='absolute right-[3%]'>{resultRoom.timeRent.timeEnd}</p>
+                <p className='absolute right-[3%]'>{resultRoom.timeEnd}</p>
               </div>
             </div>
             <p className='text-2xl sm:text-3xl Gentium-B-font my-[0.5em]'>Additional Equipments</p>
-            {resultRoom.additionalItem.length == 0 ?
+            {resultRoom.equipments.length == 0 ?
               <div className='indent-5'>
                 <p className='text-xl sm:text-2xl'>None</p>
               </div>
               :
               <>
-                {resultRoom.additionalItem.map(item => <>
+                {resultRoom.equipments.map(item => <>
                   <div className='indent-5'>
                     <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>- {item.itemName}</p>
@@ -133,7 +136,7 @@ const Payment = () => {
             }
             <div className='w-full mt-[1em] flex p-5 text-xl sm:text-3xl border-t-[1px] border-gray-300 relative'>
               <p className='Gentium-B-font'>Total</p>
-              <p className='absolute right-[3%]'>1550 THB</p>
+              <p className='absolute right-[3%]'>{resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b)} THB</p>
             </div>
           </div>
         </div>
