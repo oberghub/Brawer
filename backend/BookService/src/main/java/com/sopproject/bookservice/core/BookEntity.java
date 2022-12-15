@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-@Document("Book")
+@Document("books")
 public class BookEntity implements Serializable {
     @Id
     private String _id;

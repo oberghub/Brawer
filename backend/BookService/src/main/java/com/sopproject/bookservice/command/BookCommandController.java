@@ -3,6 +3,7 @@ package com.sopproject.bookservice.command;
 import com.sopproject.bookservice.command.rest.CreateBookCommand;
 import com.sopproject.bookservice.command.rest.CreateBookRestModel;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +23,7 @@ public class BookCommandController {
     @PostMapping
     public String createBooks(@RequestBody CreateBookRestModel model){
         CreateBookCommand command = CreateBookCommand.builder()
+                ._id(new ObjectId().toString())
                 .title(model.getTitle())
                 .desc(model.getDesc())
                 .quantity(model.getQuantity())
