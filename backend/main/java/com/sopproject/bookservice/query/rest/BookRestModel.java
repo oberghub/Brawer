@@ -1,16 +1,11 @@
-package com.sopproject.bookservice.core;
+package com.sopproject.bookservice.query.rest;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Data
-@Document("Book")
-public class BookEntity implements Serializable {
-    @Id
+public class BookRestModel {
     private String _id;
     private String title;
     private String desc;
@@ -19,5 +14,4 @@ public class BookEntity implements Serializable {
     private String image;
     private String language;
     private List<String> genres;
-
 }

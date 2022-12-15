@@ -15,7 +15,8 @@ public class BookQueryController {
     @Autowired
     private QueryGateway queryGateway;
 
-    @GetMapping("all")
+
+    @GetMapping
     public List<BookRestModel> findBooksQuery(){
         FindBooksQuery findBooksQuery = new FindBooksQuery();
         List<BookRestModel> books = queryGateway

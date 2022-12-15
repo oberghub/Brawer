@@ -12,6 +12,7 @@ import java.util.List;
 public class BookEntity implements Serializable {
     @Id
     private String _id;
+    private String bookId;
     private String title;
     private String desc;
     private int quantity;
