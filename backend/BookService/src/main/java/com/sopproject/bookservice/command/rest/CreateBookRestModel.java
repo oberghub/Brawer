@@ -1,10 +1,11 @@
-package com.sopproject.bookservice.core.event;
+package com.sopproject.bookservice.command.rest;
 
 import lombok.Data;
 
 import java.util.List;
+
 @Data
-public class BookCreatedEvent {
+public class CreateBookRestModel {
     private String _id;
     private String title;
     private String desc;
