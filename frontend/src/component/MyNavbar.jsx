@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { TextField } from '@mui/material';
-import { AiOutlineSearch } from 'react-icons/ai'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import secureLocalStorage from "react-secure-storage";
 export const MyNavbar = () => {
     const [acc, setAcc] = useState(true)
     const [bookInCart, setBookInCart] = useState([])
@@ -14,7 +13,7 @@ export const MyNavbar = () => {
         document.getElementById('slide-profile').classList.toggle('translate-y-[-100%]');
     }
     useEffect(() => { //ติดWarning Maximum update depth exceeded. ใครก็ได้ฝากที TT
-        let arr = JSON.parse(localStorage.getItem('books'))
+        let arr = JSON.parse(secureLocalStorage.getItem('books'))
         setBookInCart(() => !arr ? [] : arr)
     }, [])
     return (
@@ -87,6 +86,10 @@ export const MyNavbar = () => {
                             <Link to={'all-spaces'} onClick={toggleslide}>
                                 <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpaces</p>
                             </Link>
+                            <Link to={'management'} onClick={toggleslide}>
+                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">Management</p>
+                            </Link>
+
                         </div>
                         {/* Bottom of menu */}
                         <div className="w-full border-t-[0.5px] border-gray-200 mt-[1em] sm:mt-0 flex">
@@ -125,7 +128,8 @@ export const MyNavbar = () => {
                         {/* Choice to loan item */}
                         <div className='hidden lg:flex ml-[3em]'>
                             <Link to={"all-books"} className='text-2xl mr-10 cursor-pointer'>Books</Link>
-                            <Link to={'all-spaces'} className='text-2xl cursor-pointer'>WorkSpaces</Link>
+                            <Link to={'all-spaces'} className='text-2xl mr-10 cursor-pointer'>WorkSpaces</Link>
+                            <Link to={'management'} className='text-2xl cursor-pointer'>Management</Link>
                         </div>
                         {/* Image Profile */}
                         <div className='absolute right-0 cursor-pointer hidden sm:flex' onClick={() => { toggleslide() }}>

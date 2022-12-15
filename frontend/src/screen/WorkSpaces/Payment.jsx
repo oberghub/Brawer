@@ -4,19 +4,28 @@ import { AiOutlineCreditCard, AiOutlineBank, AiOutlineQrcode } from 'react-icons
 import { BsCheckCircleFill } from 'react-icons/bs'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import secureLocalStorage from 'react-secure-storage';
 const Payment = () => {
   const [resultRoom, setResultRoom] = useState(
+    //ชุดทดสอบ ลบออกแล้วมัน error T_T
     {
+      bookingId: 'booking001',
       roomId: 'wsw001',
       roomName: "w01",
       roomType: "Workstation",
       roomCapacity: "2 - 9",
-      timeRent: { date: "2022-12-11", timeStart: "14:00", timeEnd: "16:00" },
+      pricePerHour : 500,
+      sumPrice : 1000,
+      date: "2022-11-25",
+      timeStart: "14:00",
+      timeEnd: "16:00",
       equipments: [
         { itemName: "Microphone", price: 150, quantity: 2 },
         { itemName: "Projector", price: 250, quantity: 1 },
-      ]
-    }
+      ],
+      bookingBy: "sheepSheepy",
+      // status: "Cancel",
+    },
   )
   const [paymentMethod, setMethod] = useState([
     { type: "Credit / Debit", icon: <AiOutlineCreditCard size={100} className="m-auto" /> },
@@ -36,7 +45,13 @@ const Payment = () => {
     setConfirmModal(true)
   }
   useEffect(() => {
-    setResultRoom(JSON.parse(localStorage.getItem("myRoom")))
+    let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+    if(!!room){
+      setResultRoom(room)
+    }
+    else{
+      navigate("/")
+    }
   }, [])
   return (
     <div>
@@ -105,16 +120,20 @@ const Payment = () => {
                 <p className='absolute right-[3%]'>{resultRoom.roomCapacity} Person</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
+                <p className='Gentium-B-font'>Room Price :</p>
+                <p className='absolute right-[3%]'>{resultRoom.pricePerHour} THB</p>
+              </div>
+              <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Date :</p>
                 <p className='absolute right-[3%]'>{resultRoom.date}</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
-                <p className='Gentium-B-font'>Start :</p>
-                <p className='absolute right-[3%]'>{resultRoom.timeStart}</p>
+                <p className='Gentium-B-font'>Time :</p>
+                <p className='absolute right-[3%]'>{resultRoom.timeStart} - {resultRoom.timeEnd}</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
-                <p className='Gentium-B-font'>End :</p>
-                <p className='absolute right-[3%]'>{resultRoom.timeEnd}</p>
+                <p className='Gentium-B-font'>Period :</p>
+                <p className='absolute right-[3%]'>{parseInt(resultRoom.timeEnd) - parseInt(resultRoom.timeStart)} HRS</p>
               </div>
             </div>
             <p className='text-2xl sm:text-3xl Gentium-B-font my-[0.5em]'>Additional Equipments</p>
@@ -136,7 +155,7 @@ const Payment = () => {
             }
             <div className='w-full mt-[1em] flex p-5 text-xl sm:text-3xl border-t-[1px] border-gray-300 relative'>
               <p className='Gentium-B-font'>Total</p>
-              <p className='absolute right-[3%]'>{resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b)} THB</p>
+              <p className='absolute right-[3%]'>{resultRoom.equipments.length !== 0 ? resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b) + resultRoom.sumPrice : resultRoom.sumPrice} THB</p>
             </div>
           </div>
         </div>

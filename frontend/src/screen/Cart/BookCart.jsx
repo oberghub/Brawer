@@ -4,6 +4,7 @@ import { BsCheckCircleFill } from 'react-icons/bs'
 import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import {RiDeleteBin5Line} from 'react-icons/ri'
 import { useLocation, useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 
 export const BookCart = () => {
     const location = useLocation()
@@ -11,7 +12,7 @@ export const BookCart = () => {
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [BookData, setBookData] = useState([])
     const openModal = () => {
-        let arr = JSON.parse(localStorage.getItem("books"))
+        let arr = JSON.parse(secureLocalStorage.getItem("books"))
         if(!arr || BookData.length === 0){
             alert("ไม่มีของอยู่ในนี้")
         }
@@ -37,14 +38,14 @@ export const BookCart = () => {
         }))
         // console.log(BookData[index])
         if(!!foundtitle){
-            let arr = JSON.parse(localStorage.getItem("books"))
+            let arr = JSON.parse(secureLocalStorage.getItem("books"))
             for(let book of arr){
                 if(book.title === foundtitle){
                     book.quantity++
                     break
                 }
             }
-            localStorage.setItem('books', JSON.stringify(arr))
+            secureLocalStorage.setItem('books', JSON.stringify(arr))
         }
         
     }
@@ -63,7 +64,7 @@ export const BookCart = () => {
             }
         }))
         if(!!foundtitle){
-            let arr = JSON.parse(localStorage.getItem("books"))
+            let arr = JSON.parse(secureLocalStorage.getItem("books"))
             for(let book of arr){
                 if(book.title === foundtitle){
                     if(book.quantity > 1){
@@ -72,19 +73,19 @@ export const BookCart = () => {
                     }
                 }
             }
-            localStorage.setItem('books', JSON.stringify(arr))
+            secureLocalStorage.setItem('books', JSON.stringify(arr))
         }
     }
     const deleteBook = (index) => {
-        let arr = JSON.parse(localStorage.getItem("books"))
+        let arr = JSON.parse(secureLocalStorage.getItem("books"))
         arr.splice(index, 1)
-        localStorage.setItem('books', JSON.stringify(arr))
+        secureLocalStorage.setItem('books', JSON.stringify(arr))
         let copyBooks = [...BookData]
         copyBooks.splice(index, 1)
         setBookData(copyBooks)
     }
     useEffect(() => {
-        let books = JSON.parse(localStorage.getItem('books'))
+        let books = JSON.parse(secureLocalStorage.getItem('books'))
         if(location.pathname === "/borrow-cart" && !books){
             navigate("/")
         }

@@ -30,8 +30,8 @@ function WorkSpace() {
                             <li>อินเทอร์เน็ตความเร็วสูง</li>
                             <li>ใช้บริการเครื่องปริ้นท์ได้ไม่จำกัด</li>
                         </div>
-                        <div className="w-[300px] h-[65px] bg-[#2F5D62] hover:bg-[#2B5155] absolute bottom-[-10%] right-[11%] flex justify-center items-center cursor-pointer">
-                            <p className='text-white text-xl Gentium-B-font'  onClick={() => {navigate('/booking/find-a-room')}}>Reserve Now!</p>
+                        <div onClick={() => {navigate('/booking/find-a-room')}} className="w-[300px] h-[65px] bg-[#2F5D62] hover:bg-[#2B5155] absolute bottom-[-10%] right-[11%] flex justify-center items-center cursor-pointer">
+                            <p className='text-white text-xl Gentium-B-font' >Reserve Now!</p>
                         </div>
                     </div>
                 </div>

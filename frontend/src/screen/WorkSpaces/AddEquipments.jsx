@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import secureLocalStorage from 'react-secure-storage'
 const AddEquipments = () => {
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
@@ -13,6 +14,7 @@ const AddEquipments = () => {
     ])
     const [added, setAdded] = useState([
     ])
+    //กด + เพิ่มจำนวนของที่เลือก
     const incrementQuantity = (ind) => {
         let newAdded = added.map((item, index) => {
             if (index == ind) {
@@ -26,10 +28,11 @@ const AddEquipments = () => {
         // console.log(BookData[index])
 
         //เพิ่ม จน. ของแล้วเก็บลง local
-        let room = JSON.parse(localStorage.getItem("myRoom"))
+        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
         room.equipments = newAdded
-        localStorage.setItem("myRoom", JSON.stringify(room))
+        secureLocalStorage.setItem("myRoom", JSON.stringify(room))
     }
+    //กด - ลดจำนวนของที่เลือก
     const decrementQuantity = (ind) => {
         let newAdded = added.map((item, index) => {
             if (index == ind) {
@@ -45,9 +48,9 @@ const AddEquipments = () => {
         setAdded(newAdded)
 
         //ลด จน. ของแล้วเก็บลง local
-        let room = JSON.parse(localStorage.getItem("myRoom"))
+        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
         room.equipments = newAdded
-        localStorage.setItem("myRoom", JSON.stringify(room))
+        secureLocalStorage.setItem("myRoom", JSON.stringify(room))
     }
     const delItem = (data, index) => {
         //คืนของเข้า modal
@@ -60,10 +63,10 @@ const AddEquipments = () => {
         copyAddedItem.splice(index, 1)
         setAdded(copyAddedItem)
 
-        //ลบของออกจาก localStorage
-        let room = JSON.parse(localStorage.getItem("myRoom"))
+        //ลบของออกจาก secureLocalStorage
+        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
         room.equipments = copyAddedItem
-        localStorage.setItem("myRoom", JSON.stringify(room))
+        secureLocalStorage.setItem("myRoom", JSON.stringify(room))
     }
     const addItem = (data, index) => {
         //add ของเข้าไปใน added
@@ -77,18 +80,19 @@ const AddEquipments = () => {
         setEquipments(copyEquipments)
         
         //เพิ่มของลง local
-        let room = JSON.parse(localStorage.getItem("myRoom"))
+        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
         room.equipments = copyAddedItem
-        localStorage.setItem("myRoom", JSON.stringify(room))
+        secureLocalStorage.setItem("myRoom", JSON.stringify(room))
 
     }
+    //กด Next
     const storeEquipment = () => {
-        let room = JSON.parse(localStorage.getItem("myRoom"))
-        localStorage.setItem("myRoom", JSON.stringify({...room, equipments : added}))
+        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+        secureLocalStorage.setItem("myRoom", JSON.stringify({...room, equipments : added}))
     }
     useEffect(() => { //ติดบัคตรงพอกดเลือกของแล้วกด next แล้วกดกลับมาหน้าเดิม ใน click to add ของมันลบออกไม่หมด
-                      //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ที่บัคคือใน comment**
-        let room = JSON.parse(localStorage.getItem("myRoom"))
+                      //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ที่บัคคือใน comment** ***แก้แล้ว***
+        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
         if(!!room && room.length !== 0){
             let copyItem = [...equipments]
             let tempitems = []
@@ -106,6 +110,9 @@ const AddEquipments = () => {
             // console.log(tempitems)
             setEquipments(tempitems)
             setAdded(room.equipments)
+        }
+        else{
+            navigate("/")
         }
     }, [])
     return (

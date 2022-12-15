@@ -248,7 +248,7 @@ const BorrowManage = () => {
               <tr className='h-[2.5em]' style={{ backgroundColor: index % 2 == 0 ? "#2F5D62" : "white", color: index % 2 == 0 ? 'white' : 'black' }}>
                 <td>{item.borrowId}</td>
                 <td>{item.borrower}</td>
-                <td>{item.status}</td>
+                <td className='Gentium-B-font'>{item.status}</td>
                 <td className='Gentium-R-font'>
                   <div className='flex items-center justify-center'>
                     <AiOutlineSearch onClick={() => {

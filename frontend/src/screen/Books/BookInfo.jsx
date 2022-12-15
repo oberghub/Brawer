@@ -2,19 +2,20 @@ import React, {useState} from "react";
 import { useLocation } from "react-router-dom";
 import { BsBookmark } from 'react-icons/bs'
 import { useEffect } from "react";
+import secureLocalStorage from "react-secure-storage";
 export const BookInfo = () => {
     const location = useLocation()
     const [addState, setAddState] = useState("Add to Cart")
     const addToCart = (item) => {
 
         //เช็คว่ายังไม่ได้สร้าง Localstorage 'books' ใช่มั้ย ถ้าไม่มีมัน return เป็น null ใส่ ! หน้า null จะ = true ก็คือ เข้าไปทำใน if
-        if(!JSON.parse(localStorage.getItem("books"))){
+        if(!JSON.parse(secureLocalStorage.getItem("books"))){
             let arr = []
             arr.push({...item, quantity : 1})
-            localStorage.setItem('books', JSON.stringify(arr))
+            secureLocalStorage.setItem('books', JSON.stringify(arr))
         }
         else{
-            let arr = JSON.parse(localStorage.getItem("books"))
+            let arr = JSON.parse(secureLocalStorage.getItem("books"))
             var isDouble = null
             for(let book of arr){
                 //จำลองโดยการเช็คว่าชื่อหนังสือเหมือนกัน
@@ -30,7 +31,7 @@ export const BookInfo = () => {
             if(!isDouble){
                 arr.push({...item, quantity : 1})
             }
-            localStorage.setItem('books', JSON.stringify(arr))
+            secureLocalStorage.setItem('books', JSON.stringify(arr))
         }
 
         setAddState("Add to cart completed.")

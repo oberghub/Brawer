@@ -166,7 +166,7 @@ const EquipmentsStock = () => {
                 <Box
                   className='w-full'
                 >
-                  <p className='text-xl mb-1 Gentium-B-font'>Book Title :</p>
+                  <p className='text-xl mb-1 Gentium-B-font'>Item Name :</p>
                   <TextField fullWidth label="" id="title" value={e_Title} onChange={handleE_Title} />
                 </Box>
               </div>
@@ -174,7 +174,7 @@ const EquipmentsStock = () => {
                 <Box
                   className='w-full'
                 >
-                  <p className='text-xl mb-1 Gentium-B-font'>Price :</p>
+                  <p className='text-xl mb-1 Gentium-B-font'>Price per 1 :</p>
                   <TextField fullWidth type={"number"} id="title" value={e_Price} onChange={handleE_Price} />
                 </Box>
               </div>

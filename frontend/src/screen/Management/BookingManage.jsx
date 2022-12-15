@@ -11,8 +11,12 @@ const BookingManage = () => {
       roomName: "w01",
       roomType: "Workstation",
       roomCapacity: "2 - 9",
-      timeRent: { date: "2022-11-25", timeStart: "14:00", timeEnd: "16:00" },
-      additionalItem: [
+      pricePerHour : 500,
+      sumPrice : 1000,
+      date: "2022-11-25",
+      timeStart: "14:00",
+      timeEnd: "16:00",
+      equipments: [
         { itemName: "Microphone", price: 150, quantity: 2 },
         { itemName: "Projector", price: 250, quantity: 1 },
       ],
@@ -25,8 +29,10 @@ const BookingManage = () => {
       roomName: "w01",
       roomType: "Workstation",
       roomCapacity: "2 - 9",
-      timeRent: { date: "2022-12-07", timeStart: "17:00", timeEnd: "19:00" },
-      additionalItem: [
+      pricePerHour : 500,
+      sumPrice : 1000,
+      date: "2022-12-07", timeStart: "17:00", timeEnd: "19:00" ,
+      equipments: [
         { itemName: "Microphone", price: 150, quantity: 2 },
         { itemName: "Projector", price: 250, quantity: 1 },
       ],
@@ -39,8 +45,10 @@ const BookingManage = () => {
       roomName: "w01",
       roomType: "Workstation",
       roomCapacity: "2 - 9",
-      timeRent: { date: "2022-12-08", timeStart: "11:00", timeEnd: "13:00" },
-      additionalItem: [
+      pricePerHour : 500,
+      sumPrice : 1000,
+      date: "2022-12-08", timeStart: "11:00", timeEnd: "13:00",
+      equipments: [
         { itemName: "Microphone", price: 150, quantity: 2 },
         { itemName: "Projector", price: 250, quantity: 1 },
       ],
@@ -52,9 +60,11 @@ const BookingManage = () => {
       roomId: 'smr001',
       roomName: "sr1",
       roomType: "Seminar Room",
+      pricePerHour : 5500,
+      sumPrice : 33000,
       roomCapacity: "50-100",
-      timeRent: { date: "2022-12-17", timeStart: "11:00", timeEnd: "17:00" },
-      additionalItem: [
+      date: "2022-12-17", timeStart: "11:00", timeEnd: "17:00",
+      equipments: [
         { itemName: "Microphone", price: 150, quantity: 10 },
         { itemName: "Projector", price: 250, quantity: 2 },
       ],
@@ -73,19 +83,27 @@ const BookingManage = () => {
   const [roomName, setRoomName] = useState()
   const [roomType, setRoomType] = useState()
   const [roomCapacity, setRoomCapacity] = useState()
-  const [timeRent, setTimeRent] = useState()
-  const [additionalItem, setAdditionalItem] = useState()
+  const [date, setDate] = useState()
+  const [timeStart, setTimeStart] = useState()
+  const [timeEnd, setTimeEnd] = useState()
+  const [pricePerHour, setPricePerHour] = useState()
+  const [equipments, setEquipments] = useState()
   const [bookingBy, setBookingBy] = useState()
+  const [sumPrice, setSumPrice] = useState()
   const [status, setStatus] = useState()
   const seeADetail = (data) => {
     setBookingId(data.bookingId)
     setRoomId(data.roomId)
     setRoomName(data.roomName)
     setRoomType(data.roomType)
+    setPricePerHour(data.pricePerHour)
     setRoomCapacity(data.roomCapacity)
-    setTimeRent(data.timeRent)
-    setAdditionalItem(data.additionalItem)
+    setDate(data.date)
+    setTimeStart(data.timeStart)
+    setTimeEnd(data.timeEnd)
+    setEquipments(data.equipments)
     setBookingBy(data.bookingBy)
+    setSumPrice(data.sumPrice)
     setStatus(data.status)
   }
   const toggleslide = () => {
@@ -167,35 +185,39 @@ const BookingManage = () => {
                 <div className='w-full bg-[#FAFAFA] rounded p-5 drop-shadow-xl'>
                   <p className='text-xl sm:text-2xl sm:text-2xl Gentium-B-font mb-[0.5em]'>Room Seleted</p>
                   <div className='indent-5'>
-                    <div className='w-full text-lg sm:text-xl flex relative'>
+                    <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Workstation :</p>
                       <p className='absolute right-[3%]'>Room {roomName}</p>
                     </div>
-                    <div className='w-full text-lg sm:text-xl flex relative'>
+                    <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Capacity :</p>
                       <p className='absolute right-[3%]'>{roomCapacity} Person</p>
                     </div>
-                    <div className='w-full text-lg sm:text-xl flex relative'>
+                    <div className='w-full text-xl sm:text-2xl flex relative'>
+                      <p className='Gentium-B-font'>Room Price :</p>
+                      <p className='absolute right-[3%]'>{pricePerHour} THB</p>
+                    </div>
+                    <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Date :</p>
-                      <p className='absolute right-[3%]'>{timeRent.date}</p>
+                      <p className='absolute right-[3%]'>{date}</p>
                     </div>
-                    <div className='w-full text-lg sm:text-xl flex relative'>
-                      <p className='Gentium-B-font'>Start :</p>
-                      <p className='absolute right-[3%]'>{timeRent.timeStart}</p>
+                    <div className='w-full text-xl sm:text-2xl flex relative'>
+                      <p className='Gentium-B-font'>Time :</p>
+                      <p className='absolute right-[3%]'>{timeStart} - {timeEnd}</p>
                     </div>
-                    <div className='w-full text-lg sm:text-xl flex relative'>
-                      <p className='Gentium-B-font'>End :</p>
-                      <p className='absolute right-[3%]'>{timeRent.timeEnd}</p>
+                    <div className='w-full text-xl sm:text-2xl flex relative'>
+                      <p className='Gentium-B-font'>Period :</p>
+                      <p className='absolute right-[3%]'>{parseInt(timeEnd) - parseInt(timeStart)} HRS</p>
                     </div>
                   </div>
                   <p className='text-xl sm:text-2xl Gentium-B-font my-[0.5em]'>Additional Equipments</p>
-                  {additionalItem.length == 0 ?
+                  {equipments.length == 0 ?
                     <div className='indent-5'>
                       <p className='text-xl'>None</p>
                     </div>
                     :
                     <>
-                      {additionalItem.map(item => <>
+                      {equipments.map(item => <>
                         <div className='indent-5'>
                           <div className='w-full text-lg sm:text-xl flex relative'>
                             <p className='Gentium-B-font'>- {item.itemName}</p>
@@ -207,7 +229,7 @@ const BookingManage = () => {
                   }
                   <div className='w-full mt-[1em] flex p-5 text-xl sm:text-2xl border-t-[1px] border-gray-300 relative'>
                     <p className='Gentium-B-font'>Total</p>
-                    <p className='absolute right-[3%]'>1550 THB</p>
+                    <p className='absolute right-[3%]'>{equipments.length !== 0 ? equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b) + sumPrice : sumPrice} THB</p>
                   </div>
                 </div>
                 {/* update status button */}
