@@ -59,10 +59,11 @@ const BookStock = () => {
   useEffect(() => {
     if (chooseImage.length < 1) return;
     const newImageUrls = [];
-    chooseImage.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
+    chooseImage.forEach((image) => {newImageUrls.push(URL.createObjectURL(image))});
     setImageUrls(newImageUrls);
   }, [chooseImage]);
   //---Handle Image---//
+  
   const handleQuantity = (event) => {
     setQuantity(event.target.value)
   }
@@ -220,7 +221,7 @@ const BookStock = () => {
             </div>
           </div>
           <div className="w-full relative">
-            <p onClick={() => { console.log(books) }} className='text-3xl'>Choose A Book</p>
+            <p onClick={() => { console.log(e_chooseImage) }} className='text-3xl'>Choose A Book</p>
           </div>
           <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
             <div className="text-xl">
