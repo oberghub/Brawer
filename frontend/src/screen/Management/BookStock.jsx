@@ -59,13 +59,14 @@ const BookStock = () => {
       sete_BookType(selectedBook.genres.join(","))
       sete_Authors(selectedBook.authors.join(","))
       sete_Quantity(selectedBook.quantity)
-      sete_Image(selectedBook.image)
       sete_Desc(selectedBook.desc)
-      console.log(selectedBook.title)
+      // sete_Image(selectedBook.image)
       setImageUrls([selectedBook.image])
     }
     
   }, [selectedBook]);
+
+  
   //---Handle Image---//
   const handleImage = (event) => {
     setImage([...event.target.files])
@@ -98,7 +99,14 @@ const BookStock = () => {
     sete_Desc(event.target.value);
   };
   const handleE_Image = (event) => {
-    sete_Image(event.target.files[0].name)
+    sete_Image(event.target.files[0])
+    let myimage;
+    let reader = new FileReader()
+    reader.readAsDataURL(event.target.files[0])
+    reader.onload = () =>{
+      myimage = reader.result
+      setImageUrls([myimage])
+    }
   }
   const handleE_Quantity = (event) => {
     sete_Quantity(event.target.value)
@@ -106,6 +114,8 @@ const BookStock = () => {
   const handleE_Authors = (event) => {
     sete_Authors(event.target.value)
   }
+
+  //เพิ่ม  Book
   const addBook = () => {
     const addThatBook = (image) =>{
       let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
@@ -138,9 +148,35 @@ const BookStock = () => {
     }else{
       addThatBook("none")
     }
-    
-   
   }
+
+  //Update Book
+  const updateBook = () => {
+    selectedBook.title = e_bookTitle
+    selectedBook.quantity = parseInt(e_quantity)
+    selectedBook.language = e_bookLanguage
+    selectedBook.image = imageUrls
+    selectedBook.genres = e_bookType.split(",")
+    selectedBook.desc = e_desc
+    selectedBook.authors = e_Authors.split(",")
+
+
+    //Update SelectedBook to db
+
+  }
+  //Delete Book
+  const deleteBook = () => {
+    let todelete = books.filter((e)=>e._id != selectedBook._id)
+    setBooks(todelete)
+    setSelectedBook(todelete[0])
+
+    //Delete with selectedBook._id   in db
+
+
+    
+  }
+
+
   //Get Data When First Time Render
   useEffect(() => {
     axios.get("http://localhost:8082/book-service/books/all", {
@@ -244,22 +280,22 @@ const BookStock = () => {
         </div>
         <div className="w-full p-5 bg-white drop-shadow-xl mt-[5em] relative">
           <div className="hidden lg:flex lg:absolute right-[2%] relative flex">
-            <div onClick={() => { }} className='mr-3 mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+            <div onClick={() => { updateBook()}} className='mr-3 mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
               <p className='text-white text-xl'>Change</p>
             </div>
-            <div onClick={() => { }} className='mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
+            <div onClick={() => { deleteBook()}} className='mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
               <p className='text-white text-xl'>Delete</p>
             </div>
           </div>
           <div className="w-full relative">
             <p onClick={() => { console.log(e_chooseImage) }} className='text-3xl'>Choose A Book</p>
           </div>
-          <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+          <div onClick={() => { updateBook()}} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
             <div className="text-xl">
               <p className='text-white'>Change</p>
             </div>
           </div>
-          <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
+          <div onClick={() => { deleteBook()}} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
             <div className="text-xl">
               <p className='text-white'>Delete</p>
             </div>
