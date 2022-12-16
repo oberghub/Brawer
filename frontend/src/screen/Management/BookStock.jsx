@@ -17,7 +17,6 @@ const BookStock = () => {
   }
   const [selectedBook, setSelectedBook] = useState("")
   const [isActiveModal, setIsActiveModal] = useState(false)
-  const [valerrmsg, setValerrmsg] = useState(null)
 
   //----------------------New Book----------------------//
   const [bookTitle, setBookTitle] = useState("")
@@ -25,7 +24,8 @@ const BookStock = () => {
   const [bookType, setBookType] = useState("")
   const [quantity, setQuantity] = useState(1)
   const [desc, setDesc] = useState("")
-  const [chooseImage, setImage] = useState("")
+  const [chooseImage, setImage] = useState([])
+  const [imageUrls, setImageUrls] = useState([])
   const [authors, setAuthors] = useState("")
   //----------------------New Book----------------------//
 
@@ -51,9 +51,18 @@ const BookStock = () => {
   const handleDesc = (event) => {
     setDesc(event.target.value);
   };
+
+  //---Handle Image---//
   const handleImage = (event) => {
-    setImage(event.target.files[0].name.toString())
+    setImage([...event.target.files])
   }
+  useEffect(() => {
+    if (chooseImage.length < 1) return;
+    const newImageUrls = [];
+    chooseImage.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
+    setImageUrls(newImageUrls);
+  }, [chooseImage]);
+  //---Handle Image---//
   const handleQuantity = (event) => {
     setQuantity(event.target.value)
   }
@@ -121,10 +130,7 @@ const BookStock = () => {
                     <path d="M443.6,387.1L312.4,255.4l131.5-130c5.4-5.4,5.4-14.2,0-19.6l-37.4-37.6c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4  L256,197.8L124.9,68.3c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4L68,105.9c-5.4,5.4-5.4,14.2,0,19.6l131.5,130L68.4,387.1  c-2.6,2.6-4.1,6.1-4.1,9.8c0,3.7,1.4,7.2,4.1,9.8l37.4,37.6c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1L256,313.1l130.7,131.1  c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1l37.4-37.6c2.6-2.6,4.1-6.1,4.1-9.8C447.7,393.2,446.2,389.7,443.6,387.1z" />
                   </svg>
                 </div>
-                <p onClick={() => { console.log("Hi".split(",")) }} className='mb-3'>Add New Book</p>
-                {!!valerrmsg ?
-                  <p className='text-red-500 text-sm'>{valerrmsg}</p>
-                  : null}
+                <p onClick={() => { console.log(imageUrls) }} className='mb-3'>Add New Book</p>
               </div>
 
               {/* Input field */}
@@ -250,7 +256,9 @@ const BookStock = () => {
           </div>
           <div className="w-full lg:h-[550px] lg:grid grid-rows-3 grid-flow-col gap-5 mt-[3em]">
             <div className="w-full row-span-3">
-              <img src={require('../../local_image/think_python.png')} className="w-[60%] h-auto cursor-pointer m-auto" alt='book' />
+              {imageUrls.map(item => 
+                <img src={require(item)} className="w-[60%] h-auto cursor-pointer m-auto" alt='book_image' />
+              )}
               <div className="w-full m-auto flex items-center justify-center">
                 <input className='mt-5' type={"file"} onChange={handleE_Image} />
               </div>
