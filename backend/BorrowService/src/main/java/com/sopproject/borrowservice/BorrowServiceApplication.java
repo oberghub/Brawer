@@ -1,4 +1,4 @@
-package com.sopproject.borrowservice.BorrowService;
+package com.sopproject.borrowservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 public class BorrowServiceApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(BorrowServiceApplication.class, args);
 	}
