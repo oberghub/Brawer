@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import axios from 'axios';
 const BookStock = () => {
   const [books, setBooks] = useState([
     { title: 'Think Python', desc: "lorem ipsum mafak", lang: "Eng", type: "Computer", img: "", qty: 1 },
@@ -10,8 +11,13 @@ const BookStock = () => {
     { title: 'Think Milk', desc: "lorem ipsum mafak", lang: "Eng", type: "Dessert", img: "", qty: 1 },
     { title: 'Think Jon Puad Hua', desc: "lorem ipsum mafak", lang: "Eng", type: "Shit Content", img: "", qty: 1 },
   ])
+  const toggleslide = () => {
+    document.getElementById('menu-slide-toggle').classList.toggle('invisible')
+    document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
+  }
   const [selectedBook, setSelectedBook] = useState("")
   const [isActiveModal, setIsActiveModal] = useState(false)
+  const [valerrmsg, setValerrmsg] = useState(null)
 
   //----------------------New Book----------------------//
   const [bookTitle, setBookTitle] = useState("")
@@ -20,6 +26,7 @@ const BookStock = () => {
   const [quantity, setQuantity] = useState(1)
   const [desc, setDesc] = useState("")
   const [chooseImage, setImage] = useState("")
+  const [authors, setAuthors] = useState("")
   //----------------------New Book----------------------//
 
   //----------------------Edit Book----------------------//
@@ -29,6 +36,7 @@ const BookStock = () => {
   const [e_quantity, sete_Quantity] = useState(1)
   const [e_desc, sete_Desc] = useState("")
   const [e_chooseImage, sete_Image] = useState("")
+  const [e_Authors, sete_Authors] = useState("")
   //----------------------Edit Book----------------------//
 
   const handleBookTitle = (event) => {
@@ -44,10 +52,13 @@ const BookStock = () => {
     setDesc(event.target.value);
   };
   const handleImage = (event) => {
-    setImage(event.target.files[0].name)
+    setImage(event.target.files[0].name.toString())
   }
   const handleQuantity = (event) => {
     setQuantity(event.target.value)
+  }
+  const handleAuthors = (event) => {
+    setAuthors(event.target.value)
   }
 
   const handleE_BookTitle = (event) => {
@@ -68,22 +79,36 @@ const BookStock = () => {
   const handleE_Quantity = (event) => {
     sete_Quantity(event.target.value)
   }
+  const handleE_Authors = (event) => {
+    sete_Authors(event.target.value)
+  }
   const addBook = () => {
+    let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: chooseImage, quantity: quantity, authors: authors.split(","), desc: desc })
+    axios.post("http://localhost:8082/book-service/books", addData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => console.log(res.status + " " + res.statusText))
     const copyBooks = [...books]
-    copyBooks.push({ title: bookTitle, lang: bookLanguage, type: bookType, img: chooseImage, qty: quantity })
+    copyBooks.push({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: chooseImage, quantity: quantity, authors: authors.split(","), desc: desc })
     setBooks(copyBooks)
     setBookTitle("")
     setBookLanguage("")
     setBookType("")
     setImage("")
+    setAuthors("")
+    setDesc("")
     setQuantity(1)
     setIsActiveModal(false)
-    console.log(copyBooks)
   }
-  const toggleslide = () => {
-    document.getElementById('menu-slide-toggle').classList.toggle('invisible')
-    document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
-  }
+  //Get Data When First Time Render
+  useEffect(() => {
+    axios.get("http://localhost:8082/book-service/books/all", {
+    }).then((res) => {
+      setBooks(res.data)
+      console.log(res)
+    }).catch((e) => console.log(e))
+  }, [])
   return (
     <div>
       {isActiveModal ?
@@ -96,7 +121,10 @@ const BookStock = () => {
                     <path d="M443.6,387.1L312.4,255.4l131.5-130c5.4-5.4,5.4-14.2,0-19.6l-37.4-37.6c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4  L256,197.8L124.9,68.3c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4L68,105.9c-5.4,5.4-5.4,14.2,0,19.6l131.5,130L68.4,387.1  c-2.6,2.6-4.1,6.1-4.1,9.8c0,3.7,1.4,7.2,4.1,9.8l37.4,37.6c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1L256,313.1l130.7,131.1  c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1l37.4-37.6c2.6-2.6,4.1-6.1,4.1-9.8C447.7,393.2,446.2,389.7,443.6,387.1z" />
                   </svg>
                 </div>
-                <p className='mb-3'>Add New Book</p>
+                <p onClick={() => { console.log("Hi".split(",")) }} className='mb-3'>Add New Book</p>
+                {!!valerrmsg ?
+                  <p className='text-red-500 text-sm'>{valerrmsg}</p>
+                  : null}
               </div>
 
               {/* Input field */}
@@ -117,14 +145,20 @@ const BookStock = () => {
                   <Box
                     className='w-full'
                   >
-                    <p className='text-xl mb-1 Gentium-B-font'>Book Type :</p>
-                    <TextField fullWidth label="" id="booktype" value={bookType} onChange={handleBookType} />
+                    <p className='text-xl mb-1 Gentium-B-font'>Genres :</p>
+                    <TextField placeholder='ex. Science, Computer' fullWidth label="" id="booktype" value={bookType} onChange={handleBookType} />
                   </Box>
                   <Box
                     className='w-full'
                   >
                     <p className='text-xl mb-1 Gentium-B-font'>Quantity :</p>
                     <TextField type={"number"} fullWidth label="" id="qty" value={quantity} onChange={handleQuantity} />
+                  </Box>
+                  <Box
+                    className='w-full'
+                  >
+                    <p className='text-xl mb-1 Gentium-B-font'>Authors :</p>
+                    <TextField placeholder='ex. Somsri, Chaiyan' fullWidth label="" id="qty" value={authors} onChange={handleAuthors} />
                   </Box>
                 </div>
                 <div className="w-full grid grid-cols-1 mt-5">
@@ -144,9 +178,13 @@ const BookStock = () => {
                   <div onClick={() => { setIsActiveModal(false) }} className='rounded bg-[#EEE] hover:bg-[#E1E1E1] flex items-center justify-center w-full h-[50px] cursor-pointer'>
                     <p className='text-2xl'>Cancel</p>
                   </div>
-                  <div onClick={() => { addBook() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-full h-[50px] cursor-pointer'>
-                    <p className='text-2xl'>Add</p>
-                  </div>
+                  {bookTitle !== "" && bookLanguage !== "" && bookType !== "" && quantity !== "" && authors !== "" && desc !== "" && chooseImage !== "" ?
+                    <div onClick={() => { addBook() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-full h-[50px] cursor-pointer'>
+                      <p className='text-2xl'>Add</p>
+                    </div>
+                    :
+                    null
+                  }
                 </div>
               </div>
             </div>
@@ -176,7 +214,7 @@ const BookStock = () => {
             </div>
           </div>
           <div className="w-full relative">
-            <p className='text-3xl'>Choose A Book</p>
+            <p onClick={() => { console.log(books) }} className='text-3xl'>Choose A Book</p>
           </div>
           <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
             <div className="text-xl">
@@ -193,16 +231,17 @@ const BookStock = () => {
               className='w-full'
               disablePortal
               id="combo-box-books"
-              options={books.map((item, index) => "(" + parseInt(index) + ") " + item.title + " x" + item.qty)}
+              options={books.map((item, index) => "(" + parseInt(index) + ") " + item.title + " x" + item.quantity)}
               value={selectedBook}
               onChange={(event, newValue) => {
                 const index = newValue.substring(1, 2)
                 setSelectedBook(newValue);
                 sete_BookTitle(books[index].title)
-                sete_BookLanguage(books[index].lang)
-                sete_BookType(books[index].type)
-                sete_Quantity(books[index].qty)
-                sete_Image(books[index].img)
+                sete_BookLanguage(books[index].language)
+                sete_BookType(books[index].genres.join(","))
+                sete_Authors(books[index].authors.join(","))
+                sete_Quantity(books[index].quantity)
+                sete_Image(books[index].image)
                 sete_Desc(books[index].desc)
                 console.log(books[index].title)
               }}
@@ -235,14 +274,20 @@ const BookStock = () => {
                 <Box
                   className='w-full'
                 >
-                  <p className='text-xl mb-1 Gentium-B-font'>Book Type :</p>
-                  <TextField fullWidth label="" id="title" value={e_bookType} onChange={handleE_BookType} />
+                  <p className='text-xl mb-1 Gentium-B-font'>Genres :</p>
+                  <TextField placeholder='ex. Science, Computer' fullWidth label="" id="title" value={e_bookType} onChange={handleE_BookType} />
                 </Box>
                 <Box
                   className='w-full'
                 >
                   <p className='text-xl mb-1 Gentium-B-font'>Quantity :</p>
                   <TextField type={"number"} fullWidth label="" id="qty" value={e_quantity} onChange={handleE_Quantity} />
+                </Box>
+                <Box
+                  className='w-full'
+                >
+                  <p className='text-xl mb-1 Gentium-B-font'>Authors :</p>
+                  <TextField placeholder='ex. Somsri, Chaiyan' fullWidth label="" id="qty" value={e_Authors} onChange={handleE_Authors} />
                 </Box>
               </div>
               <div className="w-full grid grid-cols-1">
