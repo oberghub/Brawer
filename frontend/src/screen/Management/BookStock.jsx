@@ -92,14 +92,14 @@ const BookStock = () => {
     sete_Authors(event.target.value)
   }
   const addBook = () => {
-    let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: chooseImage, quantity: quantity, authors: authors.split(","), desc: desc })
+    let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: imageUrls[0], quantity: quantity, authors: authors.split(","), desc: desc })
     axios.post("http://localhost:8082/book-service/books", addData, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).then((res) => console.log(res.status + " " + res.statusText))
     const copyBooks = [...books]
-    copyBooks.push({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: chooseImage, quantity: quantity, authors: authors.split(","), desc: desc })
+    copyBooks.push({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: imageUrls[0], quantity: quantity, authors: authors.split(","), desc: desc })
     setBooks(copyBooks)
     setBookTitle("")
     setBookLanguage("")
@@ -257,7 +257,7 @@ const BookStock = () => {
           <div className="w-full lg:h-[550px] lg:grid grid-rows-3 grid-flow-col gap-5 mt-[3em]">
             <div className="w-full row-span-3">
               {imageUrls.map(item => 
-                <img src={require(item)} className="w-[60%] h-auto cursor-pointer m-auto" alt='book_image' />
+                <img src={item} className="w-[60%] h-auto cursor-pointer m-auto" alt='book_image' />
               )}
               <div className="w-full m-auto flex items-center justify-center">
                 <input className='mt-5' type={"file"} onChange={handleE_Image} />
