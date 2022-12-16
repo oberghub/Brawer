@@ -15,7 +15,7 @@ const BookStock = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('invisible')
     document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
   }
-  const [selectedBook, setSelectedBook] = useState("")
+  const [selectedBook, setSelectedBook] = useState(null)
   const [isActiveModal, setIsActiveModal] = useState(false)
 
   //----------------------New Book----------------------//
@@ -51,17 +51,31 @@ const BookStock = () => {
   const handleDesc = (event) => {
     setDesc(event.target.value);
   };
-
+  // Handle change in selection box
+  useEffect(() => {
+    if(selectedBook){
+      sete_BookTitle(selectedBook.title)
+      sete_BookLanguage(selectedBook.language)
+      sete_BookType(selectedBook.genres.join(","))
+      sete_Authors(selectedBook.authors.join(","))
+      sete_Quantity(selectedBook.quantity)
+      sete_Image(selectedBook.image)
+      sete_Desc(selectedBook.desc)
+      console.log(selectedBook.title)
+      setImageUrls([selectedBook.image])
+    }
+    
+  }, [selectedBook]);
   //---Handle Image---//
   const handleImage = (event) => {
     setImage([...event.target.files])
   }
-  useEffect(() => {
-    if (chooseImage.length < 1) return;
-    const newImageUrls = [];
-    chooseImage.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
-    setImageUrls(newImageUrls);
-  }, [chooseImage]);
+  // useEffect(() => {
+  //   if (chooseImage.length < 1) return;
+  //   const newImageUrls = [];
+  //   chooseImage.forEach((image) => newImageUrls.push(URL.createObjectURL(image)));
+  //   setImageUrls(newImageUrls);
+  // }, [chooseImage]);
   //---Handle Image---//
   const handleQuantity = (event) => {
     setQuantity(event.target.value)
@@ -92,29 +106,46 @@ const BookStock = () => {
     sete_Authors(event.target.value)
   }
   const addBook = () => {
-    let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: imageUrls[0], quantity: quantity, authors: authors.split(","), desc: desc })
-    axios.post("http://localhost:8082/book-service/books", addData, {
-      headers: {
-        'Content-Type': 'application/json'
+    const addThatBook = (image) =>{
+      let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
+      axios.post("http://localhost:8082/book-service/books", addData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => console.log(res.status + " " + res.statusText))
+      const copyBooks = [...books]
+      copyBooks.push({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
+      setBooks(copyBooks)
+      setSelectedBook(copyBooks[0])
+      setBookTitle("")
+      setBookLanguage("")
+      setBookType("")
+      setImage("")
+      setAuthors("")
+      setDesc("")
+      setQuantity(1)
+      setIsActiveModal(false)
+    }
+    let myimage;
+    let reader = new FileReader()
+    if(chooseImage[0]){
+      reader.readAsDataURL(chooseImage[0])
+      reader.onload = () =>{
+        myimage = reader.result
+        addThatBook(myimage)
       }
-    }).then((res) => console.log(res.status + " " + res.statusText))
-    const copyBooks = [...books]
-    copyBooks.push({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: imageUrls[0], quantity: quantity, authors: authors.split(","), desc: desc })
-    setBooks(copyBooks)
-    setBookTitle("")
-    setBookLanguage("")
-    setBookType("")
-    setImage("")
-    setAuthors("")
-    setDesc("")
-    setQuantity(1)
-    setIsActiveModal(false)
+    }else{
+      addThatBook("none")
+    }
+    
+   
   }
   //Get Data When First Time Render
   useEffect(() => {
     axios.get("http://localhost:8082/book-service/books/all", {
     }).then((res) => {
       setBooks(res.data)
+      setSelectedBook(res.data[0])
       console.log(res)
     }).catch((e) => console.log(e))
   }, [])
@@ -237,19 +268,27 @@ const BookStock = () => {
               className='w-full'
               disablePortal
               id="combo-box-books"
-              options={books.map((item, index) => "(" + parseInt(index) + ") " + item.title + " x" + item.quantity)}
+              options={books}
+              // renderOption={(props,option)=>{
+              //   return(<li {...props} key={option._id}>
+              //     {"(" + books.findIndex((e)=>e._id==option._id) + ") " + option.title + " x" + option.quantity}
+              //   </li>)
+              // }}
+              getOptionLabel={(option,index)=>"(" + books.findIndex((e)=>e._id==option._id) + ") " + option.title + " x" + option.quantity}
               value={selectedBook}
               onChange={(event, newValue) => {
-                const index = newValue.substring(1, 2)
                 setSelectedBook(newValue);
-                sete_BookTitle(books[index].title)
-                sete_BookLanguage(books[index].language)
-                sete_BookType(books[index].genres.join(","))
-                sete_Authors(books[index].authors.join(","))
-                sete_Quantity(books[index].quantity)
-                sete_Image(books[index].image)
-                sete_Desc(books[index].desc)
-                console.log(books[index].title)
+                // const index = newValue.substring(1, 2)
+                // sete_BookTitle(books[index].title)
+                // sete_BookLanguage(books[index].language)
+                // sete_BookType(books[index].genres.join(","))
+                // sete_Authors(books[index].authors.join(","))
+                // sete_Quantity(books[index].quantity)
+                // sete_Image(books[index].image)
+                // sete_Desc(books[index].desc)
+                // console.log(books[index].title)
+                // setImageUrls([books[index].image])
+
               }}
               renderInput={(params) => <TextField {...params} label="" />}
             />
