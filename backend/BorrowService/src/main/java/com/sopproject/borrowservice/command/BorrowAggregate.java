@@ -27,7 +27,6 @@ public class BorrowAggregate {
     private ArrayList<String> booksId;
 
     public BorrowAggregate(){
-
     }
 
 
