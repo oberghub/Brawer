@@ -14,4 +14,5 @@ public class CreatePaymentCommand {
     private final String timestamp;
     private final String status;
     private final double price;
+    private final String borrowId;
 }

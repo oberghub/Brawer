@@ -14,4 +14,5 @@ public class PaymentEntity {
     private String timestamp;
     private String status;
     private double price;
+    private String borrowId;
 }
