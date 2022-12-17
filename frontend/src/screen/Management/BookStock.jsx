@@ -162,16 +162,33 @@ const BookStock = () => {
 
 
     //Update SelectedBook to db
+    let updateData = JSON.stringify({_id:selectedBook._id,title: e_bookTitle, language: e_bookLanguage, genres: e_bookType.split(","), image: imageUrls[0], quantity: parseInt(e_quantity), authors: e_Authors.split(","), desc: e_desc })
+    console.log(updateData)
+    axios.put("http://localhost:8082/book-service/books", updateData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => console.log(res.status + " " + res.statusText))
 
   }
   //Delete Book
   const deleteBook = () => {
+    //Delete with selectedBook._id   in db
+    let deleteData = JSON.stringify({ _id:selectedBook._id})
+    console.log(deleteData)
+    axios.delete("http://localhost:8082/book-service/books", deleteData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => console.log(res.status + " " + res.statusText))
+
+
     let todelete = books.filter((e)=>e._id != selectedBook._id)
     setBooks(todelete)
     setSelectedBook(todelete[0])
 
-    //Delete with selectedBook._id   in db
-
+    
+    
 
     
   }
