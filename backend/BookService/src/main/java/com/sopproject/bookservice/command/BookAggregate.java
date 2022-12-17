@@ -28,6 +28,7 @@ public class BookAggregate {
     private String language;
     private List<String> genres;
 
+    public BookAggregate(){}
     @CommandHandler
     public BookAggregate(CreateBookCommand command){
         boolean blankDataCheck = command.getTitle().isBlank() || command.getDesc().isBlank() ||
@@ -43,7 +44,7 @@ public class BookAggregate {
     }
 
     @CommandHandler
-    public BookAggregate(UpdateBookCommand command){
+    public void BookAggregate(UpdateBookCommand command){
         boolean blankDataCheck = command.get_id().isBlank() || command.getTitle().isBlank() || command.getDesc().isBlank() ||
                 command.getQuantity() == 0 || command.getAuthors().isEmpty() ||
                 command.getImage().isBlank() || command.getLanguage().isBlank() ||
@@ -57,7 +58,7 @@ public class BookAggregate {
     }
 
     @CommandHandler
-    public BookAggregate(DeleteBookCommand command){
+    public void BookAggregate(DeleteBookCommand command){
         boolean blankDataCheck = command.get_id().isBlank();
         if (blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
@@ -95,7 +96,6 @@ public class BookAggregate {
 
     @EventSourcingHandler
     public void on(BookDeletedEvent event){
-        AggregateLifecycle.markDeleted();
         System.out.println("Delete Book Id: " + this._id);
     }
 }

@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/borrow")
 public class BorrowCommandController {
-    @Autowired
     private CommandGateway commandGateway;
-
+    @Autowired
+    private BorrowCommandController(CommandGateway commandGateway){
+       this.commandGateway = commandGateway;
+    }
     @PostMapping
     public String createBookBorrow(@RequestBody BorrowRestModel model){
         CreateBorrowCommand command = CreateBorrowCommand.builder()
