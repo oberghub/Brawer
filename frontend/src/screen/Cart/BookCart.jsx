@@ -11,19 +11,29 @@ export const BookCart = () => {
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [BookData, setBookData] = useState([])
-    const openModal = () => {
+    const borrowed = () => {
         let arr = JSON.parse(secureLocalStorage.getItem("books"))
         if(!arr || BookData.length === 0){
             alert("ไม่มีของอยู่ในนี้")
         }
         else{
             setIsActiveModal(true)
+            //Add to Borrow service (หลังทำ login)
+            //{
+            // status : "Pending"
+            // borrow_date : "current date"
+            // due_date : "หลังจากวันที่ยืม 1 สัปดาห์"
+            // late : false
+            // userId : ไอดีของ user
+            // booksId : [
+            //   "adasdasdasds",
+            //   "asd4po32p25l" --ตัวอย่างเฉยๆ-- เก็บเป็น id ของหนังสือที่ยืม
+            // ]
+            //}
+
+            //add เสร็จล้างค่า localStorage
+            //secureLocalStorage.removeItem("books")
         }
-        // setTimeout(() => {
-        //     setIsActiveModal(false)
-        //     setCountDown(countDown--)
-        //     console.log(countDown)
-        // }, 3000);
     }
     const incrementQuantity = (ind) => {
         let foundtitle;
@@ -117,7 +127,7 @@ export const BookCart = () => {
                                 {BookData.map((item, index) =>
                                     <>
                                         <div className="bg-white drop-shadow-xl md:flex mt-5" key={index}>
-                                            <img src={require('../../local_image/think_python.png')} className="w-full md:w-[180px] md:h-[220px]" alt="profile-pic" />
+                                            <img src={item.image} className="w-full md:w-[180px] md:h-[220px]" alt="profile-pic" />
                                             <div className="w-full md:w-[70%] p-5 md:m-0 m-auto">
                                                 <p className="text-xl line-clamp-4 lg:text-2xl">{item.title}</p>
                                                 <div className="flex">
@@ -161,7 +171,7 @@ export const BookCart = () => {
                         </div>
                     </div>
                     <div className="w-[100%] h-[50px] flex items-center justify-center bg-black mt-5 cursor-pointer"
-                        onClick={() => { openModal() }}>
+                        onClick={() => { borrowed() }}>
                         <p className="text-white text-xl">Borrow</p>
                     </div>
                 </div>

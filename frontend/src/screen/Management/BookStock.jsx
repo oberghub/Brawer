@@ -5,12 +5,7 @@ import Box from '@mui/material/Box';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import axios from 'axios';
 const BookStock = () => {
-  const [books, setBooks] = useState([
-    { title: 'Think Python', desc: "lorem ipsum mafak", lang: "Eng", type: "Computer", img: "", qty: 1 },
-    { title: 'Think Java', desc: "lorem ipsum mafak", lang: "Eng", type: "Computer", img: "", qty: 1 },
-    { title: 'Think Milk', desc: "lorem ipsum mafak", lang: "Eng", type: "Dessert", img: "", qty: 1 },
-    { title: 'Think Jon Puad Hua', desc: "lorem ipsum mafak", lang: "Eng", type: "Shit Content", img: "", qty: 1 },
-  ])
+  const [books, setBooks] = useState([])
   const toggleslide = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('invisible')
     document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
@@ -37,6 +32,7 @@ const BookStock = () => {
   const [e_desc, sete_Desc] = useState("")
   const [e_chooseImage, sete_Image] = useState("")
   const [e_Authors, sete_Authors] = useState("")
+  const [e_id, sete_Id] = useState("")
   //----------------------Edit Book----------------------//
 
   const handleBookTitle = (event) => {
@@ -54,6 +50,7 @@ const BookStock = () => {
   // Handle change in selection box
   useEffect(() => {
     if(selectedBook){
+      sete_Id(selectedBook._id)
       sete_BookTitle(selectedBook.title)
       sete_BookLanguage(selectedBook.language)
       sete_BookType(selectedBook.genres.join(","))
@@ -174,23 +171,15 @@ const BookStock = () => {
   //Delete Book
   const deleteBook = () => {
     //Delete with selectedBook._id   in db
-    let deleteData = JSON.stringify({ _id:selectedBook._id})
+    let deleteData = "http://localhost:8082/book-service/books/"+selectedBook._id
     console.log(deleteData)
-    axios.delete("http://localhost:8082/book-service/books", deleteData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then((res) => console.log(res.status + " " + res.statusText))
+    // axios.delete("http://localhost:8082/book-service/books/"+deleteData, {
+    // }).then((res) => console.log(res.status + " " + res.statusText))
 
 
     let todelete = books.filter((e)=>e._id != selectedBook._id)
     setBooks(todelete)
     setSelectedBook(todelete[0])
-
-    
-    
-
-    
   }
 
 
