@@ -17,6 +17,7 @@ import java.util.List;
 
 @Aggregate
 public class BookAggregate {
+    @Id
     @AggregateIdentifier
     private String _id;
     private String title;
@@ -94,14 +95,7 @@ public class BookAggregate {
 
     @EventSourcingHandler
     public void on(BookDeletedEvent event){
-        this._id = event.get_id();
-//        this.title = event.getTitle();
-//        this.desc = event.getDesc();
-//        this.quantity = event.getQuantity();
-//        this.authors = event.getAuthors();
-//        this.image = event.getImage();
-//        this.language = event.getLanguage();
-//        this.genres = event.getGenres();
+        AggregateLifecycle.markDeleted();
         System.out.println("Delete Book Id: " + this._id);
     }
 }
