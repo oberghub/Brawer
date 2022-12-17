@@ -29,10 +29,14 @@ import BookingManage from './screen/Management/BookingManage';
 import WorkSpaceManage from './screen/Management/WorkSpaceManage';
 import NotFoundPage from './component/NotFoundPage';
 
+import { Provider } from 'react-redux';
+import { store } from './store';
+
 //component
 import { MyNavbar } from './component/MyNavbar';
 function App() {
   return (
+    <Provider store={store}>
     <div className='Gentium-R-font relative '>
       {/* navbar */}
       <MyNavbar />
@@ -66,6 +70,7 @@ function App() {
         </Route>
       </Routes>
     </div>
+    </Provider>
   );
 }
 
