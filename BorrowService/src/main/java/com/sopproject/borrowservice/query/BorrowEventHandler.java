@@ -6,19 +6,21 @@ import com.sopproject.borrowservice.core.data.BorrowRepository;
 import com.sopproject.borrowservice.core.event.BorrowUpdatedEvent;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BorrowEventHandler {
-    @Autowired
-    private BorrowRepository borrowRepository;
+    private final BorrowRepository borrowRepository;
+    public BorrowEventHandler(BorrowRepository borrowRepository){
+        this.borrowRepository = borrowRepository;
+    }
 
     @EventHandler
     public void on(BorrowCreatedEvent event){
         BorrowEntity borrowEntity = new BorrowEntity();
         BeanUtils.copyProperties(event, borrowEntity);
         borrowRepository.save(borrowEntity);
+        System.out.println("กูมาแล้ว ฮะฮ่า!");
     }
 
     @EventHandler

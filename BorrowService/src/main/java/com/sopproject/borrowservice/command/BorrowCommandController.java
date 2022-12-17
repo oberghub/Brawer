@@ -5,14 +5,15 @@ import com.sopproject.borrowservice.command.rest.CreateBorrowCommand;
 import com.sopproject.borrowservice.command.rest.UpdateBorrowCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/borrow")
 public class BorrowCommandController {
-    @Autowired
-    private CommandGateway commandGateway;
+    private final CommandGateway commandGateway;
+    private BorrowCommandController(CommandGateway commandGateway){
+        this.commandGateway = commandGateway;
+    }
 
     @PostMapping
     public String createBookBorrow(@RequestBody BorrowRestModel model){
@@ -28,6 +29,7 @@ public class BorrowCommandController {
         String result;
         try {
             result = commandGateway.sendAndWait(command);
+            System.out.println("กูมาแล้ว");
             return result;
         } catch (Exception e) {
             return e.getLocalizedMessage();

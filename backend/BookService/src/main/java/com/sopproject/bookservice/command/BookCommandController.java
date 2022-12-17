@@ -32,7 +32,6 @@ public class BookCommandController {
                 .genres(model.getGenres())
                 .image(model.getImage())
                 .build();
-
         String result;
         try {
             result = commandGateway.sendAndWait(command);
