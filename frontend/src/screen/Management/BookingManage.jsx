@@ -21,7 +21,7 @@ const BookingManage = () => {
         { itemName: "Projector", price: 250, quantity: 1 },
       ],
       bookingBy: "sheepSheepy",
-      status: "Cancel",
+      status: "CANCELED",
     },
     {
       bookingId: 'booking002',
@@ -37,7 +37,7 @@ const BookingManage = () => {
         { itemName: "Projector", price: 250, quantity: 1 },
       ],
       bookingBy: "zibirian",
-      status: "Approved"
+      status: "RESERVED"
     },
     {
       bookingId: 'booking003',
@@ -53,7 +53,7 @@ const BookingManage = () => {
         { itemName: "Projector", price: 250, quantity: 1 },
       ],
       bookingBy: "eggcrumble",
-      status: "Pending"
+      status: "PENDING"
     },
     {
       bookingId: 'booking004',
@@ -69,7 +69,7 @@ const BookingManage = () => {
         { itemName: "Projector", price: 250, quantity: 2 },
       ],
       bookingBy: "dannylee",
-      status: "Pending"
+      status: "TIMEOUT"
     }
   ]
   )
@@ -113,13 +113,9 @@ const BookingManage = () => {
   const handleChange = (event) => {
     setConfirmText(event.target.value);
   };
-  const confirmStatus = () => {
-    // if(confirmState == "Confirm"){
-    //   console.log("Eiei")
-    // }
-    // else{
-    //   console.log("ISud")
-    // }
+  const changeStatus = () => {
+    //กด PENDING สถานะจะเปลี่ยนเป็น RESERVED (จองแล้ว) เปลี่ยนสถานะpaymentที่ยกเลิกเป็น REFUND
+    //กด CANCEL สถานะจะเปลี่ยนเป็น CANCEL //ลบรอบเวลาที่ยกเลิกออกจาก database
     setConfirmModal(false)
   }
   return (
@@ -152,7 +148,7 @@ const BookingManage = () => {
                 </Box>
                 <div className='w-full flex items-center justify-center gap-3 mt-7'>
                   {confirmText == confirmState ?
-                    <div onClick={() => { confirmStatus() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                    <div onClick={() => { changeStatus() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
                       <p className='text-2xl'>Accept</p>
                     </div>
                     :
@@ -233,7 +229,7 @@ const BookingManage = () => {
                   </div>
                 </div>
                 {/* update status button */}
-                {status != 'Success' ?
+                {status != 'RESERVED' && status != 'CANCELED' && status != 'TIMEOUT' ?
                   <>
                     <div className="flex gap-5 mt-5">
                       {/* confirm button */}
@@ -284,7 +280,7 @@ const BookingManage = () => {
               <tr className='h-[2.5em]' style={{ backgroundColor: index % 2 == 0 ? "#2F5D62" : "white", color: index % 2 == 0 ? 'white' : 'black' }}>
                 <td>{item.bookingId}</td>
                 <td>{item.bookingBy}</td>
-                <td className='Gentium-B-font'>{item.status}</td>
+                <td className='Gentium-B-font' style={{color : item.status === 'CANCELED' ? 'red' : index % 2 == 0 ? 'white' : 'black'}}>{item.status}</td>
                 <td className='Gentium-R-font'>
                   <div className='flex items-center justify-center'>
                     <AiOutlineSearch size={30} className="cursor-pointer" onClick={() => {

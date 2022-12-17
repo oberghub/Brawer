@@ -5,6 +5,76 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 const BorrowManage = () => {
   const [borrowList, setBorrowList] = useState([
+    {
+      b_date: '15 December 2022',
+      d_date: '16 December 2022',
+      late: false,
+      books: [
+        {
+          title: 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
+          desc: 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+          img: '../../local_image/book_ex.jpg',
+          quantity: 2,
+        },
+        {
+          title: 'Think Java: How to Think Like a Computer Scientist 2nd Edition',
+          desc: 'Think Java is a hands-on introduction to computer science and programming used by many universities and high schools around the world. Its conciseness, emphasis on vocabulary, and informal tone make it particularly appealing for readers with little or no experience. The book starts with the most basic programming concepts and gradually works its way to advanced object-oriented techniques. In this fully updated and expanded edition, authors Allen Downey and Chris Mayfield introduce programming as a means for solving interesting problems. Each chapter presents material for one week of a college course and includes exercises to help you practice what you have learned. Along the way, you’ll see nearly every topic required for the AP Computer Science A exam and Java SE Programmer I certification.',
+          img: '../../local_image/book_ex.jpg',
+          quantity: 1,
+        },
+      ],
+      borrowId: 'ifmw-wij41-dk241-skdn',
+      borrower: "shwpasp",
+      status: 'PENDING'
+    },
+    {
+      b_date: '15 December 2022',
+      d_date: '19 December 2022',
+      late: false,
+      books: [
+        {
+          title: 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
+          desc: 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+          img: '../../local_image/book_ex.jpg',
+          quantity: 2,
+        },
+      ],
+      borrowId: 'eqmw-wdqwj41-dk241-s344n',
+      borrower: "dsadq12121",
+      status: 'RETURNED'
+    },
+    {
+      b_date: '15 December 2022',
+      d_date: '22 December 2022',
+      late: false,
+      books: [
+        {
+          title: 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
+          desc: 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+          img: '../../local_image/book_ex.jpg',
+          quantity: 2,
+        },
+      ],
+      borrowId: 'eqmw-wdqwj41-dk241-s344n-we1',
+      borrower: "asdhsoppt21",
+      status: 'CANCELED'
+    },
+    {
+      b_date: '15 December 2022',
+      d_date: '22 December 2022',
+      late: false,
+      books: [
+        {
+          title: 'Think Python : How to Think Like a Computer Scientist 2nd Edition',
+          desc: 'Think Python is an introduction to Python programming for beginners. It starts with basic concepts of programming; it is carefully designed to define all terms when they are first used and to develop each new concept in a logical progression. Larger pieces, like recursion and object-oriented programming, are divided into a sequence of smaller steps and introduced over the course of several chapters.',
+          img: '../../local_image/book_ex.jpg',
+          quantity: 2,
+        },
+      ],
+      borrowId: 'eqmw-wdqwj41-dk241-s344n-we1',
+      borrower: "asdhsoppt21",
+      status: 'BORROWING'
+    }
   ])
   const toggleslide = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('invisible')
@@ -25,13 +95,19 @@ const BorrowManage = () => {
   const handleChange = (event) => {
     setConfirmText(event.target.value);
   };
-  const confirmStatus = () => {
-    // if(confirmState == "Confirm"){
-    //   console.log("Eiei")
-    // }
-    // else{
-    //   console.log("ISud")
-    // }
+  const changeStatus = () => {
+    //status ยืมหนังสือมีตามนี้
+    //CANCELLED 'ยกเลิกการยืมจากการกดยกเลิก จะขึ้นเมื่อเป็นสถานะ PENDING เท่านั้น'
+    //PENDING 'รอการยืนยันให้ยืม เมื่อกดยืนยันจะเป็นสถานะ BORROWING'
+    //BORROWING 'กำลังยืมอยู่'
+    //RETURNED 'คืนแล้ว -> บรรณารักษ์สามารถกดปุ่มนี้ได้เสมอหลังสถานะ BORROWING เกิดขึ้น'
+
+
+    //กดดูรายละเอียดในแว่นขยาย
+    //* ใน borrow state ที่เป็น pending จะมีปุ่ม accept และ cancel ปุ่ม accept คือเปลี่ยนสถานะให้เป็น borrowing ส่วนปุ่ม cancel คือเปลี่ยนสถานะเป็น cancel และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
+    //* ใน borrow state ที่เป็น borrowing จะมีปุ่ม Return กดแล้วสถานะจะเปลี่ยนเป็น RETURNED และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
+    console.log("asda")
+    setConfirmText("")
     setConfirmModal(false)
   }
   const seeADetail = (data) => {
@@ -51,7 +127,7 @@ const BorrowManage = () => {
             <div className="bg-white p-8 rounded flex justify-center slide-down-fade">
               <div className="">
                 <div className='w-full border-b-[1px] border-gray-300 relative'>
-                  <p className='text-3xl Gentium-B-font mb-5'>Type To {confirmState} Booking</p>
+                  <p className='text-3xl Gentium-B-font mb-5'>Type To {confirmState} Change State</p>
                   <div onClick={() => {
                     setConfirmModal(false)
                     setConfirmText("")
@@ -68,12 +144,12 @@ const BorrowManage = () => {
                     maxWidth: '100%',
                   }}
                 >
-                  <p className='text-xl mb-3'>Type <b>'{confirmState}'</b> to confirm a booking.</p>
+                  <p className='text-xl mb-3'>Type <b>'{confirmState}'</b> to change state.</p>
                   <TextField fullWidth placeholder={confirmState} label="" id="typeToConfirm" value={confirmText} onChange={handleChange} />
                 </Box>
                 <div className='w-full flex items-center justify-center gap-3 mt-7'>
                   {confirmText == confirmState ?
-                    <div onClick={() => { confirmStatus() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                    <div onClick={() => { changeStatus() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
                       <p className='text-2xl'>Accept</p>
                     </div>
                     :
@@ -159,24 +235,24 @@ const BorrowManage = () => {
                   )}
                 </div>
                 {/* update status button */}
-                {status != 'Success' ?
+                {status != 'RETURNED' && status != 'BORROWING' && status != 'CANCELED' ?
                   <>
                     <div className="flex gap-5 mt-5">
                       {/* confirm button */}
                       <div onClick={() => {
                         setIsActiveModal(false)
                         setConfirmModal(true)
-                        setConfirmState("Confirm")
+                        setConfirmState("accept")
                       }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
                         <div className="text-xl">
-                          <p className='text-white'>Confirm</p>
+                          <p className='text-white'>Accept</p>
                         </div>
                       </div>
                       {/* cancel button */}
                       <div onClick={() => {
                         setIsActiveModal(false)
                         setConfirmModal(true)
-                        setConfirmState("Cancel")
+                        setConfirmState("cancel")
                       }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#ff4d55] hover:bg-[#e0484f] flex justify-center items-center'>
                         <div className="text-xl">
                           <p className='text-white'>Cancel</p>
@@ -185,7 +261,17 @@ const BorrowManage = () => {
                     </div>
                   </>
                   :
-                  null
+                  status == 'BORROWING' ? 
+                    <div onClick={() => {
+                      setIsActiveModal(false)
+                      setConfirmModal(true)
+                      setConfirmState("accept")
+                    }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+                      <div className="text-xl">
+                        <p className='text-white'>Returned</p>
+                      </div>
+                    </div>
+                  : null
                 }
               </div>
             </div>
@@ -210,7 +296,7 @@ const BorrowManage = () => {
               <tr className='h-[2.5em]' style={{ backgroundColor: index % 2 == 0 ? "#2F5D62" : "white", color: index % 2 == 0 ? 'white' : 'black' }}>
                 <td>{item.borrowId}</td>
                 <td>{item.borrower}</td>
-                <td className='Gentium-B-font'>{item.status}</td>
+                <td className='Gentium-B-font' style={{color : item.status == 'CANCELED' ? 'red' : index % 2 == 0 ? 'white' : 'black'}}>{item.status}</td>
                 <td className='Gentium-R-font'>
                   <div className='flex items-center justify-center'>
                     <AiOutlineSearch onClick={() => {

@@ -20,7 +20,7 @@ export const BookCart = () => {
             setIsActiveModal(true)
             //Add to Borrow service (หลังทำ login)
             //{
-            // status : "Pending"
+            // status : "PENDING"
             // borrow_date : "current date"
             // due_date : "หลังจากวันที่ยืม 1 สัปดาห์"
             // late : false
@@ -30,6 +30,7 @@ export const BookCart = () => {
             //   "asd4po32p25l" --ตัวอย่างเฉยๆ-- เก็บเป็น id ของหนังสือที่ยืม
             // ]
             //}
+            //หลังจากส่งไป create ปุ๊ป ไปหักจำนวนหนังสือตามที่ user ได้ยืมไป
 
             //add เสร็จล้างค่า localStorage
             //secureLocalStorage.removeItem("books")
