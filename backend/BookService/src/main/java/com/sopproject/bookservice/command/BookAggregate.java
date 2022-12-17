@@ -97,5 +97,6 @@ public class BookAggregate {
     @EventSourcingHandler
     public void on(BookDeletedEvent event){
         System.out.println("Delete Book Id: " + this._id);
+        AggregateLifecycle.markDeleted();
     }
 }
