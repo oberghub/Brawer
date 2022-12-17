@@ -12,20 +12,18 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.annotation.Id;
 
 import java.util.List;
 
 @Aggregate
 public class ReserveAggregate {
-    @Id
     @AggregateIdentifier
     private String _id;
     private String userId;
     private String roomId;
     private List<String> equipmentsId;
     private String timestamp;
-    private String reserveForm;
+    private String reserveFrom;
     private String reserveTo;
     private String status;
 
@@ -33,8 +31,8 @@ public class ReserveAggregate {
     @CommandHandler
     public ReserveAggregate(CreateReserveCommand command){
         boolean blankDataCheck = command.getUserId().isBlank() || command.getRoomId().isBlank() ||
-                command.getTimestamp().isBlank() || command.getReserveForm().isBlank() ||
-                command.getReserveForm().isBlank() || command.getStatus().isBlank();
+                command.getTimestamp().isBlank() || command.getReserveFrom().isBlank() ||
+                command.getReserveFrom().isBlank() || command.getStatus().isBlank();
         if (blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
         }
@@ -46,8 +44,8 @@ public class ReserveAggregate {
     @CommandHandler
     public void ReserveAggregate(UpdateReserveCommand command){
         boolean blankDataCheck = command.getUserId().isBlank() || command.getRoomId().isBlank() ||
-                command.getTimestamp().isBlank() || command.getReserveForm().isBlank() ||
-                command.getReserveForm().isBlank() || command.getStatus().isBlank() || command.get_id().isBlank();
+                command.getTimestamp().isBlank() || command.getReserveFrom().isBlank() ||
+                command.getReserveFrom().isBlank() || command.getStatus().isBlank() || command.get_id().isBlank();
         if (blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
         }
@@ -74,7 +72,7 @@ public class ReserveAggregate {
         this.roomId = event.getRoomId();
         this.equipmentsId = event.getEquipmentsId();
         this.timestamp = event.getTimestamp();
-        this.reserveForm = event.getReserveForm();
+        this.reserveFrom = event.getReserveFrom();
         this.reserveTo = event.getReserveTo();
         System.out.println("Create Reserve Id: " + this._id);
     }
@@ -85,7 +83,7 @@ public class ReserveAggregate {
         this.roomId = event.getRoomId();
         this.equipmentsId = event.getEquipmentsId();
         this.timestamp = event.getTimestamp();
-        this.reserveForm = event.getReserveForm();
+        this.reserveFrom = event.getReserveFrom();
         this.reserveTo = event.getReserveTo();
         System.out.println("Update Reserve Id: " + this._id);
     }

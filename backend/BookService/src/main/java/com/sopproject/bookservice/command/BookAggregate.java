@@ -17,7 +17,6 @@ import java.util.List;
 
 @Aggregate
 public class BookAggregate {
-    @Id
     @AggregateIdentifier
     private String _id;
     private String title;

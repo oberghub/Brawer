@@ -63,10 +63,10 @@ public class BookCommandController {
             return e.getLocalizedMessage();
         }
     }
-    @DeleteMapping
-    public String deleteBook(@RequestBody BookRestModel model){
+    @DeleteMapping("/{id}")
+    public String deleteBook(@PathVariable String id){
         DeleteBookCommand command = DeleteBookCommand.builder()
-                ._id(model.get_id())
+                ._id(id)
                 .build();
 
         String result;

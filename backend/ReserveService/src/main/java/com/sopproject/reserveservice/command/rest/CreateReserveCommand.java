@@ -15,7 +15,7 @@ public class CreateReserveCommand {
     private String roomId;
     private List<String> equipmentsId;
     private String timestamp;
-    private String reserveForm;
+    private String reserveFrom;
     private String reserveTo;
     private String status;
 }
