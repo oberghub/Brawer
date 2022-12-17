@@ -29,6 +29,7 @@ public class PaymentCommandController {
                 .status(model.getStatus())
                 .timestamp(model.getTimestamp())
                 .price(model.getPrice())
+                .borrowId(model.getBorrowId())
                 .build();
         String result;
         try{
@@ -49,6 +50,7 @@ public class PaymentCommandController {
                 .status(model.getStatus())
                 .timestamp(model.getTimestamp())
                 .price(model.getPrice())
+                .borrowId(model.getBorrowId())
                 .build();
         String result;
         try{

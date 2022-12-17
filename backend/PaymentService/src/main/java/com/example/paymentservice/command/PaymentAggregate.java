@@ -23,14 +23,15 @@ public class PaymentAggregate {
     private String timestamp;
     private String status;
     private double price;
+    private String borrowId;
 
     public PaymentAggregate() {
     }
 
     @CommandHandler
     public PaymentAggregate(CreatePaymentCommand command){
-        boolean blankDataCheck = command.getUserId().isBlank() || command.getReserveId().isBlank() ||
-                command.getTimestamp().isBlank() || command.getStatus().isBlank() || command.getPrice() == 0;
+        boolean blankDataCheck = command.getUserId().isBlank() || (command.getReserveId().isBlank() && command.getBorrowId().isBlank()) ||
+                command.getTimestamp().isBlank() || command.getStatus().isBlank() || command.getPrice() == 0 ;
         if(blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
         }
@@ -42,7 +43,7 @@ public class PaymentAggregate {
 
     @CommandHandler
     public void PaymentAggregate(UpdatePaymentCommand command){
-        boolean blankDataCheck = command.get_id().isBlank() || command.getUserId().isBlank() || command.getReserveId().isBlank() ||
+        boolean blankDataCheck = command.get_id().isBlank() || command.getUserId().isBlank() || (command.getReserveId().isBlank() && command.getBorrowId().isBlank()) ||
                 command.getTimestamp().isBlank() || command.getStatus().isBlank() || command.getPrice() == 0;
         if(blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
@@ -73,6 +74,7 @@ public class PaymentAggregate {
         this.timestamp = event.getTimestamp();
         this.status = event.getStatus();
         this.price = event.getPrice();
+        this.borrowId = event.getBorrowId();
         System.out.println("Add Payment Id "+this._id);
     }
 
@@ -84,6 +86,7 @@ public class PaymentAggregate {
         this.timestamp = event.getTimestamp();
         this.status = event.getStatus();
         this.price = event.getPrice();
+        this.borrowId = event.getBorrowId();
         System.out.println("Update Payment Id "+this._id);
     }
 
