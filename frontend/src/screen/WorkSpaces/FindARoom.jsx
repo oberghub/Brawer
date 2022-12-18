@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -7,43 +7,46 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react';
 import secureLocalStorage from 'react-secure-storage';
+import axios from 'axios';
 function FindARoom() {
     const navigate = useNavigate()
     let currentTime = new Date()
     const [date, setDate] = useState(currentTime)
-    const [timeStart, setTimeStart] = useState(null)
-    const [timeEnd, setTimeEnd] = useState(null)
+    const [time_start, setTimeStart] = useState(null)
+    const [time_end, setTimeEnd] = useState(null)
     const [isFiltered, setFiltered] = useState(false)
     const [allRooms, setRooms] = useState([
         {
-            roomId: 'wsw001',
-            roomName: "w01",
-            roomType: "Workstation",
-            roomCapacity: "2 - 9",
-            pricePerHour : 500,
-            timeRent: [
-                { date: "2022-12-10", timeStart: "12:00", timeEnd: "14:00" },
-                { date: "2022-12-10", timeStart: "14:00", timeEnd: "15:00" },
-                { date: "2022-12-10", timeStart: "18:00", timeEnd: "19:00" },
-                { date: "2022-12-11", timeStart: "14:00", timeEnd: "16:00" }
-            ]
+            _id: 'wsw001',
+            room_name: "w01",
+            room_type: "Workstation",
+            room_capacity: "2 - 9",
+            price : 500,
+            time_rent: [
+                { date: "2022-12-10", time_start: "12:00", time_end: "14:00" },
+                { date: "2022-12-10", time_start: "14:00", time_end: "15:00" },
+                { date: "2022-12-10", time_start: "18:00", time_end: "19:00" },
+                { date: "2022-12-11", time_start: "14:00", time_end: "16:00" }
+            ],
+            desc:"room big big"
         },
         {
-            roomId: 'wsw002',
-            roomName: "w02",
-            roomType: "Workstation",
-            roomCapacity: "2 - 9",
-            pricePerHour : 500,
-            timeRent: [
-                { date: "2022-12-10", timeStart: "10:00", timeEnd: "15:00" },
-                { date: "2022-12-12", timeStart: "11:00", timeEnd: "19:00" },
-            ]
+            _id: 'wsw002',
+            room_name: "w02",
+            room_type: "Workstation",
+            room_capacity: "2 - 9",
+            price : 500,
+            time_rent: [
+                { date: "2022-12-10", time_start: "10:00", time_end: "15:00" },
+                { date: "2022-12-12", time_start: "11:00", time_end: "19:00" },
+            ],
+            desc:"big big room"
         }
     ]
     )
     const [selectedRoomType, setSelectedRoomType] = useState(null)
     const [filterRooms, setFilterRooms] = useState(allRooms)
-    const roomType = [
+    const room_type = [
         "Workstation", "Meeting Room", "Seminar Room"
     ]
     const timeRange = [
@@ -65,54 +68,62 @@ function FindARoom() {
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [roomIndex, setRoomIndex] = useState(0)
     const forTimeStart = timeRange.filter(item => item <= "20:00")
-    const timeRangeFilter = timeStart == null ? timeRange : timeRange.filter(item => item > timeStart)
+    const timeRangeFilter = time_start == null ? timeRange : timeRange.filter(item => item > time_start)
 
     //function หาห้องที่ยังว่าง
-    function findAvailableRooms(rooms, date = "2022-12-10", timeStart, timeEnd) {
-        console.log(selectedRoomType)
-        let roomsT = rooms.filter(item => item.roomType == selectedRoomType)
-        let datebase = new Date();
-        if (date.constructor.name == "M") {
-            datebase = date.toDate().toISOString().slice(0, 10)
-        } else {
-            datebase = new Date(date).toISOString().slice(0, 10)
-        }
+    function findAvailableRooms(rooms, date = "2022-12-10", time_start, time_end) {
+        function findRooms(allrooms){
+            let roomsT = allrooms.filter(item => item.room_type == selectedRoomType)
+            let datebase = new Date();
+            if (date.constructor.name == "M") {
+                datebase = date.toDate().toISOString().slice(0, 10)
+            } else {
+                datebase = new Date(date).toISOString().slice(0, 10)
+            }
 
-        let start = new Date(datebase + "T" + timeStart)
-        let end = new Date(datebase + "T" + timeEnd)
-        const availableRooms = [];
-        for (const room of roomsT) {
-            let occupied = false
-            for (const time of room.timeRent) {
+            let start = new Date(datebase + "T" + time_start)
+            let end = new Date(datebase + "T" + time_end)
+            const availableRooms = [];
+            for (const room of roomsT) {
+                let occupied = false
+                for (const time of room.time_rent) {
 
-                let roombase = new Date(time.date).toISOString().slice(0, 10)
-                let roomstart = new Date(roombase + "T" + time.timeStart)
-                let roomend = new Date(roombase + "T" + time.timeEnd)
-                console.log(roomstart, roomend)
-                if (roombase == datebase) {
-                    if ((start >= roomstart && start < roomend) || (end > roomstart && end <= roomend)) {
-                        occupied = true
-                        console.log(room, roomstart, roomend)
-                    }
-                    if (start < roomend && end > roomstart) {
-                        occupied = true
-                        console.log(room, roomstart, roomend)
+                    let roombase = new Date(time.date).toISOString().slice(0, 10)
+                    let roomstart = new Date(roombase + "T" + time.time_start)
+                    let roomend = new Date(roombase + "T" + time.time_end)
+                    console.log(roomstart, roomend)
+                    if (roombase == datebase) {
+                        if ((start >= roomstart && start < roomend) || (end > roomstart && end <= roomend)) {
+                            occupied = true
+                            console.log(room, roomstart, roomend)
+                        }
+                        if (start < roomend && end > roomstart) {
+                            occupied = true
+                            console.log(room, roomstart, roomend)
+                        }
                     }
                 }
+                if (!occupied) {
+                    availableRooms.push(room);
+                }
             }
-            if (!occupied) {
-                availableRooms.push(room);
-            }
+            console.log(availableRooms)
+            setFilterRooms(availableRooms)
+            setFiltered(true)
+            setSelectedRoom(allRooms[0])
         }
-        console.log(availableRooms)
-        setFilterRooms(availableRooms)
-        setFiltered(true)
-        setSelectedRoom(allRooms[0])
-        return availableRooms;
+        axios.get("http://localhost:8082/workspace-service/workspaces/all", {
+        }).then((res) => {
+          setRooms(res.data)
+          let myrooms = res.data
+          findRooms(myrooms)
+          
+        }).catch((e) => {findRooms(rooms);console.log(e)})
+        
     }
     //ตอนกด next หลังเลือกห้อง
     const storeTimeRent = () => {
-        let data = { ...selectedRoom, date : date, timeStart : timeStart, timeEnd : timeEnd, equipments : [], sumPrice : selectedRoom.pricePerHour * (parseInt(timeEnd) - parseInt(timeStart))}
+        let data = { ...selectedRoom, date : date, time_start : time_start, time_end : time_end, equipments : [], sumPrice : selectedRoom.price * (parseInt(time_end) - parseInt(time_start))}
         secureLocalStorage.setItem("myRoom", JSON.stringify(data))
     }
 
@@ -126,9 +137,9 @@ function FindARoom() {
         let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
         if(!!room){
             setDate(room.date)
-            setTimeStart(room.timeStart)
-            setTimeEnd(room.timeEnd)
-            setSelectedRoomType(room.roomType)
+            setTimeStart(room.time_start)
+            setTimeEnd(room.time_end)
+            setSelectedRoomType(room.room_type)
         }
         else{
             setDate(currentTime)
@@ -137,12 +148,18 @@ function FindARoom() {
             setSelectedRoomType(null)
         }
     }, [])
+    useEffect(() => {
+        axios.get("http://localhost:8082/workspace-service/workspaces/all", {
+        }).then((res) => {
+          setRooms(res.data)
+        }).catch((e) => console.log(e))
+      }, [])
     return (
         <div>
             <div className='w-full md:h-[100px] md:flex md:gap-7 justify-center p-10'>
                 <p className='text-2xl mb-3 md:mb-0' onClick={() => {
                     console.log(!date.$d ? date : date.$d.toString().substring(4, 15))
-                    console.log(timeStart)
+                    console.log(time_start)
                 }}>Select a time</p>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker
@@ -159,9 +176,9 @@ function FindARoom() {
                 <Autocomplete
                     className='my-3 md:my-0 md:w-[260px]'
                     disablePortal
-                    id="combo-box-timeStart"
+                    id="combo-box-time_start"
                     options={forTimeStart}
-                    value={timeStart}
+                    value={time_start}
                     onChange={(event, newValue) => {
                         setTimeStart(newValue);
                     }}
@@ -170,10 +187,10 @@ function FindARoom() {
                 <Autocomplete
                     className='my-3 md:my-0 md:w-[260px]'
                     disablePortal
-                    id="combo-box-timeEnd"
+                    id="combo-box-time_end"
                     options={timeRangeFilter}
-                    disabled={timeStart == null ? true : false}
-                    value={timeEnd}
+                    disabled={time_start == null ? true : false}
+                    value={time_end}
                     onChange={(event, newValue) => {
                         setTimeEnd(newValue);
                     }}
@@ -181,16 +198,16 @@ function FindARoom() {
                 />
                 <Autocomplete
                     className='my-3 md:my-0 md:w-[260px]'
-                    id="combo-box-roomType"
-                    options={roomType}
+                    id="combo-box-room_type"
+                    options={room_type}
                     value={selectedRoomType}
                     onChange={(event, newValue) => {
                         setSelectedRoomType(newValue);
                     }}
                     renderInput={(params) => <TextField {...params} label="Room Type" />}
                 />
-                {timeStart !== null && timeEnd !== null && selectedRoomType !== null ?
-                    <div className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center md:w-[150px] h-[50px] cursor-pointer' onClick={() => { findAvailableRooms(allRooms, date, timeStart, timeEnd) }}>
+                {time_start !== null && time_end !== null && selectedRoomType !== null ?
+                    <div className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center md:w-[150px] h-[50px] cursor-pointer' onClick={() => { findAvailableRooms(allRooms, date, time_start, time_end) }}>
                         <p className='text-2xl'>Find</p>
                     </div>
                     :
@@ -221,8 +238,8 @@ function FindARoom() {
                         }} className='cursor-pointer flex items-center rounded my-3 min-[1280px]:w-[980px] h-[120px] drop-shadow-xl m-auto p-4 relative' 
                             style={{backgroundColor : index === roomIndex ? '#F1F1F1' : 'white'}}>
                             <div>
-                                <p className='text-2xl'>{data.roomType} : Room {data.roomName}</p>
-                                <p className='text-xl'>Capacity : {data.roomCapacity} Person</p>
+                                <p className='text-2xl'>{data.room_type} : Room {data.room_name}</p>
+                                <p className='text-xl'>Capacity : {data.room_capacity.length > 1?`${data.room_capacity[0]}-${data.room_capacity[1]}`:data.room_capacity[0]} Person</p>
                             </div>
                             <div className='w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center absolute right-[3%]'>
                                 {index === roomIndex ?
