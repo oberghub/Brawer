@@ -29,7 +29,7 @@ import BookingManage from './screen/Management/BookingManage';
 import WorkSpaceManage from './screen/Management/WorkSpaceManage';
 import NotFoundPage from './component/NotFoundPage';
 
-import { Provider } from 'react-redux';
+import { Provider} from 'react-redux';
 import { store } from './store';
 
 //component
@@ -37,10 +37,14 @@ import { MyNavbar } from './component/MyNavbar';
 
 //
 import { Navigate } from 'react-router-dom';
+
 function App() {
-  let user = true
+  const userCheck = () =>{
+    console.log(store.getState().user_data.user)
+    return store.getState().user_data.user
+  }
   const ProtectedRoute = ({ user, children }) => {
-    if (!user) {
+    if (!user()) {
       return <Navigate to="/" replace />;
     }
 
@@ -62,7 +66,7 @@ function App() {
           <Route path='/space-info' element={<WorkSpaceDetail />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path='booking' element={
-            <ProtectedRoute user={user}>
+            <ProtectedRoute user={userCheck}>
               <BookingWorkSpace />
             </ProtectedRoute>
           }>
