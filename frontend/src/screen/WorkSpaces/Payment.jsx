@@ -48,6 +48,7 @@ const Payment = () => {
     let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
     if(!!room){
       setResultRoom(room)
+      console.log(room)
     }
     else{
       navigate("/")
@@ -113,15 +114,15 @@ const Payment = () => {
             <div className='indent-5'>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Workstation :</p>
-                <p className='absolute right-[3%]'>Room {resultRoom.roomName}</p>
+                <p className='absolute right-[3%]'>Room {resultRoom.room_name}</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Capacity :</p>
-                <p className='absolute right-[3%]'>{resultRoom.roomCapacity} Person</p>
+                <p className='absolute right-[3%]'>{resultRoom.room_capacity} Person</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Room Price :</p>
-                <p className='absolute right-[3%]'>{resultRoom.pricePerHour} THB</p>
+                <p className='absolute right-[3%]'>{resultRoom.price} THB</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Date :</p>
@@ -129,11 +130,11 @@ const Payment = () => {
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Time :</p>
-                <p className='absolute right-[3%]'>{resultRoom.timeStart} - {resultRoom.timeEnd}</p>
+                <p className='absolute right-[3%]'>{resultRoom.time_start} - {resultRoom.time_end}</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Period :</p>
-                <p className='absolute right-[3%]'>{parseInt(resultRoom.timeEnd) - parseInt(resultRoom.timeStart)} HRS</p>
+                <p className='absolute right-[3%]'>{parseInt(resultRoom.time_end) - parseInt(resultRoom.time_start)} HRS</p>
               </div>
             </div>
             <p className='text-2xl sm:text-3xl Gentium-B-font my-[0.5em]'>Additional Equipments</p>

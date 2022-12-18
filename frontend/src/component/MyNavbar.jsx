@@ -47,6 +47,9 @@ export const MyNavbar = () => {
             gapi.load('client:auth2', initClient);
     });
     //--- Google OAuth ---//
+    // useEffect(() => {
+    //     //
+    // }, [user])
 
     const toggleslide = () => {
         document.getElementById('slide-profile').classList.toggle('invisible')

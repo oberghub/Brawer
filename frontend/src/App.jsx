@@ -29,7 +29,7 @@ import BookingManage from './screen/Management/BookingManage';
 import WorkSpaceManage from './screen/Management/WorkSpaceManage';
 import NotFoundPage from './component/NotFoundPage';
 
-import { Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import { store } from './store';
 
 //component
@@ -39,13 +39,13 @@ import { MyNavbar } from './component/MyNavbar';
 import { Navigate } from 'react-router-dom';
 
 function App() {
-  const userCheck = () =>{
+  const userCheck = () => {
     console.log(store.getState().user_data.user)
     return store.getState().user_data.user
   }
   const ProtectedRoute = ({ user, children }) => {
     if (!user()) {
-      alert("Please Sign in before booking")
+      alert("Please Sign in")
       return <Navigate to="/" replace />;
     }
 
@@ -55,14 +55,18 @@ function App() {
     <Provider store={store}>
       <div className='Gentium-R-font relative '>
         {/* navbar */}
-        <MyNavbar/>
+        <MyNavbar />
 
         {/* Route Page */}
         <Routes>
           <Route index path='/' element={<Home />} />
           <Route path='/all-books' element={<Book />} />
           <Route path='/book-info' element={<BookInfo />} />
-          <Route path='/borrow-cart' element={<BookCart />} />
+          <Route path='/borrow-cart' element={
+            <ProtectedRoute user={userCheck}>
+              <BookCart />
+            </ProtectedRoute>
+          } />
           <Route path='/all-spaces' element={<WorkSpace />} />
           <Route path='/space-info' element={<WorkSpaceDetail />} />
           <Route path="*" element={<NotFoundPage />} />
@@ -75,13 +79,21 @@ function App() {
             <Route path='equipments' element={<AddEquipments />} />
             <Route path='payment' element={<Payment />} />
           </Route>
-          <Route path='profile' element={<MainProfile />}>
+          <Route path='profile' element={
+            <ProtectedRoute user={userCheck} >
+              <MainProfile />
+            </ProtectedRoute>
+          }>
             <Route path='borrow-list' element={<BorrowList />} />
             <Route path='favourite' element={<Favourite />} />
             <Route path='booking-history' element={<BookingHistory />} />
             {/* <Route path='edit-profile' element={<EditProfile />} /> */}
           </Route>
-          <Route path='management' element={<MainManage />}>
+          <Route path='management' element={
+            <ProtectedRoute user={userCheck} >
+              <MainManage />
+            </ProtectedRoute>
+          }>
             <Route path='booking-manage' element={<BookingManage />} />
             <Route path='borrow-manage' element={<BorrowManage />} />
             <Route path='book-stock' element={<BookStock />} />
