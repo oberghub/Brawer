@@ -8,8 +8,7 @@ import secureLocalStorage from "react-secure-storage";
 import { gapi } from "gapi-script";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { userdata } from "../userSlice";
-export const MyNavbar = ({signInstate}) => {
-    console.log("-> ", signInstate)
+export const MyNavbar = () => {
     const [acc, setAcc] = useState(false)
     const [bookInCart, setBookInCart] = useState([])
     const navigate = useNavigate()

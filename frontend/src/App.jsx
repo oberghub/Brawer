@@ -45,6 +45,7 @@ function App() {
   }
   const ProtectedRoute = ({ user, children }) => {
     if (!user()) {
+      alert("Please Sign in before booking")
       return <Navigate to="/" replace />;
     }
 

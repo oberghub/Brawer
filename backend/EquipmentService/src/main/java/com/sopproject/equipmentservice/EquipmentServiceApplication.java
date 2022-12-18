@@ -1,4 +1,4 @@
-package com.sopproject.workspaceservice;
+package com.sopproject.equipmentservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-public class WorkspaceServiceApplication {
+public class EquipmentServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WorkspaceServiceApplication.class, args);
+		SpringApplication.run(EquipmentServiceApplication.class, args);
 	}
 
 }
