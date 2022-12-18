@@ -7,11 +7,11 @@ const AddEquipments = () => {
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [equipments, setEquipments] = useState([
-        { name: "Projector", price: 300 },
-        { name: "Laptop", price: 500 },
-        { name: "Charging Adapter", price: 50 },
-        { name: "Microphone", price: 100 },
-        { name: "Upgrade Speaker", price: 250 },
+        { name: "Projector", price: 300, _id:"01", desc:"p" },
+        { name: "Laptop", price: 500, _id:"02", desc:"p"  },
+        { name: "Charging Adapter", price: 50, _id:"03", desc:"p"  },
+        { name: "Microphone", price: 100, _id:"04", desc:"p"  },
+        { name: "Upgrade Speaker", price: 250, _id:"05", desc:"p"  },
     ])
     const [added, setAdded] = useState([
     ])
@@ -56,7 +56,7 @@ const AddEquipments = () => {
     const delItem = (data, index) => {
         //คืนของเข้า modal
         let copyEquipments = [...equipments]
-        copyEquipments.push({ name: data.name, price: data.price })
+        copyEquipments.push({ name: data.name, price: data.price, _id:data._id, desc:data.desc  })
         setEquipments(copyEquipments)
 
         //ลบของออกจากหน้าหลัก
@@ -72,7 +72,7 @@ const AddEquipments = () => {
     const addItem = (data, index) => {
         //add ของเข้าไปใน added
         let copyAddedItem = [...added]
-        copyAddedItem.push({ name: data.name, price: data.price, quantity: 1 })
+        copyAddedItem.push({ name: data.name, price: data.price, quantity: 1, _id:data._id, desc:data.desc })
         setAdded(copyAddedItem)
 
         //ลบของออกจาก modal
@@ -91,37 +91,34 @@ const AddEquipments = () => {
         let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
         secureLocalStorage.setItem("myRoom", JSON.stringify({...room, equipments : added}))
     }
-    useEffect(() => { //ติดบัคตรงพอกดเลือกของแล้วกด next แล้วกดกลับมาหน้าเดิม ใน click to add ของมันลบออกไม่หมด
-                      //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ที่บัคคือใน comment** ***แก้แล้ว***
-        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
-        if(!!room && room.length !== 0){
-            let copyItem = [...equipments]
-            let tempitems = []
-            tempitems = copyItem.filter(item => {
-                let canaddequipment = true
-                for(let equ of room.equipments){
-                    // console.log(item.name, equ.name, equ.name !== item.name)
-                    if(equ.name == item.name){
-                        canaddequipment = false
-                        break
-                    }
-                }
-                return canaddequipment
-            })
-            // console.log(tempitems)
-            console.log(tempitems, room.equipments)
-            setEquipments(tempitems)
-            setAdded(room.equipments)
-        }
-        else{
-            navigate("/")
-        }
-    }, [])
+
     //Get Data When First Time Render
-    useEffect(() => {
+    useEffect(() => {   //ติดบัคตรงพอกดเลือกของแล้วกด next แล้วกดกลับมาหน้าเดิม ใน click to add ของมันลบออกไม่หมด
+                        //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ที่บัคคือใน comment** ***แก้แล้ว***
         axios.get("http://localhost:8082/equipment-service/equipments/all", {
         }).then((res) => {
             setEquipments(res.data)
+            console.log(res.data)
+            let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+            if(!!room && room.length !== 0){
+                let copyItem = [...res.data]
+                let tempitems = []
+                tempitems = copyItem.filter(item => {
+                    let canaddequipment = true
+                    for(let equ of room.equipments){
+                        if(equ.name == item.name){
+                            canaddequipment = false
+                            break
+                        }
+                    }
+                    return canaddequipment
+                })
+                setEquipments(tempitems)
+                setAdded(room.equipments)
+            }
+            else{
+                navigate("/")
+            }
 
         }).catch((e) => console.log(e))
     }, [])
