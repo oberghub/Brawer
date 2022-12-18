@@ -13,7 +13,7 @@ const Payment = () => {
       roomId: 'wsw001',
       roomName: "w01",
       roomType: "Workstation",
-      roomCapacity: "2 - 9",
+      room_capacity: ["2","9"],
       pricePerHour : 500,
       sumPrice : 1000,
       date: "2022-11-25",
@@ -118,7 +118,7 @@ const Payment = () => {
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Capacity :</p>
-                <p className='absolute right-[3%]'>{resultRoom.room_capacity} Person</p>
+                <p className='absolute right-[3%]'>{resultRoom.room_capacity.length > 1?`${resultRoom.room_capacity[0]}-${resultRoom.room_capacity[1]}`:resultRoom.room_capacity[0]} Person</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Room Price :</p>
@@ -147,7 +147,7 @@ const Payment = () => {
                 {resultRoom.equipments.map(item => <>
                   <div className='indent-5'>
                     <div className='w-full text-xl sm:text-2xl flex relative'>
-                      <p className='Gentium-B-font'>- {item.itemName}</p>
+                      <p className='Gentium-B-font'>- {item.name}</p>
                       <p className='absolute right-[3%]'>x{item.quantity} : {item.price * item.quantity} THB</p>
                     </div>
                   </div>

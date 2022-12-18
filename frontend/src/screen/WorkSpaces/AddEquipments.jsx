@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -6,11 +7,11 @@ const AddEquipments = () => {
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [equipments, setEquipments] = useState([
-        { itemName: "Projector", price: 300 },
-        { itemName: "Laptop", price: 500 },
-        { itemName: "Charging Adapter", price: 50 },
-        { itemName: "Microphone", price: 100 },
-        { itemName: "Upgrade Speaker", price: 250 },
+        { name: "Projector", price: 300 },
+        { name: "Laptop", price: 500 },
+        { name: "Charging Adapter", price: 50 },
+        { name: "Microphone", price: 100 },
+        { name: "Upgrade Speaker", price: 250 },
     ])
     const [added, setAdded] = useState([
     ])
@@ -55,7 +56,7 @@ const AddEquipments = () => {
     const delItem = (data, index) => {
         //คืนของเข้า modal
         let copyEquipments = [...equipments]
-        copyEquipments.push({ itemName: data.itemName, price: data.price })
+        copyEquipments.push({ name: data.name, price: data.price })
         setEquipments(copyEquipments)
 
         //ลบของออกจากหน้าหลัก
@@ -71,7 +72,7 @@ const AddEquipments = () => {
     const addItem = (data, index) => {
         //add ของเข้าไปใน added
         let copyAddedItem = [...added]
-        copyAddedItem.push({ itemName: data.itemName, price: data.price, quantity: 1 })
+        copyAddedItem.push({ name: data.name, price: data.price, quantity: 1 })
         setAdded(copyAddedItem)
 
         //ลบของออกจาก modal
@@ -99,8 +100,8 @@ const AddEquipments = () => {
             tempitems = copyItem.filter(item => {
                 let canaddequipment = true
                 for(let equ of room.equipments){
-                    // console.log(item.itemName, equ.itemName, equ.itemName !== item.itemName)
-                    if(equ.itemName == item.itemName){
+                    // console.log(item.name, equ.name, equ.name !== item.name)
+                    if(equ.name == item.name){
                         canaddequipment = false
                         break
                     }
@@ -108,12 +109,21 @@ const AddEquipments = () => {
                 return canaddequipment
             })
             // console.log(tempitems)
+            console.log(tempitems, room.equipments)
             setEquipments(tempitems)
             setAdded(room.equipments)
         }
         else{
             navigate("/")
         }
+    }, [])
+    //Get Data When First Time Render
+    useEffect(() => {
+        axios.get("http://localhost:8082/equipment-service/equipments/all", {
+        }).then((res) => {
+            setEquipments(res.data)
+
+        }).catch((e) => console.log(e))
     }, [])
     return (
         <div>
@@ -130,7 +140,7 @@ const AddEquipments = () => {
                                 {equipments.map((item, index) =>
                                     <>
                                         <div key={index} onClick={() => { addItem(item, index) }} className='bg-[#FAFAFA] drop-shadow md:w-[500px] md:h-[100px] p-5 my-5 cursor-pointer'>
-                                            <p className='text-2xl'>{item.itemName}</p>
+                                            <p className='text-2xl'>{item.name}</p>
                                             <p className='text-xl'>{item.price} THB / 1 Pcs.</p>
                                         </div>
                                     </>
@@ -146,7 +156,7 @@ const AddEquipments = () => {
             <div className='min-[1280px]:w-[1280px] h-[500px] p-5 mt-[2em] m-auto bg-[#FAFAFA] relative overflow-y-scroll'>
                 {added.map((item, index) => <>
                     <div className='my-3 p-5 min-[480px]:flex items-center min-[1280px]:w-[980px] h-[100px] bg-white rounded drop-shadow-xl m-auto relative'>
-                        <p className='text-2xl'>{item.itemName}</p>
+                        <p className='text-2xl'>{item.name}</p>
                         <div className='flex gap-5 absolute right-[3%]'>
                             <p className='text-2xl'>Qt.</p>
                             <p onClick={() => decrementQuantity(index)} className='text-3xl cursor-pointer'>-</p>

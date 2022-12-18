@@ -10,7 +10,7 @@ import secureLocalStorage from 'react-secure-storage';
 import axios from 'axios';
 function FindARoom() {
     const navigate = useNavigate()
-    let currentTime = new Date()
+    let currentTime = new Date().toISOString().slice(0, 10)
     const [date, setDate] = useState(currentTime)
     const [time_start, setTimeStart] = useState(null)
     const [time_end, setTimeEnd] = useState(null)
@@ -123,7 +123,13 @@ function FindARoom() {
     }
     //ตอนกด next หลังเลือกห้อง
     const storeTimeRent = () => {
-        let data = { ...selectedRoom, date : date, time_start : time_start, time_end : time_end, equipments : [], sumPrice : selectedRoom.price * (parseInt(time_end) - parseInt(time_start))}
+        let datebase;
+        if (date.constructor.name == "M") {
+            datebase = date.toDate().toISOString().slice(0, 10)
+        }else{
+            datebase = date
+        }
+        let data = { ...selectedRoom, date : datebase, time_start : time_start, time_end : time_end, equipments : [], sumPrice : selectedRoom.price * (parseInt(time_end) - parseInt(time_start))}
         secureLocalStorage.setItem("myRoom", JSON.stringify(data))
     }
 
