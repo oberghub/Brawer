@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import axios from 'axios';
 const EquipmentsStock = () => {
   const [equipments, setEquipments] = useState([
-    { title: 'Projector', price : 100 , desc : "lorem ipsum fuck"},
-    { title: 'White Board', price : 100, desc : "lorem ipsum fuck" },
-    { title: 'Microphone', price : 100, desc : "lorem ipsum fuck"},
-    { title: 'Shabu', price : 100, desc : "lorem ipsum fuck" },
   ])
   const [selectedEquipments, setSelectedEquipments] = useState("")
   const [isActiveModal, setIsActiveModal] = useState(false)
@@ -23,6 +20,7 @@ const EquipmentsStock = () => {
   const [e_Title, sete_Title] = useState("")
   const [e_Price, sete_Price] = useState("")
   const [e_desc, sete_Desc] = useState("")
+  const [itemId, setItemId] = useState("")
   //----------------------Edit Equipments----------------------//
 
   const handleTitle = (event) => {
@@ -44,17 +42,51 @@ const EquipmentsStock = () => {
     sete_Desc(event.target.value);
   };
   const addEquipments= () => {
+    let addItem = {name : title, price : price, desc : desc}
     const copyEquipments = [...equipments]
-    copyEquipments.push({ title: title , price : price, desc : desc })
+    copyEquipments.push(addItem)
+    axios.post("http://localhost:8082/equipment-service/equipment", addItem, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => console.log(res.status + " " + res.statusText))
     setEquipments(copyEquipments)
     setTitle("")
     setPrice("")
+    setDesc("")
     setIsActiveModal(false)
+    window.location.reload()
+  }
+  const updateEquipments = () => {
+    let updateItem = {_id : itemId, name : e_Title, price : e_Price, desc : e_desc}
+    axios.put("http://localhost:8082/equipment-service/equipment", updateItem, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => console.log(res.status + " " + res.statusText))
+
+  }
+  const deleteEquipment = () => {
+    //Delete with selectedBook._id   in db
+    let deleteData = "http://localhost:8082/equipment-service/equipment/"+itemId
+    axios.delete(deleteData, {
+    }).then((res) => console.log(res.status + " " + res.statusText))
+
+    let todelete = equipments.filter((e)=>e._id != itemId)
+    setEquipments(todelete)
+    setSelectedEquipments(todelete[0])
   }
   const toggleslide = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('invisible')
     document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
   }
+  useEffect(() => {
+    const URL = "http://localhost:8082/equipment-service/equipments/all"
+    axios.get(URL).then((res) => {
+      console.log(res)
+      setEquipments(res.data)
+    }).catch((e) => console.log(e))
+  }, [])
   return (
     <div>
       {isActiveModal ?
@@ -75,7 +107,7 @@ const EquipmentsStock = () => {
                 <Box
                   className='w-full'
                 >
-                  <p className='text-xl mb-1 Gentium-B-font'>Title :</p>
+                  <p className='text-xl mb-1 Gentium-B-font'>Item Name :</p>
                   <TextField fullWidth label="" id="title" value={title} onChange={handleTitle} />
                 </Box>
                 <div className="w-full grid grid-cols-2 gap-3 mt-5">
@@ -133,12 +165,12 @@ const EquipmentsStock = () => {
           <div className="w-full relative">
             <p className='text-3xl'>Choose An Equipments</p>
           </div>
-          <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+          <div onClick={() => {updateEquipments()}} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
             <div className="text-xl">
               <p className='text-white'>Change</p>
             </div>
           </div>
-          <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
+          <div onClick={() => { deleteEquipment() }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
             <div className="text-xl">
               <p className='text-white'>Delete</p>
             </div>
@@ -148,14 +180,15 @@ const EquipmentsStock = () => {
               className='w-full'
               disablePortal
               id="combo-box-equipments"
-              options={equipments.map((item, index) => "(" + parseInt(index) + ") " + item.title)}
+              options={equipments.map((item, index) => "(" + parseInt(index) + ") " + item.name)}
               value={selectedEquipments}
               onChange={(event, newValue) => {
                 const index = newValue.substring(1, 2)
                 setSelectedEquipments(newValue);
-                sete_Title(equipments[index].title)
+                sete_Title(equipments[index].name)
                 sete_Price(equipments[index].price)
                 sete_Desc(equipments[index].desc)
+                setItemId(equipments[index]._id)
               }}
               renderInput={(params) => <TextField {...params} label="" />}
             />

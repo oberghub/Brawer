@@ -7,12 +7,12 @@ export const BookInfo = () => {
     const location = useLocation()
     const [addState, setAddState] = useState("Add to Cart")
     const addToCart = (item) => {
-
         //เช็คว่ายังไม่ได้สร้าง Localstorage 'books' ใช่มั้ย ถ้าไม่มีมัน return เป็น null ใส่ ! หน้า null จะ = true ก็คือ เข้าไปทำใน if
         if(!JSON.parse(secureLocalStorage.getItem("books"))){
             let arr = []
             arr.push({...item, quantity : 1})
             secureLocalStorage.setItem('books', JSON.stringify(arr))
+            window.location.reload();
         }
         else{
             let arr = JSON.parse(secureLocalStorage.getItem("books"))
@@ -32,6 +32,7 @@ export const BookInfo = () => {
                 arr.push({...item, quantity : 1})
             }
             secureLocalStorage.setItem('books', JSON.stringify(arr))
+            window.location.reload();
         }
 
         setAddState("Add to cart completed.")

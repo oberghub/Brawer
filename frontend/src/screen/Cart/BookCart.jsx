@@ -94,6 +94,7 @@ export const BookCart = () => {
         let copyBooks = [...BookData]
         copyBooks.splice(index, 1)
         setBookData(copyBooks)
+        window.location.reload()
     }
     useEffect(() => {
         let books = JSON.parse(secureLocalStorage.getItem('books'))

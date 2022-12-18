@@ -116,7 +116,7 @@ export const MyNavbar = () => {
                     :
                     <>
                         {/* Body of menu */}
-                        <div className="mt-[1em] lg:h-[175px]">
+                        <div className="mt-[1em]">
                             <p className="text-lg cursor-pointer" onClick={() => {
                                 navigate("/profile/favourite")
                                 toggleslide()
@@ -137,7 +137,7 @@ export const MyNavbar = () => {
                                 : null}
                         </div>
                         <p className="text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
-                        <div className="mt-[0.5em] border-t-[0.5px] border-gray-400 mb-[1em]">
+                        <div className="mt-[0.5em] border-t-[0.5px] border-gray-200 mb-[1em]">
                             <Link to={'all-books'} onClick={toggleslide}>
                                 <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Books</p>
                             </Link>
@@ -213,7 +213,7 @@ export const MyNavbar = () => {
                                 />
                                 :
                                 <div className="flex gap-5">
-                                    <p className="mt-2 text-lg Gentium-B-font">{acc.name}</p>
+                                    <p className="mt-2 text-lg Gentium-B-font" onClick={() => {navigate('/profile')}}>{acc.name}</p>
                                     <img onClick={() => { toggleslide() }} src={acc.imageUrl.toString()} className="w-10 h-10 rounded-full" alt='profile-pic' />
                                 </div>
                             }

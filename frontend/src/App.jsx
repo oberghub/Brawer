@@ -37,6 +37,7 @@ import { MyNavbar } from './component/MyNavbar';
 
 //
 import { Navigate } from 'react-router-dom';
+import { useState } from 'react';
 
 function App() {
   const userCheck = () => {
@@ -45,7 +46,6 @@ function App() {
   }
   const ProtectedRoute = ({ user, children }) => {
     if (!user()) {
-      alert("Please Sign in")
       return <Navigate to="/" replace />;
     }
 

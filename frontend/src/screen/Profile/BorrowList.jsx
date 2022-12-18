@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-
+import { AiOutlineCreditCard, AiOutlineBank, AiOutlineQrcode } from 'react-icons/ai'
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 export const BorrowList = () => {
     const [borrowList, setBorrowList] = useState([
         {
+            borrowId: "asdiqoqwe22212",
             b_date: '15 December 2022',
             d_date: '16 December 2022',
             late: true,
@@ -22,6 +25,7 @@ export const BorrowList = () => {
             ]
         },
         {
+            borrowId: "asd012klje32d",
             b_date: '15 December 2022',
             d_date: '19 December 2022',
             late: false,
@@ -35,8 +39,132 @@ export const BorrowList = () => {
             ]
         }
     ])
+    const [paymentMethod, setMethod] = useState([
+        { type: "Credit / Debit", icon: <AiOutlineCreditCard size={100} className="m-auto" /> },
+        { type: "Bank Transfer", icon: <AiOutlineBank size={100} className="m-auto" /> },
+        { type: "QR Code", icon: <AiOutlineQrcode size={100} className="m-auto" /> },
+    ])
+    const [payAfineModal, setPayAFineModal] = useState(false)
+    const [selectPaymentMethod, setSelectPayment] = useState(null)
+    const [confirmPaymentModal, setConfirmPaymentModal] = useState(false)
+    const [confirmText, setConfirmText] = useState()
+    const handleChange = (event) => {
+        setConfirmText(event.target.value);
+      };
+      const confirmPayment = () => {
+        setConfirmPaymentModal(false)
+        // setConfirmModal(true)
+      }
+
     return (
         <div className="w-full">
+            {confirmPaymentModal ?
+                <>
+                    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50">
+                        <div className="bg-white p-8 rounded flex justify-center slide-down-fade">
+                            <div className="">
+                                <div className='w-full border-b-[1px] border-gray-300'>
+                                    <p className='text-3xl Gentium-B-font mb-5'>Type To Confirm Payment</p>
+                                </div>
+                                <Box
+                                    className='my-8'
+                                    sx={{
+                                        width: 500,
+                                        maxWidth: '100%',
+                                    }}
+                                >
+                                    <p className='text-xl mb-3'>Type <b>'Confirm'</b> to confirm a payment.</p>
+                                    <TextField fullWidth placeholder='OkBaeTonk' label="" id="typeToConfirm" value={confirmText} onChange={handleChange} />
+                                </Box>
+                                <div className='w-full flex items-center justify-center gap-3 mt-7'>
+                                    <div onClick={() => { setConfirmPaymentModal(false) }} className='rounded bg-[#EEE] hover:bg-[#E1E1E1] flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                                        <p className='text-2xl'>Cancel</p>
+                                    </div>
+                                    {confirmText == "OkBaeTonk" ?
+                                        <div onClick={() => { confirmPayment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                                            <p className='text-2xl'>Confirm</p>
+                                        </div>
+                                        :
+                                        null
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+                : null}
+            {payAfineModal ?
+                <>
+                    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50">
+                        <div className="bg-white p-8 rounded flex justify-center slide-down-fade">
+                            <div className="">
+                                <div className="w-full bg-[#FAFAFA] drop-shadow-xl p-5">
+                                    <div className='border-b-[1px] border-gray-300'>
+                                        <p className="text-3xl Gentium-B-font mb-3">Pay a fine</p>
+                                    </div>
+                                    <div className="mt-3 relative flex">
+                                        <p className="text-xl">Due Date</p>
+                                        <p className="text-xl absolute right-[5%]">2022-12-21</p>
+                                    </div>
+                                    <div className="relative flex">
+                                        <p className="text-xl">Return Date :</p>
+                                        <p className="text-xl absolute right-[5%]">2022-12-26</p>
+                                    </div>
+                                    <div className="relative flex">
+                                        <p className="text-xl">Total Late :</p>
+                                        <p className="text-xl absolute right-[5%]">5 Day</p>
+                                    </div>
+                                    <div className="relative flex text-2xl border-t-[1px] border-gray-300 my-5">
+                                        <p className="Gentium-B-font mt-3">Total : </p>
+                                        {/* เงื่อนไขการคิดเงินคือ ถ้าคืนช้า วันละ15บาทคูณกับจำนวนวันทั้งหมด และคูณอีกว่ายืมไปกี่เล่ม ถ้า2เล่มก็คูณ2 ex(สมมติชื่อตัวแปรเฉยๆ). (totalLate * 15 * bookCount) */}
+                                        <p className="absolute right-[5%] mt-3">150 THB</p>
+                                    </div>
+                                </div>
+                                <div className='bg-[#FAFAFA] drop-shadow-xl p-5'>
+                                    <div className='border-b-[1px] border-gray-300'>
+                                        <p className='text-2xl sm:text-3xl Gentium-B-font mb-[0.5em]'>Choose Payment Method</p>
+                                    </div>
+                                    <div className='flex gap-5 overflow-x-scroll'>
+                                        {paymentMethod.map((item, index) =>
+                                            <>
+                                                {index == selectPaymentMethod ?
+                                                    <div onClick={() => { setSelectPayment(index) }} className='w-[150px] sm:h-[150px] text-center cursor-pointer bg-gray-200 my-5 p-3 rounded drop-shadow-xl'>
+                                                        {item.icon}
+                                                        <p className='text-xl'>{item.type}</p>
+                                                    </div>
+                                                    :
+                                                    <div onClick={() => { setSelectPayment(index) }} className='w-[150px] sm:h-[150px] text-center cursor-pointer bg-gray-100 my-5 p-3 rounded drop-shadow-xl'>
+                                                        {item.icon}
+                                                        <p className='text-xl'>{item.type}</p>
+                                                    </div>
+                                                }
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className='w-full flex items-center justify-center gap-3 mt-7'>
+                                    <div onClick={() => { setPayAFineModal(false) }} className='rounded bg-[#EEE] hover:bg-[#E1E1E1] flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                                        <p className='text-2xl'>Back</p>
+                                    </div>
+                                    {selectPaymentMethod == null ?
+                                        <div className='rounded bg-[#E5E5E5] opacity-50 flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-default'>
+                                            <p className='text-2xl'>Confirm</p>
+                                        </div>
+                                        :
+                                        <div onClick={() => { 
+                                            setConfirmPaymentModal(true)
+                                            setPayAFineModal(false) }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+                                            <p className='text-2xl'>Confirm</p>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </>
+                :
+                null
+            }
             <p className='text-3xl Gentium-B-font'>Borrow History</p>
             {borrowList.map((item, index) =>
                 <>
@@ -72,8 +200,8 @@ export const BorrowList = () => {
                                 </div>
                                 {item.late ?
                                     <>
-                                        <div className="lg:absolute right-0">
-                                            <p>You are lated! <u className="text-red-500 cursor-pointer ml-3">Pay a fine</u></p>
+                                        <div className="lg:absolute right-0" onClick={() => { setPayAFineModal(true) }}>
+                                            <p>You are late! <u className="text-red-500 cursor-pointer ml-3">Pay a fine</u></p>
                                         </div>
                                     </>
                                     :
