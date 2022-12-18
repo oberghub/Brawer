@@ -8,7 +8,8 @@ import secureLocalStorage from "react-secure-storage";
 import { gapi } from "gapi-script";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { userdata } from "../userSlice";
-export const MyNavbar = () => {
+export const MyNavbar = ({signInstate}) => {
+    console.log("-> ", signInstate)
     const [acc, setAcc] = useState(false)
     const [bookInCart, setBookInCart] = useState([])
     const navigate = useNavigate()
@@ -17,21 +18,25 @@ export const MyNavbar = () => {
 
     //--- Google OAuth ---//
     const CLIENT_ID = "657796919531-5h1omqe0i3dt1t6pkue7lin4rj7nd4tb.apps.googleusercontent.com"
-    const onSuccess = async (res) => {
-        const profile = await res.profileObj;
-        setAcc(user)
-        console.log("success:", res);
+    const onSuccess = (res) => {
+        const profile = res.profileObj;
+        setAcc(profile)
+        console.log("success:", profile);
         dispatch(userdata({
             name : profile.name,
-            email : profile.email 
+            email : profile.email,
+            imageUrl : profile.imageUrl 
         }))
+
     };
     const onFailure = (err) => {
         console.log("failed:", err);
     };
     const logout = () => {
+        window.location.reload(false);
         setAcc(false)
         toggleslide()
+        //ทำเสร็จแล้ว reload page
       };
     useEffect(() => {
         const initClient = () => {
@@ -101,6 +106,7 @@ export const MyNavbar = () => {
                                 buttonText="Sign in with Google"
                                 onSuccess={onSuccess}
                                 onFailure={onFailure}
+                                isSignedIn={true}
                                 cookiePolicy={"single_host_origin"}
                             />
                         </div>
@@ -110,7 +116,7 @@ export const MyNavbar = () => {
                         {/* Body of menu */}
                         <div className="mt-[1em] lg:h-[175px]">
                             <p className="text-lg cursor-pointer" onClick={() => {
-                                navigate("/profile/edit-profile")
+                                navigate("/profile/favourite")
                                 toggleslide()
                             }}>Profile</p>
                             <p className="text-lg cursor-pointer mt-[0.3em]" onClick={() => {
@@ -143,8 +149,9 @@ export const MyNavbar = () => {
                         </div>
                         {/* Bottom of menu */}
                         <div className="w-full border-t-[0.5px] border-gray-200 mt-[1em] sm:mt-0 flex">
-                            <div className="relative block sm:hidden">
-                                <img src={require('../local_image/sek.jpg')} className="w-10 h-10 rounded-full mt-4 mr-3" alt='profile-pic' />
+                            <div className="relative block lg:hidden">
+                                <img onClick={() => {navigate("/profile/favourite")
+                                                     toggleslide()}} src={acc.imageUrl.toString()} className="w-10 h-10 rounded-full mt-4 mr-3 cursor-pointer" alt='profile-pic' />
                                 {bookInCart.length !== 0 ?
                                     <div className="w-5 h-5 rounded-full bg-red-500 flex justify-center items-center absolute right-0 bottom-[-5px]">
                                         <p className="text-lg text-white Gentium-B-font">{bookInCart.length}</p>
@@ -154,7 +161,7 @@ export const MyNavbar = () => {
                             <GoogleLogout
                                 className="mt-3"
                                 clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-                                buttonText="Logout"
+                                buttonText="Sign Out"
                                 onLogoutSuccess={logout}
                             >
                             </GoogleLogout>
@@ -171,7 +178,7 @@ export const MyNavbar = () => {
                                 h-10 sm:h-16
                                 flex items-center bg-red relative'>
                         {/* Nav title */}
-                        <div className=' mr-8 lg:mr-10'>
+                        <div onClick={() => {console.log(acc)}} className=' mr-8 lg:mr-10'>
                             <Link to={"/"} className='Gentium-B-font text-3xl cursor-pointer'>BRAWER</Link>
                         </div>
                         {/* Nav Search Bar */}
@@ -200,11 +207,13 @@ export const MyNavbar = () => {
                                     onSuccess={onSuccess}
                                     onFailure={onFailure}
                                     cookiePolicy={"single_host_origin"}
+                                    isSignedIn={true}
                                 />
                                 :
-                                <>
-                                    <img onClick={() => { toggleslide() }} src={require('../local_image/sek.jpg')} className="w-10 h-10 rounded-full" alt='profile-pic' />
-                                </>
+                                <div className="flex gap-5">
+                                    <p className="mt-2 text-lg Gentium-B-font">{acc.name}</p>
+                                    <img onClick={() => { toggleslide() }} src={acc.imageUrl.toString()} className="w-10 h-10 rounded-full" alt='profile-pic' />
+                                </div>
                             }
                             {/* ถ้ามีการ Add Item เข้า Cart จะขึ้นตุ่มแดงๆมีเลข */}
                             {bookInCart.length !== 0 ?

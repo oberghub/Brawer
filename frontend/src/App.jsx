@@ -34,42 +34,57 @@ import { store } from './store';
 
 //component
 import { MyNavbar } from './component/MyNavbar';
+
+//
+import { Navigate } from 'react-router-dom';
 function App() {
+  let user = true
+  const ProtectedRoute = ({ user, children }) => {
+    if (!user) {
+      return <Navigate to="/" replace />;
+    }
+
+    return children;
+  };
   return (
     <Provider store={store}>
-    <div className='Gentium-R-font relative '>
-      {/* navbar */}
-      <MyNavbar />
+      <div className='Gentium-R-font relative '>
+        {/* navbar */}
+        <MyNavbar/>
 
-      {/* Route Page */}
-      <Routes>
-        <Route index path='/' element={<Home />} />
-        <Route path='/all-books' element={<Book />} />
-        <Route path='/book-info' element={<BookInfo />} />
-        <Route path='/borrow-cart' element={<BookCart />} />
-        <Route path='/all-spaces' element={<WorkSpace />} />
-        <Route path='/space-info' element={<WorkSpaceDetail />} />
-        <Route path="*" element={ <NotFoundPage />} />
-        <Route path='booking' element={<BookingWorkSpace />}>
-          <Route path='find-a-room' element={<FindARoom />} />
-          <Route path='equipments' element={<AddEquipments />} />
-          <Route path='payment' element={<Payment />} />
-        </Route>
-        <Route path='profile' element={<MainProfile />}>
-          <Route path='borrow-list' element={<BorrowList />} />
-          <Route path='favourite' element={<Favourite />} />
-          <Route path='booking-history' element={<BookingHistory />} />
-          <Route path='edit-profile' element={<EditProfile />} />
-        </Route>
-        <Route path='management' element={<MainManage />}>
-          <Route path='booking-manage' element={<BookingManage />} />
-          <Route path='borrow-manage' element={<BorrowManage />} />
-          <Route path='book-stock' element={<BookStock />} />
-          <Route path='workspace-manage' element={<WorkSpaceManage />} />
-          <Route path='equipments-stock' element={<EquipmentsStock />} />
-        </Route>
-      </Routes>
-    </div>
+        {/* Route Page */}
+        <Routes>
+          <Route index path='/' element={<Home />} />
+          <Route path='/all-books' element={<Book />} />
+          <Route path='/book-info' element={<BookInfo />} />
+          <Route path='/borrow-cart' element={<BookCart />} />
+          <Route path='/all-spaces' element={<WorkSpace />} />
+          <Route path='/space-info' element={<WorkSpaceDetail />} />
+          <Route path="*" element={<NotFoundPage />} />
+          <Route path='booking' element={
+            <ProtectedRoute user={user}>
+              <BookingWorkSpace />
+            </ProtectedRoute>
+          }>
+            <Route path='find-a-room' element={<FindARoom />} />
+            <Route path='equipments' element={<AddEquipments />} />
+            <Route path='payment' element={<Payment />} />
+          </Route>
+          <Route path='profile' element={<MainProfile />}>
+            <Route path='borrow-list' element={<BorrowList />} />
+            <Route path='favourite' element={<Favourite />} />
+            <Route path='booking-history' element={<BookingHistory />} />
+            {/* <Route path='edit-profile' element={<EditProfile />} /> */}
+          </Route>
+          <Route path='management' element={<MainManage />}>
+            <Route path='booking-manage' element={<BookingManage />} />
+            <Route path='borrow-manage' element={<BorrowManage />} />
+            <Route path='book-stock' element={<BookStock />} />
+            <Route path='workspace-manage' element={<WorkSpaceManage />} />
+            <Route path='equipments-stock' element={<EquipmentsStock />} />
+          </Route>
+        </Routes>
+      </div>
     </Provider>
   );
 }
