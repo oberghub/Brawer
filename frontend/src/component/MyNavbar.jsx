@@ -75,15 +75,18 @@ export const MyNavbar = () => {
                         <div className="mt-[1em] h-[100px] sm:h-[175px] flex justify-center items-center">
                             <p>You haven't logged in yet.</p>
                         </div>
-                        {/* small screen */}
-                        <p className="block sm:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
-                        <div className="block sm:hidden mt-[0.5em] border-t-[0.5px] border-gray-400">
+                        <p className="text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
+                        <div className="mt-[0.5em] border-t-[0.5px] border-gray-400 mb-[1em]">
                             <Link to={'all-books'} onClick={toggleslide}>
-                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Book</p>
+                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Books</p>
                             </Link>
                             <Link to={'all-spaces'} onClick={toggleslide}>
-                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpace</p>
+                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpaces</p>
                             </Link>
+                            <Link to={'management'} onClick={toggleslide}>
+                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">Management</p>
+                            </Link>
+
                         </div>
                         {/* Bottom of menu */}
                         {/* Sign in with google */}
@@ -125,9 +128,8 @@ export const MyNavbar = () => {
                                 }}>Your Book Cart ({bookInCart.length})</p>
                                 : null}
                         </div>
-                        {/* < lg */}
-                        <p className="block lg:hidden text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
-                        <div className="block lg:hidden mt-[0.5em] border-t-[0.5px] border-gray-400 mb-[1em]">
+                        <p className="text-2xl Gentium-B-font mt-[0.7em]">Navigate</p>
+                        <div className="mt-[0.5em] border-t-[0.5px] border-gray-400 mb-[1em]">
                             <Link to={'all-books'} onClick={toggleslide}>
                                 <p className="text-xl cursor-pointer Gentium-B-font mt-[0.8em]">Books</p>
                             </Link>
@@ -186,7 +188,7 @@ export const MyNavbar = () => {
                             <Link to={'management'} className='text-2xl cursor-pointer'>Management</Link>
                         </div>
                         {/* Image Profile */}
-                        <div className='absolute right-0 cursor-pointer hidden sm:flex'>
+                        <div className='absolute right-0 cursor-pointer hidden lg:flex'>
                             {!acc ?
                                 // <button onClick={() => { }} type="button" class="mt-2 text-white bg-[#4285F4] hover:bg-[#4285F4]/90 focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-[#4285F4]/55 mr-2 mb-2">
                                 //     <svg class="mr-2 -ml-1 w-4 h-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z"></path></svg>
@@ -214,7 +216,7 @@ export const MyNavbar = () => {
                         {/* content > 1024px */}
 
                         {/* content < 1024px */}
-                        <div className='absolute right-0 cursor-pointer sm:hidden'>
+                        <div className='absolute right-0 cursor-pointer lg:hidden'>
                             <GiHamburgerMenu size={30} onClick={() => { toggleslide() }} />
                         </div>
                         {/* content < 1024px */}

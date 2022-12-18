@@ -9,25 +9,31 @@ const WorkSpaceManage = () => {
   const [rooms, setRooms] = useState([
     {
       roomId: 'wsw001',
-      roomName: "w01",
-      roomType: "Workstation",
-      roomCapacity: "2 - 9",
+      room_name: "w01",
+      room_type: "Workstation",
+      price: 500,
+      desc: "อบอุ่น",
+      room_capacity: ["2", "9"],
       timeRent: [
       ]
     },
     {
       roomId: 'wsw002',
-      roomName: "w02",
-      roomType: "Workstation",
-      roomCapacity: "2 - 9",
+      room_name: "w02",
+      room_type: "Workstation",
+      price: 500,
+      desc: "อบอุ่น",
+      room_capacity: ["2", "9"],
       timeRent: [
       ]
     },
     {
       roomId: 'smrw001',
-      roomName: "smr01",
-      roomType: "Seminar Room",
-      roomCapacity: "100 - 200",
+      room_name: "smr01",
+      room_type: "Seminar Room",
+      price: 5000,
+      desc: "กว้างใหญ่",
+      room_capacity: ["100", "200"],
       timeRent: [
       ]
     }
@@ -36,18 +42,29 @@ const WorkSpaceManage = () => {
   const [roomName, setRoomName] = useState()
   const [roomType, setRoomType] = useState()
   const [roomCapacity, setRoomCapacity] = useState()
+  const [price, setPrice] = useState()
+  const [desc, setDesc] = useState()
 
   const [e_roomName, sete_RoomName] = useState()
   const [e_roomType, sete_RoomType] = useState()
+  const [e_price, sete_Price] = useState()
   const [e_roomCapacity, sete_RoomCapacity] = useState()
+  const [e_desc, sete_Desc] = useState()
+
+  const all_type = [
+    { label: "Workstation" }, { label: "Meeting Room" }, { label: "Seminar Room" }
+  ]
   const handleRoomName = (event) => {
     setRoomName(event.target.value);
   };
-  const handleRoomType = (event) => {
-    setRoomType(event.target.value);
-  };
   const handleRoomCapacity = (event) => {
     setRoomCapacity(event.target.value);
+  };
+  const handlePrice = (event) => {
+    setPrice(event.target.value);
+  };
+  const handleDesc = (event) => {
+    setDesc(event.target.value);
   };
   const handleE_RoomName = (event) => {
     sete_RoomName(event.target.value);
@@ -58,17 +75,25 @@ const WorkSpaceManage = () => {
   const handleE_RoomCapacity = (event) => {
     sete_RoomCapacity(event.target.value);
   };
+  const handleE_Desc = (event) => {
+    sete_Desc(event.target.value);
+  };
+  const handleE_Price = (event) => {
+    sete_Desc(event.target.value);
+  };
   const toggleslide = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('invisible')
     document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
   }
   const addWorkSpaces = () => {
     const copyWorkSpace = [...rooms]
-    copyWorkSpace.push({ roomName: roomName , roomType : roomType, roomCapacity : roomCapacity, timeRent : [] })
+    copyWorkSpace.push({ room_name: roomName, room_type: roomType, room_capacity: roomCapacity.split(","), price : price, desc : desc, timeRent: [], status : "AVAILABLE" })
     setRooms(copyWorkSpace)
     setRoomType("")
     setRoomName("")
     setRoomCapacity("")
+    setPrice("")
+    setDesc("")
     setIsActiveModal(false)
   }
   return (
@@ -95,19 +120,39 @@ const WorkSpaceManage = () => {
                   <TextField fullWidth label="" id="title" value={roomName} onChange={handleRoomName} />
                 </Box>
                 <div className="w-full grid grid-cols-2 gap-3 mt-5">
-                  <Box
-                    className='w-full'
-                  >
+                  <div>
                     <p className='text-xl mb-1 Gentium-B-font'>Room Type :</p>
-                    <TextField fullWidth label="" id="price" value={roomType} onChange={handleRoomType} />
-                  </Box>
-                </div>
-                <div className="w-full grid grid-cols-1 mt-5">
+                    <Autocomplete
+                      className='w-full'
+                      disablePortal
+                      id="combo-box-roomtype"
+                      options={all_type}
+                      value={roomType}
+                      onChange={(event, newValue) => {
+                        setRoomType(newValue.label)
+                      }}
+                      renderInput={(params) => <TextField {...params} label="" />}
+                    />
+                  </div>
                   <Box
                     className='w-full'
                   >
                     <p className='text-xl mb-1 Gentium-B-font'>Room Capacity :</p>
                     <TextField fullWidth label="" id="desc" value={roomCapacity} onChange={handleRoomCapacity} />
+                  </Box>
+                </div>
+                <div className="w-full grid grid-cols-2 mt-5 gap-5">
+                  <Box
+                    className='w-full'
+                  >
+                    <p className='text-xl mb-1 Gentium-B-font'>Price :</p>
+                    <TextField type={'number'} fullWidth label="" id="desc" value={price} onChange={handlePrice} />
+                  </Box>
+                  <Box
+                    className='w-full'
+                  >
+                    <p className='text-xl mb-1 Gentium-B-font'>Description :</p>
+                    <TextField multiline rows={4} fullWidth label="" id="desc" value={desc} onChange={handleDesc} />
                   </Box>
                 </div>
                 {/* Button */}
@@ -147,7 +192,7 @@ const WorkSpaceManage = () => {
             </div>
           </div>
           <div className="w-full relative">
-            <p className='text-3xl'>Choose A Workspace</p>
+            <p onClick={() => { console.log(e_roomType) }} className='text-3xl'>Choose A Workspace</p>
           </div>
           <div onClick={() => { }} className='lg:hidden mt-[1em] rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
             <div className="text-xl">
@@ -163,20 +208,22 @@ const WorkSpaceManage = () => {
             <Autocomplete
               className='w-full'
               disablePortal
-              id="combo-box-equipments"
-              options={rooms.map((item, index) => "(" + parseInt(index) + ") " + item.roomName)}
+              id="combo-box-workspaces"
+              options={rooms.map((item, index) => "(" + parseInt(index) + ") " + item.room_name)}
               value={selectedWorkSpace}
               onChange={(event, newValue) => {
                 const index = newValue.substring(1, 2)
                 setSelectedWorkSpace(newValue);
-                sete_RoomName(rooms[index].roomName)
-                sete_RoomType(rooms[index].roomType)
-                sete_RoomCapacity(rooms[index].roomCapacity)
+                sete_RoomName(rooms[index].room_name)
+                sete_RoomType(rooms[index].room_type)
+                sete_Price(rooms[index].price)
+                sete_Desc(rooms[index].desc)
+                sete_RoomCapacity(rooms[index].room_capacity.join(", "))
               }}
               renderInput={(params) => <TextField {...params} label="" />}
             />
           </div>
-          <div className="w-full lg:h-[370px] lg:grid grid-rows-3 grid-flow-col gap-5 mt-[3em]">
+          <div className="w-full lg:h-[490px] lg:grid grid-rows-3 grid-flow-col gap-5 mt-[3em]">
             <div className="w-full col-span-2 mt-[2em] md:mt-0">
               <div className="w-full grid grid-cols-1">
                 <Box
@@ -187,19 +234,39 @@ const WorkSpaceManage = () => {
                 </Box>
               </div>
               <div className="w-full grid grid-cols-2 gap-5 mt-5">
-                <Box
-                  className='w-full'
-                >
+                <div>
                   <p className='text-xl mb-1 Gentium-B-font'>Room Type :</p>
-                  <TextField fullWidth id="title" value={e_roomType} onChange={handleE_RoomType} />
-                </Box>
-              </div>
-              <div className="w-full grid grid-cols-1 mt-5">
+                  <Autocomplete
+                    className='w-full'
+                    disablePortal
+                    id="combo-box-roomtype"
+                    options={all_type}
+                    value={e_roomType}
+                    onChange={(event, newValue) => {
+                      sete_RoomType(newValue.label)
+                    }}
+                    renderInput={(params) => <TextField {...params} label="" />}
+                  />
+                </div>
                 <Box
                   className='w-full'
                 >
                   <p className='text-xl mb-1 Gentium-B-font'>Room Capacity :</p>
-                  <TextField fullWidth label="" id="desc" value={e_roomCapacity} onChange={handleE_RoomCapacity} />
+                  <TextField placeholder='ex. 2, 15' fullWidth label="" id="desc" value={e_roomCapacity} onChange={handleE_RoomCapacity} />
+                </Box>
+              </div>
+              <div className="w-full grid grid-cols-2 mt-5 gap-5">
+                <Box
+                  className='w-full'
+                >
+                  <p className='text-xl mb-1 Gentium-B-font'>Price :</p>
+                  <TextField type={'number'} fullWidth label="" id="desc" value={e_price} onChange={handleE_Price} />
+                </Box>
+                <Box
+                  className='w-full'
+                >
+                  <p className='text-xl mb-1 Gentium-B-font'>Description :</p>
+                  <TextField multiline rows={4} fullWidth label="" id="desc" value={e_desc} onChange={handleE_Desc} />
                 </Box>
               </div>
             </div>
