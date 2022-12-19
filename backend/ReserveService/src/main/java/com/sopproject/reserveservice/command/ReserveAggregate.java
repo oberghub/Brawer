@@ -13,6 +13,8 @@ import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Aggregate
@@ -27,27 +29,50 @@ public class ReserveAggregate {
     private String reserveTo;
     private String status;
 
-    public ReserveAggregate(){}
+    public ReserveAggregate() {
+    }
+
     @CommandHandler
-    public ReserveAggregate(CreateReserveCommand command){
+    public ReserveAggregate(CreateReserveCommand command) {
         boolean blankDataCheck = command.getUserId().isBlank() || command.getRoomId().isBlank() ||
                 command.getTimestamp().isBlank() || command.getReserveFrom().isBlank() ||
                 command.getReserveFrom().isBlank() || command.getStatus().isBlank();
-        if (blankDataCheck){
+        if (blankDataCheck) {
             throw new IllegalArgumentException("Data cannot be blank");
         }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime reserveFrom = LocalDateTime.parse(command.getReserveFrom(), formatter);
+        LocalDateTime reserveTo = LocalDateTime.parse(command.getReserveTo(), formatter);
+        if (reserveFrom.isBefore(now)) {
+            throw new IllegalArgumentException("Invalid reserve beginning time");
+        }
+        if (reserveTo.isBefore(reserveFrom) || reserveTo.isAfter(LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 22, 0))) {
+            throw new IllegalArgumentException("Invalid reserve ending time");
+        }
+
         ReserveCreatedEvent event = new ReserveCreatedEvent();
         BeanUtils.copyProperties(command, event);
         AggregateLifecycle.apply(event);
     }
 
     @CommandHandler
-    public void ReserveAggregate(UpdateReserveCommand command){
+    public void ReserveAggregate(UpdateReserveCommand command) {
         boolean blankDataCheck = command.getUserId().isBlank() || command.getRoomId().isBlank() ||
                 command.getTimestamp().isBlank() || command.getReserveFrom().isBlank() ||
                 command.getReserveFrom().isBlank() || command.getStatus().isBlank() || command.get_id().isBlank();
-        if (blankDataCheck){
+        if (blankDataCheck) {
             throw new IllegalArgumentException("Data cannot be blank");
+        }
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime reserveFrom = LocalDateTime.parse(command.getReserveFrom(), formatter);
+        LocalDateTime reserveTo = LocalDateTime.parse(command.getReserveTo(), formatter);
+        if (reserveFrom.isBefore(now)) {
+            throw new IllegalArgumentException("Invalid reserve beginning time");
+        }
+        if (reserveTo.isBefore(reserveFrom) || reserveTo.isAfter(LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 22, 0))) {
+            throw new IllegalArgumentException("Invalid reserve ending time");
         }
         ReserveUpdatedEvent event = new ReserveUpdatedEvent();
         BeanUtils.copyProperties(command, event);
@@ -55,9 +80,9 @@ public class ReserveAggregate {
     }
 
     @CommandHandler
-    public void ReserveAggregate(DeleteReserveCommand command){
+    public void ReserveAggregate(DeleteReserveCommand command) {
         boolean blankDataCheck = command.get_id().isBlank();
-        if (blankDataCheck){
+        if (blankDataCheck) {
             throw new IllegalArgumentException("Reserve ID cannot be blank");
         }
         ReserveDeletedEvent event = new ReserveDeletedEvent();
@@ -66,7 +91,7 @@ public class ReserveAggregate {
     }
 
     @EventSourcingHandler
-    public void on(ReserveCreatedEvent event){
+    public void on(ReserveCreatedEvent event) {
         this._id = event.get_id();
         this.userId = event.getUserId();
         this.roomId = event.getRoomId();
@@ -78,7 +103,7 @@ public class ReserveAggregate {
     }
 
     @EventSourcingHandler
-    public void on(ReserveUpdatedEvent event){
+    public void on(ReserveUpdatedEvent event) {
         this.userId = event.getUserId();
         this.roomId = event.getRoomId();
         this.equipmentsId = event.getEquipmentsId();
@@ -89,7 +114,7 @@ public class ReserveAggregate {
     }
 
     @EventSourcingHandler
-    public void on(ReserveDeletedEvent event){
+    public void on(ReserveDeletedEvent event) {
         System.out.println("Delete Reserve Id: " + this._id);
         AggregateLifecycle.markDeleted();
     }

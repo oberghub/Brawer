@@ -1,0 +1,27 @@
+spring:
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          google:
+#            client-id: 657796919531-5h1omqe0i3dt1t6pkue7lin4rj7nd4tb.apps.googleusercontent.com
+#            client-secret: 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
+  data:
+    mongodb:
+      database: brawer
+      uri: mongodb+srv://admin:1234@cluster0.0h4dgcy.mongodb.net/brawer
+  application:
+    name: user-service
+
+server:
+  port: 8080
+
+  client:
+    service-url:
+      defaultZone=: http://localhost:8761/eureka
+
+management:
+  endpoint:
+    health:
+      show-details: always
+

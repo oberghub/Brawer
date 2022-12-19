@@ -1,11 +1,9 @@
 package com.sopproject.workspaceservice.command;
 
-import com.sopproject.workspaceservice.command.rest.CreateWorkspaceCommand;
-import com.sopproject.workspaceservice.command.rest.WorkspaceRestModel;
-import com.sopproject.workspaceservice.command.rest.DeleteWorkspaceCommand;
-import com.sopproject.workspaceservice.command.rest.UpdateWorkspaceCommand;
+import com.sopproject.workspaceservice.command.rest.*;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +56,21 @@ public class WorkspaceCommandController {
             return result;
         } catch (Exception e) {
             return e.getLocalizedMessage();
+        }
+    }
+
+    @RabbitListener(queues = "onReserveWorkspace")
+    public boolean onReserveWorkspace(String roomId) {
+        SetWorkspaceStatusCommand command = SetWorkspaceStatusCommand.builder()
+                ._id(roomId)
+                .status("RESERVED")
+                .build();
+        String result;
+        try {
+            result = commandGateway.sendAndWait(command);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
     @DeleteMapping("/{id}")
