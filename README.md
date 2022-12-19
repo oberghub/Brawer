@@ -24,4 +24,5 @@
 1. Open project ใน Intellij
 2. เมื่อเปิดขึ้นมาแล้ว รอให้ Intellij ติดตั้ง Dependency
 3. Run
+
 ** อย่าลืมติดตั้ง Axonserver เพื่อใช้งาน Event Store **
