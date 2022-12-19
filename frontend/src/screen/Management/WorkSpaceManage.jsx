@@ -93,16 +93,21 @@ const WorkSpaceManage = () => {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then((res) => console.log(res.status + " " + res.statusText))
-    const copyWorkSpace = [...rooms]
-    copyWorkSpace.push({ room_name: roomName, room_type: roomType, room_capacity: roomCapacity.split(","), price : price, desc : desc, time_rent: [], status : "AVAILABLE" })
-    setRooms(copyWorkSpace)
-    setRoomType("")
-    setRoomName("")
-    setRoomCapacity("")
-    setPrice("")
-    setDesc("")
-    setIsActiveModal(false)
+    }).then((res) => {
+      console.log(res.status + " " + res.statusText)
+      if(res.status == 200){
+        const copyWorkSpace = [...rooms]
+        copyWorkSpace.push({_id:res.data, room_name: roomName, room_type: roomType, room_capacity: roomCapacity.split(","), price : price, desc : desc, time_rent: [], status : "AVAILABLE" })
+        setRooms(copyWorkSpace)
+        setRoomType("")
+        setRoomName("")
+        setRoomCapacity("")
+        setPrice("")
+        setDesc("")
+        setIsActiveModal(false)
+      }
+    })
+    
   }
 
   const updateWorkSpace = () =>{
@@ -132,7 +137,7 @@ const WorkSpaceManage = () => {
 
     let todelete = rooms.filter((e)=>e._id != selectedWorkSpace._id)
     setRooms(todelete)
-    setSelectedWorkSpace(todelete[0])
+    setSelectedWorkSpace(todelete.length>0?todelete[0]:null)
   }
 
   //Get Data When First Time Render
@@ -140,7 +145,7 @@ const WorkSpaceManage = () => {
     axios.get("http://localhost:8082/workspace-service/workspaces/all", {
     }).then((res) => {
       setRooms(res.data)
-      setSelectedWorkSpace(res.data[0])
+      setSelectedWorkSpace(res.data.length>0?res.data[0]:null)
       console.log(res)
     }).catch((e) => console.log(e))
   }, [])

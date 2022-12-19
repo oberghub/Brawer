@@ -43,21 +43,30 @@ const EquipmentsStock = () => {
   };
   const addEquipments= () => {
     let addItem = {name : title, price : price, desc : desc}
-    const copyEquipments = [...equipments]
-    copyEquipments.push(addItem)
+    
     axios.post("http://localhost:8082/equipment-service/equipment", addItem, {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then((res) => console.log(res.status + " " + res.statusText))
-    setEquipments(copyEquipments)
-    setTitle("")
-    setPrice("")
-    setDesc("")
-    setIsActiveModal(false)
-    window.location.reload()
+    }).then((res) => {
+      console.log(res.status + " " + res.statusText)
+      if(res.status == 200){
+        const copyEquipments = [...equipments]
+        copyEquipments.push({...addItem, _id:res.data})
+        setEquipments(copyEquipments)
+        setTitle("")
+        setPrice("")
+        setDesc("")
+        setIsActiveModal(false)
+        window.location.reload()
+      }
+    })
+    
   }
   const updateEquipments = () => {
+    selectedEquipments.name =e_Title
+    selectedEquipments.price = e_Price
+    selectedEquipments.desc = e_desc
     let updateItem = {_id : itemId, name : e_Title, price : e_Price, desc : e_desc}
     axios.put("http://localhost:8082/equipment-service/equipment", updateItem, {
       headers: {
@@ -74,7 +83,7 @@ const EquipmentsStock = () => {
 
     let todelete = equipments.filter((e)=>e._id != itemId)
     setEquipments(todelete)
-    setSelectedEquipments(todelete[0])
+    setSelectedEquipments(todelete.length>0?todelete[0]:null)
   }
   const toggleslide = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('invisible')
@@ -85,8 +94,17 @@ const EquipmentsStock = () => {
     axios.get(URL).then((res) => {
       console.log(res)
       setEquipments(res.data)
+      setSelectedEquipments(res.data.length>0?res.data[0]:null)
     }).catch((e) => console.log(e))
   }, [])
+  useEffect(()=>{
+    if(selectedEquipments){
+      sete_Title(selectedEquipments.name)
+      sete_Price(selectedEquipments.price)
+      sete_Desc(selectedEquipments.desc)
+      setItemId(selectedEquipments._id)
+    }
+  },[selectedEquipments])
   return (
     <div>
       {isActiveModal ?
@@ -155,10 +173,10 @@ const EquipmentsStock = () => {
         </div>
         <div className="w-full p-5 bg-white drop-shadow-xl mt-[5em] relative">
           <div className="hidden lg:flex lg:absolute right-[2%] relative flex">
-            <div onClick={() => { }} className='mr-3 mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+            <div onClick={() => {updateEquipments() }} className='mr-3 mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
               <p className='text-white text-xl'>Change</p>
             </div>
-            <div onClick={() => { }} className='mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
+            <div onClick={() => {deleteEquipment()}} className='mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
               <p className='text-white text-xl'>Delete</p>
             </div>
           </div>
@@ -180,15 +198,16 @@ const EquipmentsStock = () => {
               className='w-full'
               disablePortal
               id="combo-box-equipments"
-              options={equipments.map((item, index) => "(" + parseInt(index) + ") " + item.name)}
+              options={equipments}
+              getOptionLabel={(option)=>"(" + equipments.findIndex((e)=>e._id==option._id) + ") " + option.name}
               value={selectedEquipments}
               onChange={(event, newValue) => {
-                const index = newValue.substring(1, 2)
                 setSelectedEquipments(newValue);
-                sete_Title(equipments[index].name)
-                sete_Price(equipments[index].price)
-                sete_Desc(equipments[index].desc)
-                setItemId(equipments[index]._id)
+                // const index = newValue.substring(1, 2)
+                // sete_Title(equipments[index].name)
+                // sete_Price(equipments[index].price)
+                // sete_Desc(equipments[index].desc)
+                // setItemId(equipments[index]._id)
               }}
               renderInput={(params) => <TextField {...params} label="" />}
             />

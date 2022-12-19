@@ -120,19 +120,23 @@ const BookStock = () => {
         headers: {
           'Content-Type': 'application/json'
         }
-      }).then((res) => console.log(res.status + " " + res.statusText))
-      const copyBooks = [...books]
-      copyBooks.push({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
-      setBooks(copyBooks)
-      setSelectedBook(copyBooks[0])
-      setBookTitle("")
-      setBookLanguage("")
-      setBookType("")
-      setImage("")
-      setAuthors("")
-      setDesc("")
-      setQuantity(1)
-      setIsActiveModal(false)
+      }).then((res) => {
+        console.log(res.status + " " + res.statusText)
+        if(res.status == 200){
+          const copyBooks = [...books]
+          copyBooks.push({ _id:res.data,title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
+          setBooks(copyBooks)
+          setBookTitle("")
+          setBookLanguage("")
+          setBookType("")
+          setImage("")
+          setAuthors("")
+          setDesc("")
+          setQuantity(1)
+          setIsActiveModal(false)
+        }
+      })
+      
     }
     let myimage;
     let reader = new FileReader()
@@ -173,13 +177,13 @@ const BookStock = () => {
     //Delete with selectedBook._id   in db
     let deleteData = "http://localhost:8082/book-service/books/"+selectedBook._id
     console.log(deleteData)
-    // axios.delete("http://localhost:8082/book-service/books/"+deleteData, {
-    // }).then((res) => console.log(res.status + " " + res.statusText))
+    axios.delete("http://localhost:8082/book-service/books/"+selectedBook._id, {
+    }).then((res) => console.log(res.status + " " + res.statusText))
 
 
     let todelete = books.filter((e)=>e._id != selectedBook._id)
     setBooks(todelete)
-    setSelectedBook(todelete[0])
+    setSelectedBook(todelete.length>0?todelete[0]:null)
   }
 
 
@@ -188,7 +192,7 @@ const BookStock = () => {
     axios.get("http://localhost:8082/book-service/books/all", {
     }).then((res) => {
       setBooks(res.data)
-      setSelectedBook(res.data[0])
+      setSelectedBook(res.data.length>0?res.data[0]:null)
       console.log(res)
     }).catch((e) => console.log(e))
   }, [])
