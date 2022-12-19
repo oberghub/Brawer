@@ -45,7 +45,7 @@ function App() {
     return store.getState().user_data.user
   }
   const ProtectedRoute = ({ user, children }) => {
-    if (!user()) {
+    if (!user() && store.getState().user_data.userloaded) {
       return <Navigate to="/" replace />;
     }
 

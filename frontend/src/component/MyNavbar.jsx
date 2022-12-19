@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import secureLocalStorage from "react-secure-storage";
 import { gapi } from "gapi-script";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
-import { userdata } from "../userSlice";
+import { setLoaded, userdata } from "../userSlice";
 export const MyNavbar = () => {
     const [acc, setAcc] = useState(false)
     const [bookInCart, setBookInCart] = useState([])
@@ -26,6 +26,7 @@ export const MyNavbar = () => {
             email : profile.email,
             imageUrl : profile.imageUrl 
         }))
+        
 
     };
     const onFailure = (err) => {
@@ -45,6 +46,7 @@ export const MyNavbar = () => {
             });
             };
             gapi.load('client:auth2', initClient);
+            dispatch(setLoaded(true))
     });
     //--- Google OAuth ---//
     // useEffect(() => {
