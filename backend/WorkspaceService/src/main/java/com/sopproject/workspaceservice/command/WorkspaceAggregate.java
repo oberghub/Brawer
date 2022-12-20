@@ -1,7 +1,6 @@
 package com.sopproject.workspaceservice.command;
 
 import com.sopproject.workspaceservice.command.rest.*;
-import com.sopproject.workspaceservice.core.event.SetWorkspaceStatusEvent;
 import com.sopproject.workspaceservice.core.event.WorkspaceCreatedEvent;
 import com.sopproject.workspaceservice.core.event.WorkspaceDeletedEvent;
 import com.sopproject.workspaceservice.core.event.WorkspaceUpdatedEvent;
@@ -54,17 +53,6 @@ public class WorkspaceAggregate {
     }
 
     @CommandHandler
-    public void WorkspaceAggregate(SetWorkspaceStatusCommand command){
-        boolean blankDataCheck = command.get_id().isBlank() || command.getStatus().isBlank();
-        if (blankDataCheck){
-            throw new IllegalArgumentException("Data cannot be blank");
-        }
-        SetWorkspaceStatusEvent event = new SetWorkspaceStatusEvent();
-        BeanUtils.copyProperties(command, event);
-        AggregateLifecycle.apply(event);
-    }
-
-    @CommandHandler
     public void WorkspaceAggregate(DeleteWorkspaceCommand command){
         boolean blankDataCheck = command.get_id().isBlank();
         if (blankDataCheck){
@@ -101,12 +89,6 @@ public class WorkspaceAggregate {
         System.out.println("Update WorkSpace Id: " + this._id);
     }
 
-    @EventSourcingHandler
-    public void on(SetWorkspaceStatusEvent event){
-        this._id = event.get_id();
-        this.status = event.getStatus();
-        System.out.println("Set WorkSpace Id: " + this._id + " Status: " + this.status);
-    }
 
     @EventSourcingHandler
     public void on(WorkspaceDeletedEvent event){

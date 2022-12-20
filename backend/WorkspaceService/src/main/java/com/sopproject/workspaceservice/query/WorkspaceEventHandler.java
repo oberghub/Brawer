@@ -2,7 +2,6 @@ package com.sopproject.workspaceservice.query;
 
 import com.sopproject.workspaceservice.core.WorkspaceEntity;
 import com.sopproject.workspaceservice.core.data.WorkspaceRepository;
-import com.sopproject.workspaceservice.core.event.SetWorkspaceStatusEvent;
 import com.sopproject.workspaceservice.core.event.WorkspaceCreatedEvent;
 import com.sopproject.workspaceservice.core.event.WorkspaceDeletedEvent;
 import com.sopproject.workspaceservice.core.event.WorkspaceUpdatedEvent;
@@ -31,12 +30,7 @@ public class WorkspaceEventHandler {
         BeanUtils.copyProperties(event, workspaceEntity);
         workspaceRepository.save(workspaceEntity);
     }
-    @EventHandler
-    public void on(SetWorkspaceStatusEvent event){
-        WorkspaceEntity workspaceEntity = workspaceRepository.findByWorkspaceId(event.get_id());
-        workspaceEntity.setStatus(event.getStatus());
-        workspaceRepository.save(workspaceEntity);
-    }
+
     @EventHandler
     public void on(WorkspaceDeletedEvent event){
         workspaceRepository.deleteById(event.get_id());

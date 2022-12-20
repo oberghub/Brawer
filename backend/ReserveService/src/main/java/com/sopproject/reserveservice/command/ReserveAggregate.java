@@ -44,12 +44,12 @@ public class ReserveAggregate {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime reserveFrom = LocalDateTime.parse(command.getReserveFrom(), formatter);
         LocalDateTime reserveTo = LocalDateTime.parse(command.getReserveTo(), formatter);
-        if (reserveFrom.isBefore(now)) {
-            throw new IllegalArgumentException("Invalid reserve beginning time");
-        }
-        if (reserveTo.isBefore(reserveFrom) || reserveTo.isAfter(LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 22, 0))) {
-            throw new IllegalArgumentException("Invalid reserve ending time");
-        }
+//        if (reserveFrom.isBefore(now)) {
+//            throw new IllegalArgumentException("Invalid reserve beginning time");
+//        }
+//        if (reserveTo.isBefore(reserveFrom) || reserveTo.isAfter(LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 22, 0))) {
+//            throw new IllegalArgumentException("Invalid reserve ending time");
+//        }
 
         ReserveCreatedEvent event = new ReserveCreatedEvent();
         BeanUtils.copyProperties(command, event);
@@ -68,12 +68,12 @@ public class ReserveAggregate {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime reserveFrom = LocalDateTime.parse(command.getReserveFrom(), formatter);
         LocalDateTime reserveTo = LocalDateTime.parse(command.getReserveTo(), formatter);
-        if (reserveFrom.isBefore(now)) {
-            throw new IllegalArgumentException("Invalid reserve beginning time");
-        }
-        if (reserveTo.isBefore(reserveFrom) || reserveTo.isAfter(LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 22, 0))) {
-            throw new IllegalArgumentException("Invalid reserve ending time");
-        }
+//        if (reserveFrom.isBefore(now)) {
+//            throw new IllegalArgumentException("Invalid reserve beginning time");
+//        }
+//        if (reserveTo.isBefore(reserveFrom) || reserveTo.isAfter(LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 22, 0))) {
+//            throw new IllegalArgumentException("Invalid reserve ending time");
+//        }
         ReserveUpdatedEvent event = new ReserveUpdatedEvent();
         BeanUtils.copyProperties(command, event);
         AggregateLifecycle.apply(event);

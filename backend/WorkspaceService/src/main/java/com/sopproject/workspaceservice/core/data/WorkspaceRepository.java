@@ -7,8 +7,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WorkspaceRepository extends MongoRepository<WorkspaceEntity, String> {
-    @Query("{title:'?0'}")
+    @Query("{room_type:'?0'}")
     WorkspaceEntity findByWorkspaceRoom_type(String room_type);
-    @Query("{bookId:'?0'}")
-    WorkspaceEntity findByWorkspaceId(String workspaceId);
+
+    @Query("{_id: '?0'}")
+    WorkspaceEntity findWorkspaceById(String _id);
 }

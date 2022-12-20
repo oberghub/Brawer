@@ -8,7 +8,13 @@ import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reserve")
@@ -38,10 +44,11 @@ public class ReserveCommandController {
 
         String result;
         try {
-//            Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "reserve", model.getRoomId());
-//            if (!(boolean)rabbit){
-//                return "Rabbitmq Create Reserve Error";
-//            }
+            Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "reserve", model.getRoomId());
+            System.out.println(rabbit);
+            if (!(boolean)rabbit){
+                return "Rabbitmq Create Reserve Error";
+            }
             result = commandGateway.sendAndWait(command);
             return "Created Reserve " + result;
         } catch (Exception e) {
@@ -66,6 +73,7 @@ public class ReserveCommandController {
         try {
             if(model.getStatus().equals("CANCELLED") || model.getStatus().equals("TIMEOUT")){
                 Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", model.getRoomId());
+                System.out.println(rabbit);
                 if (!(boolean)rabbit){
                     return "Rabbitmq Cancel Reserve Error";
                 }
@@ -89,6 +97,50 @@ public class ReserveCommandController {
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
+    }
+
+    //    cron every hour = "0 0 * ? * *"
+//    cron every minute = "0 * * ? * *"
+    @Scheduled(cron = "0 * * ? * *")
+    public void onHourPast() {
+        System.out.println("Doing cron job");
+        List<ReserveRestModel> reserveRestModelList = WebClient.create()
+                .get()
+                .uri("http://localhost:8082/reserve-service/reserve/all")
+                .retrieve()
+                .bodyToFlux(ReserveRestModel.class)
+                .collectList()
+                .block();
+//        System.out.println(reserveRestModelList);
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        for (ReserveRestModel reserveRestModel : reserveRestModelList) {
+            LocalDateTime reserveTo = LocalDateTime.parse(reserveRestModel.getReserveTo(), formatter);
+            if (!reserveRestModel.getStatus().equals("TIMEOUT") &&
+                    reserveTo.isBefore(LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), now.getHour(), now.getMinute(), now.getSecond()))) {
+                reserveRestModel.setStatus("TIMEOUT");
+                UpdateReserveCommand command = UpdateReserveCommand.builder()
+                        ._id(reserveRestModel.get_id())
+                        .userId(reserveRestModel.getUserId())
+                        .roomId(reserveRestModel.getRoomId())
+                        .equipmentsId(reserveRestModel.getEquipmentsId())
+                        .reserveFrom(reserveRestModel.getReserveFrom())
+                        .reserveTo(reserveRestModel.getReserveTo())
+                        .timestamp(reserveRestModel.getTimestamp())
+                        .status(reserveRestModel.getStatus())
+                        .build();
+                String result;
+                try {
+                    result = commandGateway.sendAndWait(command);
+                    System.out.println("Updated Reserve Status" +result);
+                } catch (Exception e) {
+                    System.out.println(e.getLocalizedMessage());;
+                }
+
+            }
+        }
+
     }
 }
 

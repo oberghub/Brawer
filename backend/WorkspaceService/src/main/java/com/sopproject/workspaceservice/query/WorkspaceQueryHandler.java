@@ -2,6 +2,7 @@ package com.sopproject.workspaceservice.query;
 
 import com.sopproject.workspaceservice.core.WorkspaceEntity;
 import com.sopproject.workspaceservice.core.data.WorkspaceRepository;
+import com.sopproject.workspaceservice.query.rest.FindWorkspaceByIdQuery;
 import com.sopproject.workspaceservice.query.rest.WorkspaceRestModel;
 import com.sopproject.workspaceservice.query.rest.WorkspaceQuery;
 import org.axonframework.queryhandling.QueryHandler;
@@ -29,5 +30,13 @@ public class WorkspaceQueryHandler {
             workspaceRestModels.add(workspaceRestModel);
         }
         return workspaceRestModels;
+    }
+    @QueryHandler
+    WorkspaceRestModel findWorkspaceById(FindWorkspaceByIdQuery query){
+        WorkspaceRestModel workspaceRestModel = new WorkspaceRestModel();
+        WorkspaceEntity workspace = workspaceRepository.findWorkspaceById(query.getId());
+        BeanUtils.copyProperties(workspace, workspaceRestModel);
+
+        return workspaceRestModel;
     }
 }
