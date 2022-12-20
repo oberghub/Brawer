@@ -2,6 +2,7 @@ package com.sopproject.workspaceservice.query;
 
 import com.sopproject.workspaceservice.core.WorkspaceEntity;
 import com.sopproject.workspaceservice.core.data.WorkspaceRepository;
+import com.sopproject.workspaceservice.query.rest.FindByRoom_typeQuery;
 import com.sopproject.workspaceservice.query.rest.FindWorkspaceByIdQuery;
 import com.sopproject.workspaceservice.query.rest.WorkspaceQuery;
 import com.sopproject.workspaceservice.query.rest.WorkspaceRestModel;
@@ -38,5 +39,18 @@ public class WorkspaceQueryHandler {
         BeanUtils.copyProperties(workspace, workspaceRestModel);
 
         return workspaceRestModel;
+    }
+
+    @QueryHandler
+    List<WorkspaceRestModel> findByRoom_type(FindByRoom_typeQuery query){
+        List<WorkspaceRestModel> workspaceRestModels = new ArrayList<>();
+        List<WorkspaceEntity> storedWorkspaces = workspaceRepository.findByRoom_type(query.getRoom_type());
+        for (WorkspaceEntity workspaceEntity : storedWorkspaces){
+            WorkspaceRestModel workspaceRestModel = new WorkspaceRestModel();
+            BeanUtils.copyProperties(workspaceEntity, workspaceRestModel);
+            workspaceRestModels.add(workspaceRestModel);
+        }
+
+        return workspaceRestModels;
     }
 }

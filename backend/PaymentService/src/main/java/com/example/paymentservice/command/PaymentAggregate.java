@@ -12,7 +12,10 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.checkerframework.checker.units.qual.C;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Aggregate
 public class PaymentAggregate {
@@ -25,6 +28,9 @@ public class PaymentAggregate {
     private double price;
     private String borrowId;
 
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     public PaymentAggregate() {
     }
 
@@ -47,6 +53,15 @@ public class PaymentAggregate {
                 command.getTimestamp().isBlank() || command.getStatus().isBlank() || command.getPrice() == 0;
         if(blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
+        }
+        if(command.getStatus().equals("REFUNDED") && !command.getBorrowId().isBlank()){
+            throw new IllegalArgumentException("Cannot refund late book returning fine");
+        }
+        if (command.getStatus().equals("REFUNDED") || command.getStatus().equals("CANCELLED")){
+            Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cor", command.getReserveId());
+            if(!(boolean) rabbit){
+                throw new AmqpException("Error sending rabbit refunding or cancelling message");
+            }
         }
         PaymentUpdatedEvent event = new PaymentUpdatedEvent();
         BeanUtils.copyProperties(command,event);

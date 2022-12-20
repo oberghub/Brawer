@@ -33,4 +33,13 @@ public class WorkspaceQueryController {
 
         return workspace;
     }
+    @GetMapping("/{room_type}")
+    public List<WorkspaceRestModel> findByRoom_type(@PathVariable String room_type){
+        FindByRoom_typeQuery findByRoomTypeQuery = new FindByRoom_typeQuery();
+        findByRoomTypeQuery.setRoom_type(room_type);
+        List<WorkspaceRestModel> workspaces = queryGateway
+                .query(findByRoomTypeQuery, ResponseTypes.multipleInstancesOf(WorkspaceRestModel.class)).join();
+
+        return workspaces;
+    }
 }

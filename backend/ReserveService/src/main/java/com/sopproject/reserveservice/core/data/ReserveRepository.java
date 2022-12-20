@@ -5,11 +5,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ReserveRepository extends MongoRepository<ReserveEntity, String> {
-    @Query("{roomId:'?0'}")
-    ReserveEntity findReserveByRoomId(String roomId);
+    @Query("{_id:'?0'}")
+    ReserveEntity findReserveById(String _id);
 
     @Query("{userId:'?0'}")
-    ReserveEntity findReserveByUserId(String userId);
+    List<ReserveEntity> findReserveByUserId(String userId);
 }

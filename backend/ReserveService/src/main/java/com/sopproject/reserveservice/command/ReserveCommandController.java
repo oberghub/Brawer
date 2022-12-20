@@ -7,6 +7,7 @@ import com.sopproject.reserveservice.command.rest.UpdateReserveCommand;
 import com.sopproject.reserveservice.core.ReserveEntity;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,13 @@ import java.util.List;
 @RequestMapping("/reserve")
 public class ReserveCommandController {
     private final CommandGateway commandGateway;
-
+    Exception e
     @Autowired
     private RabbitTemplate rabbitTemplate;
+
+    {
+        return e.getLocalizedMessage();
+    }
 
     @Autowired
     public ReserveCommandController(CommandGateway commandGateway) {
@@ -49,7 +54,7 @@ public class ReserveCommandController {
         try {
             Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "reserve", entity);
             System.out.println(rabbit);
-            if (!(boolean)rabbit){
+            if (!(boolean) rabbit) {
                 return "Rabbitmq Create Reserve Error";
             }
             result = commandGateway.sendAndWait(command);
@@ -76,21 +81,22 @@ public class ReserveCommandController {
         BeanUtils.copyProperties(command, entity);
         String result;
         try {
-            if(model.getStatus().equals("CANCELLED") || model.getStatus().equals("TIMEOUT")){
+            if (model.getStatus().equals("CANCELLED") || model.getStatus().equals("TIMEOUT")) {
                 Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", entity);
                 System.out.println(rabbit);
-                if (!(boolean)rabbit){
+                if (!(boolean) rabbit) {
                     return "Rabbitmq Cancel Reserve Error";
                 }
             }
             result = commandGateway.sendAndWait(command);
-            return "Updated Reserve " +result;
+            return "Updated Reserve " + result;
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
-    }
+    } catch(
+
     @DeleteMapping("/{id}")
-    public String deleteReserve(@PathVariable String id){
+    public String deleteReserve(@PathVariable String id) {
         DeleteReserveCommand command = DeleteReserveCommand.builder()
                 ._id(id)
                 .build();
@@ -98,10 +104,50 @@ public class ReserveCommandController {
         String result;
         try {
             result = commandGateway.sendAndWait(command);
-            return "Deleted Reserve " +id;
+            return "Deleted Reserve " + id;
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
+    })
+
+    @RabbitListener(queues = "onCancelOrRefund")
+    public boolean onCancelOrRefund(String reserveId) {
+        ReserveRestModel model = WebClient.create()
+                .get()
+                .uri("http://localhost:8082/reserve-service/reserve/" + reserveId)
+                .retrieve()
+                .bodyToMono(ReserveRestModel.class)
+                .block();
+
+        UpdateReserveCommand command = UpdateReserveCommand.builder()
+                ._id(model.get_id())
+                .userId(model.getUserId())
+                .roomId(model.getRoomId())
+                .equipmentsId(model.getEquipmentsId())
+                .reserveFrom(model.getReserveFrom())
+                .reserveTo(model.getReserveTo())
+                .timestamp(model.getTimestamp())
+                .status("CANCELLED")
+                .build();
+
+        ReserveEntity entity = new ReserveEntity();
+        BeanUtils.copyProperties(command, entity);
+
+        boolean isDone = false;
+        try {
+            Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", entity);
+            System.out.println(rabbit);
+            if (!(boolean) rabbit) {
+                System.out.println("Rabbitmq Cancel Reserve Error");
+                result = false;
+            }
+            String result = commandGateway.sendAndWait(command);
+            System.out.println(result);
+            isDone = true;
+        } catch (Exception e) {
+            isDone = false;
+        }
+        return isDone;
     }
 
     //    cron every hour = "0 0 * ? * *"
@@ -138,9 +184,10 @@ public class ReserveCommandController {
                 String result;
                 try {
                     result = commandGateway.sendAndWait(command);
-                    System.out.println("Updated Reserve Status" +result);
+                    System.out.println("Updated Reserve Status" + result);
                 } catch (Exception e) {
-                    System.out.println(e.getLocalizedMessage());;
+                    System.out.println(e.getLocalizedMessage());
+                    ;
                 }
 
             }
