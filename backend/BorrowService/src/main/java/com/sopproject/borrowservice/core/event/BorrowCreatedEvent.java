@@ -2,7 +2,7 @@ package com.sopproject.borrowservice.core.event;
 
 import lombok.Data;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class BorrowCreatedEvent {
@@ -12,5 +12,5 @@ public class BorrowCreatedEvent {
     private String due_date;
     private boolean late;
     private String userId;
-    private ArrayList<String> booksId;
+    private List<String> booksId;
 }

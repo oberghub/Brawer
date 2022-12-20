@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document("borrow")
@@ -17,5 +17,5 @@ public class BorrowEntity implements Serializable {
     private String due_date;
     private boolean late;
     private String userId;
-    private ArrayList<String> booksId;
+    private List<String> booksId;
 }

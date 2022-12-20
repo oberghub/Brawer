@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,5 +17,5 @@ public class UpdateBorrowCommand {
     private final String due_date;
     private final boolean late;
     private final String userId;
-    private final ArrayList<String> booksId;
+    private final List<String> booksId;
 }

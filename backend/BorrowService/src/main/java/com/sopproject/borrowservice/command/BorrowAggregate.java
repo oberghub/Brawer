@@ -28,8 +28,6 @@ public class BorrowAggregate {
 
     public BorrowAggregate(){
     }
-
-
     @CommandHandler
     public BorrowAggregate(CreateBorrowCommand command){
         boolean blankDataCheck = command.getBorrow_date().isBlank() || command.getDue_date().isBlank() ||

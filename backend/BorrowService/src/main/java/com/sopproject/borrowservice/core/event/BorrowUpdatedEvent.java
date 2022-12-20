@@ -3,7 +3,7 @@ package com.sopproject.borrowservice.core.event;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -14,5 +14,5 @@ public class BorrowUpdatedEvent {
     private String due_date;
     private boolean late;
     private String userId;
-    private ArrayList<String> booksId;
+    private List<String> booksId;
 }
