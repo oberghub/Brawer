@@ -4,9 +4,11 @@ import com.sopproject.reserveservice.command.rest.CreateReserveCommand;
 import com.sopproject.reserveservice.command.rest.DeleteReserveCommand;
 import com.sopproject.reserveservice.command.rest.ReserveRestModel;
 import com.sopproject.reserveservice.command.rest.UpdateReserveCommand;
+import com.sopproject.reserveservice.core.ReserveEntity;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +43,11 @@ public class ReserveCommandController {
                 .timestamp(model.getTimestamp())
                 .status(model.getStatus())
                 .build();
-
+        ReserveEntity entity = new ReserveEntity();
+        BeanUtils.copyProperties(command, entity);
         String result;
         try {
-            Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "reserve", model.getRoomId());
+            Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "reserve", entity);
             System.out.println(rabbit);
             if (!(boolean)rabbit){
                 return "Rabbitmq Create Reserve Error";
@@ -69,10 +72,12 @@ public class ReserveCommandController {
                 .status(model.getStatus())
                 .build();
 
+        ReserveEntity entity = new ReserveEntity();
+        BeanUtils.copyProperties(command, entity);
         String result;
         try {
             if(model.getStatus().equals("CANCELLED") || model.getStatus().equals("TIMEOUT")){
-                Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", model.getRoomId());
+                Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", entity);
                 System.out.println(rabbit);
                 if (!(boolean)rabbit){
                     return "Rabbitmq Cancel Reserve Error";

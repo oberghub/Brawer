@@ -1,8 +1,8 @@
 package com.sopproject.borrowservice.query;
 
-import com.sopproject.borrowservice.core.event.BorrowCreatedEvent;
 import com.sopproject.borrowservice.core.BorrowEntity;
 import com.sopproject.borrowservice.core.data.BorrowRepository;
+import com.sopproject.borrowservice.core.event.BorrowCreatedEvent;
 import com.sopproject.borrowservice.core.event.BorrowUpdatedEvent;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.BeanUtils;

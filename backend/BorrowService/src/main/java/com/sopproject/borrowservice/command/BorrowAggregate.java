@@ -5,7 +5,6 @@ import com.sopproject.borrowservice.command.rest.CreateBorrowCommand;
 import com.sopproject.borrowservice.command.rest.UpdateBorrowCommand;
 import com.sopproject.borrowservice.core.event.BorrowCreatedEvent;
 import com.sopproject.borrowservice.core.event.BorrowUpdatedEvent;
-import lombok.Data;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -13,7 +12,7 @@ import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 import org.springframework.beans.BeanUtils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Aggregate
 public class BorrowAggregate {
@@ -24,7 +23,7 @@ public class BorrowAggregate {
     private String due_date;
     private boolean late;
     private String userId;
-    private ArrayList<String> booksId;
+    private List<String> booksId;
 
     public BorrowAggregate(){
     }

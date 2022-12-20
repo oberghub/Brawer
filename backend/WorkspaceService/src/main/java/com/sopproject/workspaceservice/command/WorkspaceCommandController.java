@@ -4,6 +4,7 @@ import com.sopproject.workspaceservice.command.rest.CreateWorkspaceCommand;
 import com.sopproject.workspaceservice.command.rest.DeleteWorkspaceCommand;
 import com.sopproject.workspaceservice.command.rest.UpdateWorkspaceCommand;
 import com.sopproject.workspaceservice.command.rest.WorkspaceRestModel;
+import com.sopproject.workspaceservice.core.ReserveEntity;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -64,11 +65,11 @@ public class WorkspaceCommandController {
     }
 
     @RabbitListener(queues = "onReserveWorkspace")
-    public boolean onReserveWorkspace(String roomId) {
-        System.out.println("onReserveWorkspace " + roomId);
+    public boolean onReserveWorkspace(ReserveEntity entity) {
+        System.out.println("onReserveWorkspace " + entity.getRoomId());
         WorkspaceRestModel model = WebClient.create()
                 .get()
-                .uri("http://localhost:8082/workspace-service/workspaces/" + roomId)
+                .uri("http://localhost:8082/workspace-service/workspaces/" + entity.getRoomId())
                 .retrieve()
                 .bodyToMono(WorkspaceRestModel.class)
                 .block();
@@ -94,11 +95,11 @@ public class WorkspaceCommandController {
         }
     }
     @RabbitListener(queues = "onCancelReserve")
-    public boolean onCancelReserve(String roomId) {
-        System.out.println("onCancelReserve " + roomId);
+    public boolean onCancelReserve(ReserveEntity entity) {
+        System.out.println("onCancelReserve " + entity.getRoomId());
         WorkspaceRestModel model = WebClient.create()
                 .get()
-                .uri("http://localhost:8082/workspace-service/workspaces/" + roomId)
+                .uri("http://localhost:8082/workspace-service/workspaces/" + entity.getRoomId())
                 .retrieve()
                 .bodyToMono(WorkspaceRestModel.class)
                 .block();

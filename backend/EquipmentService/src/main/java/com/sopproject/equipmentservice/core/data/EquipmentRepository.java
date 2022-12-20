@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface EquipmentRepository extends MongoRepository<EquipmentEntity, String> {
     @Query("{name:'?0'}")
     EquipmentEntity findByName(String name);
-    @Query("{EquipmentId:'?0'}")
-    EquipmentEntity findByEquipmentId(String EquipmentId);
+
+    @Query("{_id:'?0'}")
+    EquipmentEntity findEquipmentById(String _id);
 }

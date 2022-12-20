@@ -2,11 +2,12 @@ package com.sopproject.equipmentservice.core.event;
 
 import lombok.Data;
 
-import java.util.List;
+import java.math.BigDecimal;
 @Data
 public class EquipmentCreatedEvent {
     private String _id;
     private String name;
     private String desc;
-    private Integer price;
+    private int quantity;
+    private BigDecimal price;
 }

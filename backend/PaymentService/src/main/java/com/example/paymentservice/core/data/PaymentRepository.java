@@ -12,7 +12,7 @@ public interface PaymentRepository  extends MongoRepository<PaymentEntity, Strin
     @Query("{userId: '?0'}")
     List<PaymentEntity> findByUserId(String userId);
     @Query("{_id:'?0'}")
-    PaymentEntity findByPaymentId(String paymentId);
+    PaymentEntity findByPaymentId(String _id);
 
 }
 

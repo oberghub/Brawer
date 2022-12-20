@@ -1,13 +1,17 @@
 package com.sopproject.equipmentservice.command;
 
-import com.sopproject.equipmentservice.command.rest.CreateEquipmentCommand;
-import com.sopproject.equipmentservice.command.rest.EquipmentRestModel;
-import com.sopproject.equipmentservice.command.rest.DeleteEquipmentCommand;
-import com.sopproject.equipmentservice.command.rest.UpdateEquipmentCommand;
+import com.sopproject.equipmentservice.command.rest.*;
+import com.sopproject.equipmentservice.core.ReserveEntity;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/equipment")
@@ -52,8 +56,9 @@ public class EquipmentCommandController {
             return e.getLocalizedMessage();
         }
     }
+
     @DeleteMapping("/{id}")
-    public String deleteEquipment(@PathVariable String id){
+    public String deleteEquipment(@PathVariable String id) {
         DeleteEquipmentCommand command = DeleteEquipmentCommand.builder()
                 ._id(id)
                 .build();
@@ -65,6 +70,66 @@ public class EquipmentCommandController {
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
+    }
+
+    @RabbitListener(queues = "onReserveWorkspace")
+    public boolean onReserveWorkspace(ReserveEntity entity) {
+        System.out.println("onReserveWorkspace " + entity.getEquipmentsId());
+        Set<String> ids = new LinkedHashSet<>(entity.getEquipmentsId());
+        boolean isDone = false;
+        for (String id : ids) {
+            int decrease = Collections.frequency(entity.getEquipmentsId(), id);
+            EquipmentRestModel model = WebClient.create()
+                    .get()
+                    .uri("http://localhost:8082/equipment-service/equipment/" + id)
+                    .retrieve()
+                    .bodyToMono(EquipmentRestModel.class)
+                    .block();
+
+            QtyDecreaseCommand command = QtyDecreaseCommand.builder()
+                    ._id(id)
+                    .quantity(decrease)
+                    .build();
+            try {
+                String result = commandGateway.sendAndWait(command);
+                System.out.println(result);
+                isDone = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isDone = false;
+            }
+        }
+        return isDone;
+    }
+
+    @RabbitListener(queues = "onCancelReserve")
+    public boolean onCancelReserve(ReserveEntity entity) {
+        System.out.println("onCancelReserve " + entity.getEquipmentsId());
+        Set<String> ids = new LinkedHashSet<>(entity.getEquipmentsId());
+        boolean isDone = false;
+        for (String id : ids) {
+            int increase = Collections.frequency(entity.getEquipmentsId(), id);
+            EquipmentRestModel model = WebClient.create()
+                    .get()
+                    .uri("http://localhost:8082/equipment-service/equipment/" + id)
+                    .retrieve()
+                    .bodyToMono(EquipmentRestModel.class)
+                    .block();
+
+            QtyIncreaseCommand command = QtyIncreaseCommand.builder()
+                    ._id(id)
+                    .quantity(increase)
+                    .build();
+            try {
+                String result = commandGateway.sendAndWait(command);
+                System.out.println(result);
+                isDone = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isDone = false;
+            }
+        }
+        return isDone;
     }
 }
 
