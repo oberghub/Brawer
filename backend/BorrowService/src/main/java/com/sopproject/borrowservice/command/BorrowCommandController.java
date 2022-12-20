@@ -6,18 +6,27 @@ import com.sopproject.borrowservice.command.rest.UpdateBorrowCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/borrow")
 public class BorrowCommandController {
     private CommandGateway commandGateway;
+
     @Autowired
-    private BorrowCommandController(CommandGateway commandGateway){
-       this.commandGateway = commandGateway;
+    private BorrowCommandController(CommandGateway commandGateway) {
+        this.commandGateway = commandGateway;
     }
+
     @PostMapping
-    public String createBookBorrow(@RequestBody BorrowRestModel model){
+    public String createBookBorrow(@RequestBody BorrowRestModel model) {
         CreateBorrowCommand command = CreateBorrowCommand.builder()
                 ._id(new ObjectId().toString())
                 .status(model.getStatus())
@@ -37,7 +46,7 @@ public class BorrowCommandController {
     }
 
     @PutMapping
-    public String updateBorrowState(@RequestBody BorrowRestModel model){
+    public String updateBorrowState(@RequestBody BorrowRestModel model) {
         UpdateBorrowCommand command = UpdateBorrowCommand.builder()
                 ._id(model.get_id())
                 .status(model.getStatus())
@@ -54,5 +63,47 @@ public class BorrowCommandController {
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
+    }
+
+    //    cron every day = 0 0 0 * * ?
+//    cron every minute = "0 * * ? * *"
+    @Scheduled(cron = "0 * * ? * *")
+    public void onDayPast() {
+        System.out.println("Doing cron job");
+        List<BorrowRestModel> borrowRestModelList = WebClient.create()
+                .get()
+                .uri("http://localhost:8082/borrow-service/borrow/all")
+                .retrieve()
+                .bodyToFlux(BorrowRestModel.class)
+                .collectList()
+                .block();
+
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        for (BorrowRestModel borrowRestModel : borrowRestModelList) {
+            LocalDate dueDate = LocalDate.parse(borrowRestModel.getDue_date(), formatter);
+            if (!borrowRestModel.getStatus().equals("RETURNED") &&
+                    dueDate.isBefore(LocalDate.of(now.getYear(), now.getMonth(), now.getDayOfMonth()))) {
+                borrowRestModel.setLate(true);
+                UpdateBorrowCommand command = UpdateBorrowCommand.builder()
+                        ._id(borrowRestModel.get_id())
+                        .status(borrowRestModel.getStatus())
+                        .borrow_date(borrowRestModel.getBorrow_date())
+                        .due_date(borrowRestModel.getDue_date())
+                        .late(borrowRestModel.isLate())
+                        .userId(borrowRestModel.getUserId())
+                        .booksId(borrowRestModel.getBooksId())
+                        .build();
+                String result;
+                try {
+                    result = commandGateway.sendAndWait(command);
+                    System.out.println("Updated Borrow Status" +result);
+                } catch (Exception e) {
+                    System.out.println(e.getLocalizedMessage());;
+                }
+
+            }
+        }
+
     }
 }

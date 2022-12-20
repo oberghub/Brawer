@@ -31,7 +31,7 @@ public class BorrowAggregate {
     @CommandHandler
     public BorrowAggregate(CreateBorrowCommand command){
         boolean blankDataCheck = command.getBorrow_date().isBlank() || command.getDue_date().isBlank() ||
-                command.getStatus().isBlank() || command.getUserId().isEmpty() || command.getBooksId().size() == 0;
+                command.getStatus().isBlank() || command.getUserId().isEmpty() || command.getBooksId().isEmpty();
         if (blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
         }
@@ -42,7 +42,7 @@ public class BorrowAggregate {
     @CommandHandler
     public void BorrowUpdateHandler(UpdateBorrowCommand command){
         boolean blankDataCheck = command.getBorrow_date().isBlank() || command.getDue_date().isBlank() ||
-                command.getStatus().isBlank() || command.getUserId().isEmpty() || command.getBooksId().size() == 0;
+                command.getStatus().isBlank() || command.getUserId().isEmpty() || command.getBooksId().isEmpty();
         if (blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
         }
