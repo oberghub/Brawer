@@ -88,7 +88,7 @@ public class ReserveCommandController {
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
-    } catch(
+    }
 
     @DeleteMapping("/{id}")
     public String deleteReserve(@PathVariable String id) {
@@ -103,7 +103,7 @@ public class ReserveCommandController {
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
-    })
+    }
 
     @RabbitListener(queues = "onCancelOrRefund")
     public boolean onCancelOrRefund(String reserveId) {
@@ -128,13 +128,13 @@ public class ReserveCommandController {
         ReserveEntity entity = new ReserveEntity();
         BeanUtils.copyProperties(command, entity);
 
-        boolean isDone = false;
+        boolean isDone;
         try {
             Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", entity);
             System.out.println(rabbit);
             if (!(boolean) rabbit) {
                 System.out.println("Rabbitmq Cancel Reserve Error");
-                result = false;
+                isDone = false;
             }
             String result = commandGateway.sendAndWait(command);
             System.out.println(result);
