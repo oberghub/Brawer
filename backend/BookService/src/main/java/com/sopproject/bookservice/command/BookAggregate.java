@@ -2,10 +2,9 @@ package com.sopproject.bookservice.command;
 
 import com.sopproject.bookservice.command.rest.CreateBookCommand;
 import com.sopproject.bookservice.command.rest.DeleteBookCommand;
+import com.sopproject.bookservice.command.rest.ReturnBookCommand;
 import com.sopproject.bookservice.command.rest.UpdateBookCommand;
-import com.sopproject.bookservice.core.event.BookCreatedEvent;
-import com.sopproject.bookservice.core.event.BookDeletedEvent;
-import com.sopproject.bookservice.core.event.BookUpdatedEvent;
+import com.sopproject.bookservice.core.event.*;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -66,6 +65,19 @@ public class BookAggregate {
         BeanUtils.copyProperties(command, event);
         AggregateLifecycle.apply(event);
     }
+    @CommandHandler
+    public void BookAggregate(ReturnBookCommand command){
+        boolean blankDataCheck = command.get_id().isBlank();
+        if (blankDataCheck){
+            throw new IllegalArgumentException("Data cannot be blank");
+        }
+        if(command.getQuantity() < 0){
+            throw new IllegalArgumentException("qty < 0");
+        }
+        ReturnBookCommand event = new ReturnBookCommand();
+        BeanUtils.copyProperties(command, event);
+        AggregateLifecycle.apply(event);
+    }
 
     @EventSourcingHandler
     public void on(BookCreatedEvent event){
@@ -82,7 +94,6 @@ public class BookAggregate {
 
     @EventSourcingHandler
     public void on(BookUpdatedEvent event){
-        this._id = event.get_id();
         this.title = event.getTitle();
         this.desc = event.getDesc();
         this.quantity = event.getQuantity();
@@ -97,5 +108,19 @@ public class BookAggregate {
     public void on(BookDeletedEvent event){
         System.out.println("Delete Book Id: " + this._id);
         AggregateLifecycle.markDeleted();
+    }
+
+    @EventSourcingHandler
+    public void on(BookReturnedEvent event){
+        this._id = event.get_id();
+        this.quantity += event.getQuantity();
+        System.out.println("Increased book Id: " + this._id);
+    }
+
+    @EventSourcingHandler
+    public void on(BookBorrowedEvent event){
+        this._id = event.get_id();
+        this.quantity -= event.getQuantity();
+        System.out.println("Decreased book Id: " + this._id);
     }
 }

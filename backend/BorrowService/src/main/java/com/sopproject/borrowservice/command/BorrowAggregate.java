@@ -10,7 +10,10 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -25,6 +28,8 @@ public class BorrowAggregate {
     private String userId;
     private List<String> booksId;
 
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
     public BorrowAggregate(){
     }
     @CommandHandler
@@ -45,6 +50,7 @@ public class BorrowAggregate {
         if (blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
         }
+
         BorrowUpdatedEvent UpdateEvent = BorrowUpdatedEvent.builder()
                 ._id(command.get_id())
                 .status(command.getStatus())
@@ -54,6 +60,18 @@ public class BorrowAggregate {
                 .userId(command.getUserId())
                 .booksId(command.getBooksId())
                 .build();
+        if(command.getStatus().equals("BORROWING")){
+            Object rabbit = rabbitTemplate.convertSendAndReceive("BorrowExchange","borrow", UpdateEvent.getBooksId());
+            if(!(boolean) rabbit){
+                throw new AmqpException("Rabbit borrow error");
+            }
+        }
+        if(command.getStatus().equals("RETURNED")){
+            Object rabbit = rabbitTemplate.convertSendAndReceive("BorrowExchange","return", UpdateEvent.getBooksId());
+            if(!(boolean) rabbit){
+                throw new AmqpException("Rabbit return error");
+            }
+        }
         AggregateLifecycle.apply(UpdateEvent);
     }
     @EventSourcingHandler

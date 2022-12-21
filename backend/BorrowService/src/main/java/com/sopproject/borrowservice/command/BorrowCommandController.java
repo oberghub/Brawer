@@ -55,6 +55,7 @@ public class BorrowCommandController {
                 .userId(model.getUserId())
                 .booksId(model.getBooksId())
                 .build();
+
         String result;
         try {
             result = commandGateway.sendAndWait(command);
@@ -64,7 +65,9 @@ public class BorrowCommandController {
         }
     }
 
-    //    cron every day = 0 0 0 * * ?
+
+
+//    cron every day = 0 0 0 * * ?
 //    cron every minute = "0 * * ? * *"
     @Scheduled(cron = "0 * * ? * *")
     public void onDayPast() {

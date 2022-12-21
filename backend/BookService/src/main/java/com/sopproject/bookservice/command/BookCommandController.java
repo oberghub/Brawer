@@ -1,16 +1,20 @@
 package com.sopproject.bookservice.command;
 
-import com.sopproject.bookservice.command.rest.CreateBookCommand;
-import com.sopproject.bookservice.command.rest.BookRestModel;
-import com.sopproject.bookservice.command.rest.DeleteBookCommand;
-import com.sopproject.bookservice.command.rest.UpdateBookCommand;
+import com.sopproject.bookservice.command.rest.*;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 @RestController
-@RequestMapping("/books")
+@RequestMapping("/book")
 public class BookCommandController {
     private final CommandGateway commandGateway;
 
@@ -63,8 +67,9 @@ public class BookCommandController {
             return e.getLocalizedMessage();
         }
     }
+
     @DeleteMapping("/{id}")
-    public String deleteBook(@PathVariable String id){
+    public String deleteBook(@PathVariable String id) {
         DeleteBookCommand command = DeleteBookCommand.builder()
                 ._id(id)
                 .build();
@@ -76,6 +81,64 @@ public class BookCommandController {
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
+    }
+
+    @RabbitListener(queues = "onReturnBook")
+    public boolean onReturnBook(List<String> books) {
+        Set<String> ids = new LinkedHashSet<>(books);
+        boolean isDone = false;
+        for (String id : ids) {
+            int increase = Collections.frequency(books, id);
+            BookRestModel model = WebClient.create()
+                    .get()
+                    .uri("http://localhost:8082/book-service/book/" + id)
+                    .retrieve()
+                    .bodyToMono(BookRestModel.class)
+                    .block();
+
+            ReturnBookCommand command = ReturnBookCommand.builder()
+                    ._id(id)
+                    .quantity(increase)
+                    .build();
+            try {
+                String result = commandGateway.sendAndWait(command);
+                System.out.println(result);
+                isDone = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isDone = false;
+            }
+        }
+        return isDone;
+    }
+
+    @RabbitListener(queues = "onBorrowBook")
+    public boolean onBorrowBook(List<String> books) {
+        Set<String> ids = new LinkedHashSet<>(books);
+        boolean isDone = false;
+        for (String id : ids) {
+            int decrease = Collections.frequency(books, id);
+            BookRestModel model = WebClient.create()
+                    .get()
+                    .uri("http://localhost:8082/book-service/book/" + id)
+                    .retrieve()
+                    .bodyToMono(BookRestModel.class)
+                    .block();
+
+            BorrowBookCommand command = BorrowBookCommand.builder()
+                    ._id(id)
+                    .quantity(decrease)
+                    .build();
+            try {
+                String result = commandGateway.sendAndWait(command);
+                System.out.println(result);
+                isDone = true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                isDone = false;
+            }
+        }
+        return isDone;
     }
 }
 
