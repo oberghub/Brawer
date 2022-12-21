@@ -3,6 +3,7 @@ import { CiEdit } from 'react-icons/ci'
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { TextField } from "@mui/material";
 export const MainProfile = () => {
     const navigate = useNavigate()
     const selected = useLocation()
@@ -13,6 +14,14 @@ export const MainProfile = () => {
         {title : "Borrow List", link : "borrow-list"},
         {title : "Booking History", link : "booking-history"}
     ])
+    const [editstate, setEditState] = useState(false)
+    const [e_name, setE_Name] = useState("None")
+    const handle_eName = (event) =>{
+        setE_Name(event.target.value)
+    }
+    const changeName = () =>{
+        setEditState(false)
+    }
     useEffect(() => {
         if(selected.pathname == "/profile"){
           navigate("/profile/favourite")
@@ -40,8 +49,18 @@ export const MainProfile = () => {
                 {/* User data */}
                 <div className="my-5 sm:my-0 sm:ml-5 slide-in-l">
                     <div className="flex w-full">
-                        <p className="text-2xl sm:text-3xl">Display Name : {user.name}</p>
-                        <CiEdit size={20} className="ml-3 mt-1 cursor-pointer"/>
+                        {editstate == false ?<>
+                            <p className="text-2xl sm:text-3xl">Display Name : {user.name}</p>
+                            <CiEdit size={20} className="ml-3 mt-1 cursor-pointer" onClick={() => {setE_Name(user.name);setEditState(true)}}/>
+                        </> :<>
+                            <p className="text-2xl sm:text-3xl mr-3">Display Name : <TextField  label="" id="title" value={e_name} onChange={handle_eName}/></p>
+                            <div onClick={() => {changeName()}} className='mr-3 mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
+                                <p className='text-white text-xl'>Change</p>
+                            </div>
+                        </>}
+                        
+                        
+                        
                     </div>
                     <p>Email : {user.email}</p>
                 </div>

@@ -95,7 +95,7 @@ const AddEquipments = () => {
     //Get Data When First Time Render
     useEffect(() => {   //ติดบัคตรงพอกดเลือกของแล้วกด next แล้วกดกลับมาหน้าเดิม ใน click to add ของมันลบออกไม่หมด
                         //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ที่บัคคือใน comment** ***แก้แล้ว***
-        axios.get("http://localhost:8082/equipment-service/equipments/all", {
+        axios.get("http://localhost:8082/equipment-service/equipment/all", {
         }).then((res) => {
             setEquipments(res.data)
             console.log(res.data)

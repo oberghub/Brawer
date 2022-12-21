@@ -5,6 +5,7 @@ import { BsCheckCircleFill } from 'react-icons/bs'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import secureLocalStorage from 'react-secure-storage';
+import axios from 'axios';
 const Payment = () => {
   const [resultRoom, setResultRoom] = useState(
     //ชุดทดสอบ ลบออกแล้วมัน error T_T
@@ -43,6 +44,50 @@ const Payment = () => {
   const confirmPayment = () => {
     setIsActiveModal(false)
     setConfirmModal(true)
+    
+    //add reserve with pending
+    let arr = []
+    resultRoom.equipments.forEach((e)=>{
+      arr.push(e._id)
+    })
+    let ts = new Date().toISOString()
+    let addReserve = {
+      userId:"u001",
+      roomId:resultRoom._id,
+      equipmentsId:arr,
+      reserveFrom:resultRoom.date+" "+resultRoom.time_start+":00",
+      reserveTo:resultRoom.date+" "+resultRoom.time_end+":00",
+      timestamp: ts.substring(0, 10)+" "+ts.substring(11, 19),
+      status:"PENDING"
+    }
+    console.log(ts)
+    console.log(addReserve)
+    axios.post("http://localhost:8082/reserve-service/reserve", JSON.stringify(addReserve), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => {
+      console.log(res.status + " " + res.statusText)
+      if(res.status == 200){
+        console.log(res.data)
+        let addPayment = {
+          userId:"u001",
+          reserveId:res.data,
+          status:"SUCCESS",
+          timestamp:ts.substring(0, 10)+" "+ts.substring(11, 19),
+          price:resultRoom.equipments.length !== 0 ? resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b) + resultRoom.sumPrice : resultRoom.sumPrice,
+          borrowId:null
+        }
+        axios.post("http://localhost:8082/payment-service/payments", JSON.stringify(addPayment), {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then((res) => console.log(res.status + " " + res.statusText))
+      }
+    })
+
+ 
+    
   }
   useEffect(() => {
     let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
@@ -203,7 +248,8 @@ const Payment = () => {
             <p className='text-2xl'>Confirm</p>
           </div>
           :
-          <div onClick={() => { setIsActiveModal(true) }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+          // <div onClick={() => { setIsActiveModal(true) }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+          <div onClick={() => {confirmPayment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
             <p className='text-2xl'>Confirm</p>
           </div>
         }

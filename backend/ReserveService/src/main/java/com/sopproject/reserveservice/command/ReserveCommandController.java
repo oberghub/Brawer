@@ -53,7 +53,7 @@ public class ReserveCommandController {
                 return "Rabbitmq Create Reserve Error";
             }
             result = commandGateway.sendAndWait(command);
-            return "Created Reserve " + result;
+            return result;
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
