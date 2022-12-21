@@ -23,13 +23,8 @@ import java.util.List;
 @RequestMapping("/reserve")
 public class ReserveCommandController {
     private final CommandGateway commandGateway;
-    Exception e
     @Autowired
     private RabbitTemplate rabbitTemplate;
-
-    {
-        return e.getLocalizedMessage();
-    }
 
     @Autowired
     public ReserveCommandController(CommandGateway commandGateway) {
@@ -187,7 +182,6 @@ public class ReserveCommandController {
                     System.out.println("Updated Reserve Status" + result);
                 } catch (Exception e) {
                     System.out.println(e.getLocalizedMessage());
-                    ;
                 }
 
             }
