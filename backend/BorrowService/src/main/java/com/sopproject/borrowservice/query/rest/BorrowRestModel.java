@@ -3,6 +3,7 @@ package com.sopproject.borrowservice.query.rest;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class BorrowRestModel {
@@ -12,5 +13,5 @@ public class BorrowRestModel {
     private String due_date;
     private boolean late;
     private String userId;
-    private ArrayList<String> booksId;
+    private List<String> booksId;
 }

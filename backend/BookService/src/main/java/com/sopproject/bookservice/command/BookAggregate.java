@@ -1,9 +1,6 @@
 package com.sopproject.bookservice.command;
 
-import com.sopproject.bookservice.command.rest.CreateBookCommand;
-import com.sopproject.bookservice.command.rest.DeleteBookCommand;
-import com.sopproject.bookservice.command.rest.ReturnBookCommand;
-import com.sopproject.bookservice.command.rest.UpdateBookCommand;
+import com.sopproject.bookservice.command.rest.*;
 import com.sopproject.bookservice.core.event.*;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
@@ -74,7 +71,23 @@ public class BookAggregate {
         if(command.getQuantity() < 0){
             throw new IllegalArgumentException("qty < 0");
         }
-        ReturnBookCommand event = new ReturnBookCommand();
+        BookReturnedEvent event = new BookReturnedEvent();
+        BeanUtils.copyProperties(command, event);
+        AggregateLifecycle.apply(event);
+    }
+    @CommandHandler
+    public void BookAggregate(BorrowBookCommand command){
+        boolean blankDataCheck = command.get_id().isBlank();
+        if (blankDataCheck){
+            throw new IllegalArgumentException("Data cannot be blank");
+        }
+        if(command.getQuantity() < 0){
+            throw new IllegalArgumentException("qty < 0");
+        }
+        if(command.getQuantity() > this.quantity){
+            throw new IllegalArgumentException("borrow more than remaining");
+        }
+        BookBorrowedEvent event = new BookBorrowedEvent();
         BeanUtils.copyProperties(command, event);
         AggregateLifecycle.apply(event);
     }

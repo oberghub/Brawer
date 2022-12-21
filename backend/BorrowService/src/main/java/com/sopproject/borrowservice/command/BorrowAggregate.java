@@ -35,7 +35,8 @@ public class BorrowAggregate {
     @CommandHandler
     public BorrowAggregate(CreateBorrowCommand command){
         boolean blankDataCheck = command.getBorrow_date().isBlank() || command.getDue_date().isBlank() ||
-                command.getStatus().isBlank() || command.getUserId().isEmpty() || command.getBooksId().isEmpty();
+                command.getStatus().isBlank() || command.getUserId().isEmpty() || command.getBooksId().isEmpty() ||
+                command.getBooksId().equals(null);
         if (blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
         }
@@ -46,33 +47,27 @@ public class BorrowAggregate {
     @CommandHandler
     public void BorrowUpdateHandler(UpdateBorrowCommand command){
         boolean blankDataCheck = command.getBorrow_date().isBlank() || command.getDue_date().isBlank() ||
-                command.getStatus().isBlank() || command.getUserId().isEmpty() || command.getBooksId().isEmpty();
+                command.getStatus().isBlank() || command.getUserId().isEmpty() || command.getBooksId().isEmpty() ||
+                command.getBooksId().equals(null);
         if (blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");
         }
 
-        BorrowUpdatedEvent UpdateEvent = BorrowUpdatedEvent.builder()
-                ._id(command.get_id())
-                .status(command.getStatus())
-                .borrow_date(command.getBorrow_date())
-                .due_date(command.getDue_date())
-                .late(command.isLate())
-                .userId(command.getUserId())
-                .booksId(command.getBooksId())
-                .build();
+        BorrowUpdatedEvent event = new BorrowUpdatedEvent();
+        BeanUtils.copyProperties(command, event);
         if(command.getStatus().equals("BORROWING")){
-            Object rabbit = rabbitTemplate.convertSendAndReceive("BorrowExchange","borrow", UpdateEvent.getBooksId());
+            Object rabbit = rabbitTemplate.convertSendAndReceive("BorrowExchange","borrow", event.getBooksId());
             if(!(boolean) rabbit){
                 throw new AmqpException("Rabbit borrow error");
             }
         }
         if(command.getStatus().equals("RETURNED")){
-            Object rabbit = rabbitTemplate.convertSendAndReceive("BorrowExchange","return", UpdateEvent.getBooksId());
+            Object rabbit = rabbitTemplate.convertSendAndReceive("BorrowExchange","return", event.getBooksId());
             if(!(boolean) rabbit){
                 throw new AmqpException("Rabbit return error");
             }
         }
-        AggregateLifecycle.apply(UpdateEvent);
+        AggregateLifecycle.apply(event);
     }
     @EventSourcingHandler
     public void on(BorrowCreatedEvent event){

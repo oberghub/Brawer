@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,10 @@ public class BorrowCommandController {
 
     @PostMapping
     public String createBookBorrow(@RequestBody BorrowRestModel model) {
+        List<String> booksId = new ArrayList<>();
+        for (String bookId: model.getBooksId()) {
+            booksId.add(bookId);
+        }
         CreateBorrowCommand command = CreateBorrowCommand.builder()
                 ._id(new ObjectId().toString())
                 .status(model.getStatus())
@@ -85,6 +90,7 @@ public class BorrowCommandController {
         for (BorrowRestModel borrowRestModel : borrowRestModelList) {
             LocalDate dueDate = LocalDate.parse(borrowRestModel.getDue_date(), formatter);
             if (!borrowRestModel.getStatus().equals("RETURNED") &&
+                    !borrowRestModel.isLate() &&
                     dueDate.isBefore(LocalDate.of(now.getYear(), now.getMonth(), now.getDayOfMonth()))) {
                 borrowRestModel.setLate(true);
                 UpdateBorrowCommand command = UpdateBorrowCommand.builder()
