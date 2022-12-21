@@ -116,7 +116,7 @@ const BookStock = () => {
   const addBook = () => {
     const addThatBook = (image) =>{
       let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
-      axios.post("http://localhost:8082/book-service/books", addData, {
+      axios.post("http://localhost:8082/book-service/book", addData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -165,7 +165,7 @@ const BookStock = () => {
     //Update SelectedBook to db
     let updateData = JSON.stringify({_id:selectedBook._id,title: e_bookTitle, language: e_bookLanguage, genres: e_bookType.split(","), image: imageUrls[0], quantity: parseInt(e_quantity), authors: e_Authors.split(","), desc: e_desc })
     console.log(updateData)
-    axios.put("http://localhost:8082/book-service/books", updateData, {
+    axios.put("http://localhost:8082/book-service/book", updateData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -175,9 +175,9 @@ const BookStock = () => {
   //Delete Book
   const deleteBook = () => {
     //Delete with selectedBook._id   in db
-    let deleteData = "http://localhost:8082/book-service/books/"+selectedBook._id
+    let deleteData = "http://localhost:8082/book-service/book/"+selectedBook._id
     console.log(deleteData)
-    axios.delete("http://localhost:8082/book-service/books/"+selectedBook._id, {
+    axios.delete("http://localhost:8082/book-service/book/"+selectedBook._id, {
     }).then((res) => console.log(res.status + " " + res.statusText))
 
 
@@ -189,7 +189,7 @@ const BookStock = () => {
 
   //Get Data When First Time Render
   useEffect(() => {
-    axios.get("http://localhost:8082/book-service/books/all", {
+    axios.get("http://localhost:8082/book-service/book/all", {
     }).then((res) => {
       setBooks(res.data)
       setSelectedBook(res.data.length>0?res.data[0]:null)

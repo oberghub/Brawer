@@ -8,17 +8,14 @@ import com.proto.user.UserServiceGrpc;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/user")
 public class CheckUserController {
-    @GetMapping("/isexist")
+    @PostMapping("/isexist")
     public UserRestModel checkUser(@RequestBody UserRestModel model){
         ManagedChannel channel = ManagedChannelBuilder
                 .forAddress("localhost",50054)

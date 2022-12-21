@@ -71,6 +71,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
                 .retrieve()
                 .bodyToMono(UserRestModel.class)
                 .block();
+        System.out.println(model);
         User response = User.newBuilder()
                 .setId(model.get_id())
                 .setEmail(model.getEmail())

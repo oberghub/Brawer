@@ -66,7 +66,7 @@ export const Book = () => {
     const [showBooks, setShowBooks] = useState([]) //เอาไว้ show ข้อมูลในหน้าเว็บ
     const [isLoaded, setIsLoaded] = useState(false)
     useEffect(() => {
-        axios.get("http://localhost:8082/book-service/books/all", {
+        axios.get("http://localhost:8082/book-service/book/all", {
         }).then((res) => {
             setShowBooks([...res.data])
             setIsLoaded(true)

@@ -8,6 +8,7 @@ import secureLocalStorage from "react-secure-storage";
 import { gapi } from "gapi-script";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { setLoaded, userdata } from "../userSlice";
+import axios from "axios";
 export const MyNavbar = () => {
     const [acc, setAcc] = useState(false)
     const [bookInCart, setBookInCart] = useState([])
@@ -21,11 +22,25 @@ export const MyNavbar = () => {
         const profile = res.profileObj;
         setAcc(profile)
         console.log("success:", profile);
-        dispatch(userdata({
-            name : profile.name,
-            email : profile.email,
-            imageUrl : profile.imageUrl 
-        }))
+        let userData = {name:profile.name, email:profile.email}
+        console.log(userData)
+        axios.post("http://localhost:8082/user-service/user/isexist", userData, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        }).then((res) => {
+            console.log(res.status + " " + res.statusText)
+            if(res.status == 200){
+                dispatch(userdata({...res.data,imageUrl : profile.imageUrl }))
+            }else{
+                dispatch(userdata({
+                    name : profile.name,
+                    email : profile.email,
+                    imageUrl : profile.imageUrl 
+                }))
+            }
+        })
+
         
 
     };
