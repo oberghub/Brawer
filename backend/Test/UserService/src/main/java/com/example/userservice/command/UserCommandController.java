@@ -9,6 +9,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @RequestMapping("/user")
 public class UserCommandController {
@@ -26,11 +28,12 @@ public class UserCommandController {
                 .role(model.getRole())
                 .name(model.getName())
                 .email(model.getEmail())
+                .favouriteBooks(new ArrayList<>())
                 .build();
         String result;
         try {
             result = commandGateway.sendAndWait(command);
-            return "Created User " + result;
+            return result;
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
@@ -43,6 +46,7 @@ public class UserCommandController {
                 .role(model.getRole())
                 .name(model.getName())
                 .email(model.getEmail())
+                .favouriteBooks(model.getFavouriteBooks())
                 .build();
 
         String result;

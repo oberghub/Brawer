@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends MongoRepository<UserEntity, String> {
     @Query("{email: '?0'}")
     UserEntity findByEmail(String email);
+
+    @Query("{_id:'?0'}")
+    UserEntity findByUserId(String id);
 }
