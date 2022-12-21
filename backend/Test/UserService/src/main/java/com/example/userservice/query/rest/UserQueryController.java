@@ -1,6 +1,7 @@
 package com.example.userservice.query.rest;
 
 import com.example.userservice.query.FindByEmail;
+import com.example.userservice.query.FindUserByIdQuery;
 import com.example.userservice.query.FindUsersQuery;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
@@ -32,6 +33,14 @@ public class UserQueryController {
         FindByEmail findByEmail = new FindByEmail(email);
         UserRestModel user = queryGateway
                 .query(findByEmail, ResponseTypes.instanceOf(UserRestModel.class)).join();
+        return user;
+    }
+    @GetMapping(value = "/id/{id}")
+    public UserRestModel getUserById(@PathVariable String id) {
+        FindUserByIdQuery query = new FindUserByIdQuery();
+        query.set_id(id);
+        UserRestModel user = queryGateway
+                .query(query, ResponseTypes.instanceOf(UserRestModel.class)).join();
         return user;
     }
 }
