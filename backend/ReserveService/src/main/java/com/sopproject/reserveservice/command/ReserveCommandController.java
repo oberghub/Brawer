@@ -125,12 +125,11 @@ public class ReserveCommandController {
                 .status("CANCELLED")
                 .build();
 
-        ReserveEntity entity = new ReserveEntity();
-        BeanUtils.copyProperties(command, entity);
+        BeanUtils.copyProperties(command, model);
 
         boolean isDone;
         try {
-            Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", entity);
+            Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", model);
             System.out.println(rabbit);
             if (!(boolean) rabbit) {
                 System.out.println("Rabbitmq Cancel Reserve Error");

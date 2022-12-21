@@ -4,7 +4,7 @@ import com.sopproject.workspaceservice.command.rest.CreateWorkspaceCommand;
 import com.sopproject.workspaceservice.command.rest.DeleteWorkspaceCommand;
 import com.sopproject.workspaceservice.command.rest.UpdateWorkspaceCommand;
 import com.sopproject.workspaceservice.command.rest.WorkspaceRestModel;
-import com.sopproject.workspaceservice.core.ReserveEntity;
+import com.sopproject.workspaceservice.core.ReserveRestModel;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.bson.types.ObjectId;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @RestController
-@RequestMapping("/workspaces")
+@RequestMapping("/workspace")
 public class WorkspaceCommandController {
     private final CommandGateway commandGateway;
 
@@ -65,24 +65,24 @@ public class WorkspaceCommandController {
     }
 
     @RabbitListener(queues = "onReserveWorkspace")
-    public boolean onReserveWorkspace(ReserveEntity entity) {
-        System.out.println("onReserveWorkspace " + entity.getRoomId());
-        WorkspaceRestModel model = WebClient.create()
+    public boolean onReserveWorkspace(ReserveRestModel model) {
+        System.out.println("onReserveWorkspace " + model.getRoomId());
+        WorkspaceRestModel workspaceRestModel = WebClient.create()
                 .get()
-                .uri("http://localhost:8082/workspace-service/workspaces/" + entity.getRoomId())
+                .uri("http://localhost:8082/workspace-service/workspaces/" + model.getRoomId())
                 .retrieve()
                 .bodyToMono(WorkspaceRestModel.class)
                 .block();
 
         UpdateWorkspaceCommand command = UpdateWorkspaceCommand.builder()
-                ._id(model.get_id())
-                .room_type(model.getRoom_type())
-                .room_name(model.getRoom_name())
-                .room_capacity(model.getRoom_capacity())
-                .desc(model.getDesc())
-                .price(model.getPrice())
+                ._id(workspaceRestModel.get_id())
+                .room_type(workspaceRestModel.getRoom_type())
+                .room_name(workspaceRestModel.getRoom_name())
+                .room_capacity(workspaceRestModel.getRoom_capacity())
+                .desc(workspaceRestModel.getDesc())
+                .price(workspaceRestModel.getPrice())
                 .status("RESERVED")
-                .time_rent(model.getTime_rent())
+                .time_rent(workspaceRestModel.getTime_rent())
                 .build();
 
         String result;
@@ -95,24 +95,24 @@ public class WorkspaceCommandController {
         }
     }
     @RabbitListener(queues = "onCancelReserve")
-    public boolean onCancelReserve(ReserveEntity entity) {
-        System.out.println("onCancelReserve " + entity.getRoomId());
-        WorkspaceRestModel model = WebClient.create()
+    public boolean onCancelReserve(ReserveRestModel model) {
+        System.out.println("onCancelReserve " + model.getRoomId());
+        WorkspaceRestModel workspaceRestModel = WebClient.create()
                 .get()
-                .uri("http://localhost:8082/workspace-service/workspaces/" + entity.getRoomId())
+                .uri("http://localhost:8082/workspace-service/workspaces/" + model.getRoomId())
                 .retrieve()
                 .bodyToMono(WorkspaceRestModel.class)
                 .block();
 
         UpdateWorkspaceCommand command = UpdateWorkspaceCommand.builder()
-                ._id(model.get_id())
-                .room_type(model.getRoom_type())
-                .room_name(model.getRoom_name())
-                .room_capacity(model.getRoom_capacity())
-                .desc(model.getDesc())
-                .price(model.getPrice())
+                ._id(workspaceRestModel.get_id())
+                .room_type(workspaceRestModel.getRoom_type())
+                .room_name(workspaceRestModel.getRoom_name())
+                .room_capacity(workspaceRestModel.getRoom_capacity())
+                .desc(workspaceRestModel.getDesc())
+                .price(workspaceRestModel.getPrice())
                 .status("AVAILABLE")
-                .time_rent(model.getTime_rent())
+                .time_rent(workspaceRestModel.getTime_rent())
                 .build();
 
         String result;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/workspaces")
+@RequestMapping("/workspace")
 public class WorkspaceQueryController {
     @Autowired
     private QueryGateway queryGateway;
@@ -33,7 +33,7 @@ public class WorkspaceQueryController {
 
         return workspace;
     }
-    @GetMapping("/{room_type}")
+    @GetMapping("/type/{room_type}")
     public List<WorkspaceRestModel> findByRoom_type(@PathVariable String room_type){
         FindByRoom_typeQuery findByRoomTypeQuery = new FindByRoom_typeQuery();
         findByRoomTypeQuery.setRoom_type(room_type);

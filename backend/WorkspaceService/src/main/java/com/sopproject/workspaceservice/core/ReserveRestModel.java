@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class ReserveEntity implements Serializable {
+public class ReserveRestModel {
     private String _id;
     private String userId;
     private String roomId;
@@ -15,5 +15,4 @@ public class ReserveEntity implements Serializable {
     private String reserveFrom;
     private String reserveTo;
     private String status;
-
 }
