@@ -244,7 +244,7 @@ export const BorrowList = () => {
                             <>
                                 <div className="w-full sm:h-auto bg-white drop-shadow min-[450px]:flex mt-3 p-0">
                                     <div className="w-auto">
-                                        <img src={require('../../local_image/think_python.png')} className="min-[450px]:w-[180px] min-[450px]:h-[220px] cursor-pointer" alt='book' />
+                                        <img src={books.image} className="min-[450px]:w-[180px] min-[450px]:h-[220px] cursor-pointer" alt='book' />
                                     </div>
                                     <div className="min-[450px]:w-full p-5">
                                         <p className="text-xl min-[450px]:text-2xl line-clamp-2">{books.title}</p>
