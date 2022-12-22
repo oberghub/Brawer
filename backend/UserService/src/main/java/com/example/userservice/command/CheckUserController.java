@@ -59,7 +59,5 @@ public class CheckUserController {
             return model2;
         }
 
-
-
     }
 }

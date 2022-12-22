@@ -49,7 +49,8 @@ public class PaymentAggregate {
 
     @CommandHandler
     public void PaymentAggregate(UpdatePaymentCommand command){
-        boolean blankDataCheck = command.get_id().isBlank() || command.getUserId().isBlank() || (command.getReserveId().isBlank() && command.getBorrowId().isBlank()) ||
+        boolean blankDataCheck = command.get_id().isBlank() || command.getUserId().isBlank() ||
+                (command.getReserveId().isBlank() && command.getBorrowId().isBlank()) ||
                 command.getTimestamp().isBlank() || command.getStatus().isBlank() || command.getPrice() == 0;
         if(blankDataCheck){
             throw new IllegalArgumentException("Data cannot be blank");

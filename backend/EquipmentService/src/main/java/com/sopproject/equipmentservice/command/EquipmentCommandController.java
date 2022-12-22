@@ -79,13 +79,6 @@ public class EquipmentCommandController {
         boolean isDone = false;
         for (String id : ids) {
             int decrease = Collections.frequency(model.getEquipmentsId(), id);
-//            EquipmentRestModel equipmentRestModel = WebClient.create()
-//                    .get()
-//                    .uri("http://localhost:8082/equipment-service/equipment/" + id)
-//                    .retrieve()
-//                    .bodyToMono(EquipmentRestModel.class)
-//                    .block();
-
             QtyDecreaseCommand command = QtyDecreaseCommand.builder()
                     ._id(id)
                     .quantity(decrease)
@@ -109,13 +102,6 @@ public class EquipmentCommandController {
         boolean isDone = false;
         for (String id : ids) {
             int increase = Collections.frequency(model.getEquipmentsId(), id);
-//            EquipmentRestModel equipmentRestModel = WebClient.create()
-//                    .get()
-//                    .uri("http://localhost:8082/equipment-service/equipment/" + id)
-//                    .retrieve()
-//                    .bodyToMono(EquipmentRestModel.class)
-//                    .block();
-
             QtyIncreaseCommand command = QtyIncreaseCommand.builder()
                     ._id(id)
                     .quantity(increase)

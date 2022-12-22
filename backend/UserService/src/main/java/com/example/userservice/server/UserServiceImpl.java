@@ -18,14 +18,10 @@ import java.util.ArrayList;
 
 public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
-
-
     @Override
     public void getUserByEmail(GetUserByEmailRequest request, StreamObserver<User> responseObserver){
         String email = request.getEmail();
         System.out.println(email);
-//        UserEntity storedUser = userRepository.findByEmail(email);
-//        System.out.println(storedUser);
         UserRestModel model = WebClient.create()
                 .get()
                 .uri("http://localhost:8082/user-service/users/" + email)
