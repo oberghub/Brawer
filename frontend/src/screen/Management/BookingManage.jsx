@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { GiHamburgerMenu } from 'react-icons/gi';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import axios from 'axios'
+import { useSelector } from 'react-redux';
 const BookingManage = () => {
+  const user = useSelector((state) => state.user_data.user)
   const [myRoomHistory, setMyRoomHistory] = useState([
     {
       bookingId: 'booking001',
@@ -21,7 +24,7 @@ const BookingManage = () => {
         { itemName: "Projector", price: 250, quantity: 1 },
       ],
       bookingBy: "sheepSheepy",
-      status: "CANCELED",
+      status: "CANCELLED",
     },
     {
       bookingId: 'booking002',
@@ -37,7 +40,7 @@ const BookingManage = () => {
         { itemName: "Projector", price: 250, quantity: 1 },
       ],
       bookingBy: "zibirian",
-      status: "RESERVED"
+      status: "APPROVED"
     },
     {
       bookingId: 'booking003',
@@ -114,10 +117,99 @@ const BookingManage = () => {
     setConfirmText(event.target.value);
   };
   const changeStatus = () => {
-    //กด PENDING สถานะจะเปลี่ยนเป็น RESERVED (จองแล้ว) เปลี่ยนสถานะpaymentที่ยกเลิกเป็น REFUND
+    //กด PENDING สถานะจะเปลี่ยนเป็น APPROVED (จองแล้ว) เปลี่ยนสถานะpaymentที่ยกเลิกเป็น REFUND
     //กด CANCEL สถานะจะเปลี่ยนเป็น CANCEL //ลบรอบเวลาที่ยกเลิกออกจาก database
+    console.log(confirmState)
+    if(confirmState == "Confirm"){
+      let updateReserve = {
+        _id:selectedDetail.bookingId,
+        userId:selectedDetail.bookingBy,
+        roomId:selectedDetail.roomId,
+        equipmentsId:selectedDetail.equipments.map(e=>e._id),
+        reserveFrom:selectedDetail.timeRent.date+" "+selectedDetail.timeRent.timeStart,
+        reserveTo:selectedDetail.timeRent.date+" "+selectedDetail.timeRent.timeEnd,
+        timestamp:selectedDetail.timestamp,
+        status:"APPROVED",
+      }
+      console.log(updateReserve)
+      axios.put("http://localhost:8082/reserve-service/reserve", JSON.stringify(updateReserve), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => {
+        console.log(res.status + " " + res.statusText + " "+res.data)
+        if(res.status == 200){
+          console.log(myRoomHistory)
+          selectedDetail.status = "APPROVED"
+          setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!=selectedDetail.bookingId), selectedDetail])
+        }
+      })
+    }else if(confirmState == "Cancel"){
+      let updateReserve = {
+        _id:selectedDetail.bookingId,
+        userId:selectedDetail.bookingBy,
+        roomId:selectedDetail.roomId,
+        equipmentsId:selectedDetail.equipments.map(e=>e._id),
+        reserveFrom:selectedDetail.timeRent.date+" "+selectedDetail.timeRent.timeStart,
+        reserveTo:selectedDetail.timeRent.date+" "+selectedDetail.timeRent.timeEnd,
+        timestamp:selectedDetail.timestamp,
+        status:"CANCELLED",
+      }
+      console.log(updateReserve)
+      axios.put("http://localhost:8082/reserve-service/reserve", JSON.stringify(updateReserve), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => {
+        console.log(res.status + " " + res.statusText + " "+res.data)
+        if(res.status == 200){
+          selectedDetail.status = "CANCELLED"
+          setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!=selectedDetail.bookingId), selectedDetail])
+
+        }
+      })
+    }
     setConfirmModal(false)
   }
+  const [selectedDetail,setSelectDetail] = useState()
+  useEffect( ()=>{
+    (async()=>{
+        let bookingList = []
+        await axios.get("http://localhost:8082/reserve-service/reserve/all", {
+        }).then(async (res) => {
+            if(res.status == 200){
+                for(let i=0;i<res.data.length;i++){
+                    let equiments = []
+                    let room = {}
+                    
+                    let requestEqui = res.data[i].equipmentsId
+                    equiments =  await (await axios.post("http://localhost:8082/equipment-service/equipment/ids",requestEqui, {})).data
+                    room = await (await axios.get("http://localhost:8082/workspace-service/workspace/"+res.data[i].roomId, {})).data
+                    let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
+                    let booking = {
+                        bookingId: res.data[i]._id,
+                        roomId: res.data[i].roomId,
+                        roomName: room.room_name,
+                        roomType: room.room_type,
+                        roomCapacity: room.room_capacity,
+                        timeRent: { date: res.data[i].reserveFrom.substring(0,10), timeStart: res.data[i].reserveFrom.substring(11,19), timeEnd: res.data[i].reserveTo.substring(11,19) },
+                        equipments: equiments,
+                        bookingBy: res.data[i].userId,
+                        status: res.data[i].status,
+                        total:equiments.length !== 0 ? equiments.map(item => item.price * 1).reduce((a, b) => a+b) + sum : sum,
+                        pricePerHour:room.price,
+                        sumPrice:sum,
+                        timestamp:res.data[i].timestamp
+                    }
+                    bookingList.push(booking)
+                }
+                
+            }
+        }).catch((e) => console.log(e))
+
+        setMyRoomHistory(bookingList)
+    })()  
+},[user])
   return (
     <div>
       {confirmModal ?
@@ -183,41 +275,41 @@ const BookingManage = () => {
                   <div className='indent-5'>
                     <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Workstation :</p>
-                      <p className='absolute right-[3%]'>Room {roomName}</p>
+                      <p className='absolute right-[3%]'>Room {selectedDetail.roomName}</p>
                     </div>
                     <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Capacity :</p>
-                      <p className='absolute right-[3%]'>{roomCapacity} Person</p>
+                      <p className='absolute right-[3%]'>{selectedDetail.roomCapacity.length > 1?`${selectedDetail.roomCapacity[0]}-${selectedDetail.roomCapacity[1]}`:selectedDetail.roomCapacity[0]} Person</p>
                     </div>
                     <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Room Price :</p>
-                      <p className='absolute right-[3%]'>{pricePerHour} THB</p>
+                      <p className='absolute right-[3%]'>{selectedDetail.pricePerHour} THB</p>
                     </div>
                     <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Date :</p>
-                      <p className='absolute right-[3%]'>{date}</p>
+                      <p className='absolute right-[3%]'>{selectedDetail.timeRent.date}</p>
                     </div>
                     <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Time :</p>
-                      <p className='absolute right-[3%]'>{timeStart} - {timeEnd}</p>
+                      <p className='absolute right-[3%]'>{selectedDetail.timeRent.timeStart} - {selectedDetail.timeRent.timeEnd}</p>
                     </div>
                     <div className='w-full text-xl sm:text-2xl flex relative'>
                       <p className='Gentium-B-font'>Period :</p>
-                      <p className='absolute right-[3%]'>{parseInt(timeEnd) - parseInt(timeStart)} HRS</p>
+                      <p className='absolute right-[3%]'>{parseInt(selectedDetail.timeRent.timeEnd) - parseInt(selectedDetail.timeRent.timeStart)} HRS</p>
                     </div>
                   </div>
                   <p className='text-xl sm:text-2xl Gentium-B-font my-[0.5em]'>Additional Equipments</p>
-                  {equipments.length == 0 ?
+                  {selectedDetail.equipments.length == 0 ?
                     <div className='indent-5'>
                       <p className='text-xl'>None</p>
                     </div>
                     :
                     <>
-                      {equipments.map(item => <>
+                      {selectedDetail.equipments.map(item => <>
                         <div className='indent-5'>
                           <div className='w-full text-lg sm:text-xl flex relative'>
-                            <p className='Gentium-B-font'>- {item.itemName}</p>
-                            <p className='absolute right-[3%]'>x{item.quantity} : {item.price * item.quantity} THB</p>
+                            <p className='Gentium-B-font'>- {item.name}</p>
+                            <p className='absolute right-[3%]'>x1 : {item.price * 1} THB</p>
                           </div>
                         </div>
                       </>)}
@@ -225,11 +317,11 @@ const BookingManage = () => {
                   }
                   <div className='w-full mt-[1em] flex p-5 text-xl sm:text-2xl border-t-[1px] border-gray-300 relative'>
                     <p className='Gentium-B-font'>Total</p>
-                    <p className='absolute right-[3%]'>{equipments.length !== 0 ? equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b) + sumPrice : sumPrice} THB</p>
+                    <p className='absolute right-[3%]'>{selectedDetail.equipments.length !== 0 ? selectedDetail.equipments.map(item => item.price * 1).reduce((a, b) => a+b) + selectedDetail.sumPrice : selectedDetail.sumPrice} THB</p>
                   </div>
                 </div>
                 {/* update status button */}
-                {status != 'RESERVED' && status != 'CANCELED' && status != 'TIMEOUT' ?
+                {selectedDetail.status != 'APPROVEd' && selectedDetail.status != 'CANCELLEd' && selectedDetail.status != 'TIMEOUT' ?
                   <>
                     <div className="flex gap-5 mt-5">
                       {/* confirm button */}
@@ -280,12 +372,14 @@ const BookingManage = () => {
               <tr className='h-[2.5em]' style={{ backgroundColor: index % 2 == 0 ? "#2F5D62" : "white", color: index % 2 == 0 ? 'white' : 'black' }}>
                 <td>{item.bookingId}</td>
                 <td>{item.bookingBy}</td>
-                <td className='Gentium-B-font' style={{color : item.status === 'CANCELED' ? 'red' : index % 2 == 0 ? 'white' : 'black'}}>{item.status}</td>
+                <td className='Gentium-B-font' style={{color : item.status === 'CANCELLED' ? 'red' : index % 2 == 0 ? 'white' : 'black'}}>{item.status}</td>
                 <td className='Gentium-R-font'>
                   <div className='flex items-center justify-center'>
                     <AiOutlineSearch size={30} className="cursor-pointer" onClick={() => {
                       setIsActiveModal(true)
-                      seeADetail(item)
+                      // seeADetail(item)
+                      console.log(item)
+                      setSelectDetail(item)
                     }} />
                   </div>
                 </td>
