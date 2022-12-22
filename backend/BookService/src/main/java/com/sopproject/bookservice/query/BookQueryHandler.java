@@ -4,6 +4,7 @@ import com.sopproject.bookservice.core.BookEntity;
 import com.sopproject.bookservice.core.data.BookRepository;
 import com.sopproject.bookservice.query.rest.BookRestModel;
 import com.sopproject.bookservice.query.rest.FindBookByIdQuery;
+import com.sopproject.bookservice.query.rest.FindBooksByIdsQuery;
 import com.sopproject.bookservice.query.rest.FindBooksQuery;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
@@ -38,5 +39,17 @@ public class BookQueryHandler {
         BeanUtils.copyProperties(storedBook, bookRestModel);
 
         return bookRestModel;
+    }
+
+    @QueryHandler
+    List<BookRestModel> findBooksByIds(FindBooksByIdsQuery query){
+        List<BookRestModel> bookRestModels = new ArrayList<>();
+        for(int i = 0; i < query.getIdList().size(); i++){
+            BookRestModel bookRestModel = new BookRestModel();
+            BookEntity storedBook = bookRepository.findByBookId(query.getIdList().get(i));
+            BeanUtils.copyProperties(storedBook, bookRestModel);
+            bookRestModels.add(bookRestModel);
+        }
+        return bookRestModels;
     }
 }

@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { BsBookmark } from 'react-icons/bs'
+import { BsBookmark , BsFillBookmarkFill} from 'react-icons/bs'
 import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
+import { userdata } from "../../userSlice";
 export const Book = () => {
     const navigate = useNavigate()
+    const user = useSelector((state) => state.user_data.user)
+    const dispatch = useDispatch()
+
     // //เก็บ type ของหนังสือแบบ Distinct
     // const [filterTypeData, setFilterTypeData] = useState([])
     // const [filterLangData, setFilterLangData] = useState([])
@@ -65,6 +70,46 @@ export const Book = () => {
     //Get Data When First Time Render
     const [showBooks, setShowBooks] = useState([]) //เอาไว้ show ข้อมูลในหน้าเว็บ
     const [isLoaded, setIsLoaded] = useState(false)
+    const addBookmark = (bookid) =>{
+
+        let newfavs = [...user.favouriteBooks,bookid]
+        let updateUser = {
+            _id:user._id,
+            role:user.role,
+            name:user.name,
+            email:user.email,
+            favouriteBooks:newfavs
+        }
+        console.log(user, updateUser)
+        axios.put("http://localhost:8082/user-service/user", JSON.stringify(updateUser), {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        }).then((res) => {console.log(res.status + " " + res.statusText)})
+        dispatch(userdata({...user,favouriteBooks:newfavs}))
+    }
+    const removeBookmark = (bookid) =>{
+        let newfavs = [...user.favouriteBooks]
+        let index = newfavs.indexOf(bookid)
+        if(index > -1){
+            newfavs.splice(index, 1)
+        }
+        let updateUser = {
+            _id:user._id,
+            role:user.role,
+            name:user.name,
+            email:user.email,
+            favouriteBooks:newfavs
+        }
+        console.log(user, updateUser)
+        axios.put("http://localhost:8082/user-service/user", JSON.stringify(updateUser), {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        }).then((res) => {console.log(res.status + " " + res.statusText)})
+        dispatch(userdata({...user,favouriteBooks:newfavs}))
+        
+    }
     useEffect(() => {
         axios.get("http://localhost:8082/book-service/book/all", {
         }).then((res) => {
@@ -112,7 +157,11 @@ export const Book = () => {
                                         <div className="w-full
                                                 h-auto
                                                 mt-5 pl-2 relative">
-                                            <BsBookmark size={25} className="cursor-pointer" onClick={() => { console.log("added to bookmark") }} />
+                                            {user.favouriteBooks? 
+                                            user.favouriteBooks.filter((e)=>e==book._id)[0]? 
+                                            <BsFillBookmarkFill size={25} color={"gold"} className="cursor-pointer" onClick={() => { removeBookmark(book._id) }} />: 
+                                            <BsBookmark size={25} className="cursor-pointer" onClick={() => { addBookmark(book._id) }} />
+                                            :""}
                                         </div>
                                     </div>)}
                             </div>

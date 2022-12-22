@@ -3,11 +3,9 @@ package com.sopproject.bookservice.query.rest;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,5 +31,14 @@ public class BookQueryController {
                 .query(findBookByIdQuery, ResponseTypes.instanceOf(BookRestModel.class)).join();
 
         return book;
+    }
+
+    @PostMapping("/ids")
+    public List<BookRestModel> findBooksByIdsQuery(@RequestBody List<String> idList){
+        FindBooksByIdsQuery findBooksByIdsQuery = new FindBooksByIdsQuery();
+        findBooksByIdsQuery.setIdList(idList);
+        List<BookRestModel> books = queryGateway
+                .query(findBooksByIdsQuery, ResponseTypes.multipleInstancesOf(BookRestModel.class)).join();
+        return books;
     }
 }

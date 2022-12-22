@@ -1,10 +1,15 @@
 import React, {useState} from "react";
 import { useLocation } from "react-router-dom";
-import { BsBookmark } from 'react-icons/bs'
+import { BsBookmark, BsFillBookmarkFill } from 'react-icons/bs'
 import { useEffect } from "react";
 import secureLocalStorage from "react-secure-storage";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { userdata } from "../../userSlice";
 export const BookInfo = () => {
     const location = useLocation()
+    const user = useSelector((state) => state.user_data.user)
+    const dispatch = useDispatch()
     const [addState, setAddState] = useState("Add to Cart")
     const addToCart = (item) => {
         //เช็คว่ายังไม่ได้สร้าง Localstorage 'books' ใช่มั้ย ถ้าไม่มีมัน return เป็น null ใส่ ! หน้า null จะ = true ก็คือ เข้าไปทำใน if
@@ -39,6 +44,45 @@ export const BookInfo = () => {
         setTimeout(() => {
             setAddState("Add to Cart")
         }, 2000)
+    }
+    const addBookmark = (bookid) =>{
+        let newfavs = [...user.favouriteBooks,bookid]
+        let updateUser = {
+            _id:user._id,
+            role:user.role,
+            name:user.name,
+            email:user.email,
+            favouriteBooks:newfavs
+        }
+        console.log(user, updateUser)
+        axios.put("http://localhost:8082/user-service/user", JSON.stringify(updateUser), {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        }).then((res) => {console.log(res.status + " " + res.statusText)})
+        dispatch(userdata({...user,favouriteBooks:newfavs}))
+    }
+    const removeBookmark = (bookid) =>{
+        let newfavs = [...user.favouriteBooks]
+        let index = newfavs.indexOf(bookid)
+        if(index > -1){
+            newfavs.splice(index, 1)
+        }
+        let updateUser = {
+            _id:user._id,
+            role:user.role,
+            name:user.name,
+            email:user.email,
+            favouriteBooks:newfavs
+        }
+        console.log(user, updateUser)
+        axios.put("http://localhost:8082/user-service/user", JSON.stringify(updateUser), {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        }).then((res) => {console.log(res.status + " " + res.statusText)})
+        dispatch(userdata({...user,favouriteBooks:newfavs}))
+        
     }
     return (
         <>
@@ -86,7 +130,11 @@ export const BookInfo = () => {
                             </div>
                             {/* Bookmark icon */}
                             <div className="md:w-[20%] md:h-[50px] flex items-center">
-                                <BsBookmark size={25} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => {console.log(location.state.item.img)}} />
+                                {user.favouriteBooks? 
+                                user.favouriteBooks.filter((e)=>e==location.state.item._id)[0]? 
+                                <BsFillBookmarkFill size={25} color={"gold"} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => { removeBookmark(location.state.item._id) }} />: 
+                                <BsBookmark size={25} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => { addBookmark(location.state.item._id) }} />
+                                 :""} 
                             </div>
                         </div>
                         {/* Description */}
