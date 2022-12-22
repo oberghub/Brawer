@@ -116,6 +116,18 @@ const BookingManage = () => {
   const handleChange = (event) => {
     setConfirmText(event.target.value);
   };
+  const nodupe = (arr = [])=>{
+    return arr.reduce((acc,item)=>{
+      let index = acc.map(item => item._id).indexOf(item._id)
+      if(index != -1){
+        acc[index].qty++
+      }else{
+        acc.push({...item,qty:1})
+      }
+      return acc
+    },[])
+    
+  }
   const changeStatus = () => {
     //กด PENDING สถานะจะเปลี่ยนเป็น APPROVED (จองแล้ว) เปลี่ยนสถานะpaymentที่ยกเลิกเป็น REFUND
     //กด CANCEL สถานะจะเปลี่ยนเป็น CANCEL //ลบรอบเวลาที่ยกเลิกออกจาก database
@@ -299,17 +311,17 @@ const BookingManage = () => {
                     </div>
                   </div>
                   <p className='text-xl sm:text-2xl Gentium-B-font my-[0.5em]'>Additional Equipments</p>
-                  {selectedDetail.equipments.length == 0 ?
+                  {nodupe(selectedDetail.equipments).length == 0 ?
                     <div className='indent-5'>
                       <p className='text-xl'>None</p>
                     </div>
                     :
                     <>
-                      {selectedDetail.equipments.map(item => <>
+                      {nodupe(selectedDetail.equipments).map(item => <>
                         <div className='indent-5'>
                           <div className='w-full text-lg sm:text-xl flex relative'>
                             <p className='Gentium-B-font'>- {item.name}</p>
-                            <p className='absolute right-[3%]'>x1 : {item.price * 1} THB</p>
+                            <p className='absolute right-[3%]'>x{item.qty} : {item.price * item.qty} THB</p>
                           </div>
                         </div>
                       </>)}
@@ -317,7 +329,7 @@ const BookingManage = () => {
                   }
                   <div className='w-full mt-[1em] flex p-5 text-xl sm:text-2xl border-t-[1px] border-gray-300 relative'>
                     <p className='Gentium-B-font'>Total</p>
-                    <p className='absolute right-[3%]'>{selectedDetail.equipments.length !== 0 ? selectedDetail.equipments.map(item => item.price * 1).reduce((a, b) => a+b) + selectedDetail.sumPrice : selectedDetail.sumPrice} THB</p>
+                    <p className='absolute right-[3%]'>{nodupe(selectedDetail.equipments).length !== 0 ? nodupe(selectedDetail.equipments).map(item => item.price * item.qty).reduce((a, b) => a+b) + selectedDetail.sumPrice : selectedDetail.sumPrice} THB</p>
                   </div>
                 </div>
                 {/* update status button */}

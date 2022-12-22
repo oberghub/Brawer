@@ -57,6 +57,18 @@ const BookingHistory = () => {
             setSelectDetail(index)
         }
     }
+    const nodupe = (arr = [])=>{
+        return arr.reduce((acc,item)=>{
+          let index = acc.map(item => item._id).indexOf(item._id)
+          if(index != -1){
+            acc[index].qty++
+          }else{
+            acc.push({...item,qty:1})
+          }
+          return acc
+        },[])
+        
+    }
     useEffect( ()=>{
         (async()=>{
             let bookingList = []
@@ -68,7 +80,7 @@ const BookingHistory = () => {
                         let room = {}
                         
                         let requestEqui = res.data[i].equipmentsId
-                        equiments =  await (await axios.post("http://localhost:8082/equipment-service/equipment/ids/"+requestEqui.join(","), {})).data
+                        equiments =  await (await axios.get("http://localhost:8082/equipment-service/equipment/ids/"+requestEqui.join(","), {})).data
                         room = await (await axios.get("http://localhost:8082/workspace-service/workspace/"+res.data[i].roomId, {})).data
                         let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
                         let booking = {
@@ -81,7 +93,7 @@ const BookingHistory = () => {
                             additionalItem: equiments,
                             bookingBy: res.data[i].userId,
                             status: res.data[i].status,
-                            total:equiments.length !== 0 ? equiments.map(item => item.price * 1).reduce((a, b) => a+b) + sum : sum
+                            total:nodupe(equiments).length !== 0 ? nodupe(equiments).map(item => item.price * item.qty).reduce((a, b) => a+b) + sum : sum
                         }
                         bookingList.push(booking)
                     }
@@ -133,17 +145,17 @@ const BookingHistory = () => {
                                             </div>
                                         </div>
                                         <p className='text-xl sm:text-2xl Gentium-B-font my-[0.5em]'>Additional Equipments</p>
-                                        {item.additionalItem.length == 0 ?
+                                        {nodupe(item.additionalItem).length == 0 ?
                                             <div className='indent-5'>
                                                 <p className='text-xl'>None</p>
                                             </div>
                                             :
                                             <>
-                                                {item.additionalItem.map(item => <>
+                                                {nodupe(item.additionalItem).map(item => <>
                                                     <div className='indent-5'>
                                                         <div className='w-full text-lg sm:text-xl flex relative'>
                                                             <p className='Gentium-B-font'>- {item.name}</p>
-                                                            <p className='absolute right-[3%]'>x1 : {item.price * 1} THB</p>
+                                                            <p className='absolute right-[3%]'>x{item.qty} : {item.price * item.qty} THB</p>
                                                         </div>
                                                     </div>
                                                 </>)}
@@ -151,7 +163,7 @@ const BookingHistory = () => {
                                         }
                                         <div className='w-full mt-[1em] flex p-5 text-xl sm:text-2xl border-t-[1px] border-gray-300 relative'>
                                             <p className='Gentium-B-font'>Total</p>
-                                            <p className='absolute right-[3%]'>1550 THB</p>
+                                            <p className='absolute right-[3%]'>{item.total} THB</p>
                                         </div>
                                     </div>
                                 </div>

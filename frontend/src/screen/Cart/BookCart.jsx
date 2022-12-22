@@ -40,7 +40,9 @@ export const BookCart = () => {
             let bdate = new Date()
             let ddate = new Date()
             arr.forEach(element => {
-                booksId.push(element._id)
+                for(let i=0;i<element.quantity;i++){
+                    booksId.push(element._id)
+                }
             });
             ddate.setDate(bdate.getDate()+7)
             let borrowBooks = {

@@ -195,6 +195,18 @@ const BorrowManage = () => {
     setBorrower(data.userId)
     setStatus(data.status)
   }
+  const nodupe = (arr = [])=>{
+    return arr.reduce((acc,item)=>{
+      let index = acc.map(item => item._id).indexOf(item._id)
+      if(index != -1){
+        acc[index].qty++
+      }else{
+        acc.push({...item,qty:1})
+      }
+      return acc
+    },[])
+    
+  }
   useEffect(()=>{
     (async ()=>{
         let borrowList = []
@@ -214,9 +226,7 @@ const BorrowManage = () => {
                         books:books
                     }
                     borrowList.push(borrow)
-                }
-                
-                
+                }    
             }
         }).catch((e) => console.log(e))
         console.log(borrowList)
@@ -299,7 +309,7 @@ const BorrowManage = () => {
                         </div>
                       </div>
                       <div className="hidden lg:block lg:absolute right-0">
-                        <p>Total : {books.map(item => item.quantity).reduce((a, b) => a + b)} ea</p>
+                        <p>Total : {nodupe(books).map(item => item.qty).reduce((a, b) => a + b)} ea</p>
                       </div>
                     </div>
                     <div className="w-full lg:flex relative mb-10">
@@ -312,7 +322,7 @@ const BorrowManage = () => {
                         </div>
                       </div>
                       <div className="lg:hidden">
-                        <p>Total : {books.map(item => item.quantity).reduce((a, b) => a + b)} ea</p>
+                        <p>Total : {nodupe(books).map(item => item.qty).reduce((a, b) => a + b)} ea</p>
                       </div>
                       {late ?
                         <>
@@ -325,7 +335,7 @@ const BorrowManage = () => {
                       }
                     </div>
                   </div>
-                  {books.map((books, index) =>
+                  {nodupe(books).map((books, index) =>
                     <>
                       <div className="w-full sm:h-auto bg-white drop-shadow min-[450px]:flex mt-3 p-0">
                         <div className="w-auto">
@@ -333,7 +343,7 @@ const BorrowManage = () => {
                         </div>
                         <div className="min-[450px]:w-full p-5">
                           <p className="text-xl min-[450px]:text-2xl line-clamp-2">{books.title}</p>
-                          <b className="text-lg min-[450px]:text-xl">x{books.quantity}</b>
+                          <b className="text-lg min-[450px]:text-xl">x{books.qty}</b>
                         </div>
                       </div>
                     </>

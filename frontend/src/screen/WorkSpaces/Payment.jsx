@@ -50,7 +50,9 @@ const Payment = () => {
     //add reserve with pending
     let arr = []
     resultRoom.equipments.forEach((e)=>{
-      arr.push(e._id)
+      for(let i = 0;i<e.quantity;i++){
+        arr.push(e._id)
+      }
     })
     let ts = new Date().toISOString()
     let addReserve = {

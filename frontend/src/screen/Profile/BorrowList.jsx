@@ -63,7 +63,7 @@ export const BorrowList = () => {
             const returnDate = new Date(nowdate);
             const difference = returnDate - dueDate;
             const daysLate = Math.ceil(difference / (1000 * 60 * 60 * 24));
-            setPrice(daysLate * 15 * borrowToPay.books.map(item => item.quantity).reduce((a, b) => a + b))
+            setPrice(daysLate * 15 * nodupe(borrowToPay.books).map(item => item.qty).reduce((a, b) => a + b))
             setLateDays(daysLate)
             setCurrentDate(nowdate)
         }
@@ -91,6 +91,18 @@ export const BorrowList = () => {
           }
         }).then((res) => console.log(res.status + " " + res.statusText + " "+res.data))
     }
+    const nodupe = (arr = [])=>{
+        return arr.reduce((acc,item)=>{
+          let index = acc.map(item => item._id).indexOf(item._id)
+          if(index != -1){
+            acc[index].qty++
+          }else{
+            acc.push({...item,qty:1})
+          }
+          return acc
+        },[])
+        
+      }
     useEffect(()=>{
         (async ()=>{
             let borrowList = []
@@ -247,7 +259,7 @@ export const BorrowList = () => {
                                     </div>
                                 </div>
                                 <div className="hidden lg:block lg:absolute right-0">
-                                    <p>Total : {item.books.map(item => item.quantity).reduce((a, b) => a + b)} ea</p>
+                                    <p>Total : {nodupe(item.books).map(item => item.qty).reduce((a, b) => a + b)} ea</p>
                                 </div>
                             </div>
                             <div className="w-full lg:flex relative mb-10">
@@ -260,7 +272,7 @@ export const BorrowList = () => {
                                     </div>
                                 </div>
                                 <div className="lg:hidden">
-                                    <p>Total : {item.books.map(item => item.quantity).reduce((a, b) => a + b)} ea</p>
+                                    <p>Total : {nodupe(item.books).map(item => item.qty).reduce((a, b) => a + b)} ea</p>
                                 </div>
                                 {item.late ?
                                     <>
@@ -273,7 +285,7 @@ export const BorrowList = () => {
                                 }
                             </div>
                         </div>
-                        {item.books.map((books, index) =>
+                        {nodupe(item.books).map((books, index) =>
                             <>
                                 <div className="w-full sm:h-auto bg-white drop-shadow min-[450px]:flex mt-3 p-0">
                                     <div className="w-auto">
@@ -281,7 +293,7 @@ export const BorrowList = () => {
                                     </div>
                                     <div className="min-[450px]:w-full p-5">
                                         <p className="text-xl min-[450px]:text-2xl line-clamp-2">{books.title}</p>
-                                        <b className="text-lg min-[450px]:text-xl">x{books.quantity}</b>
+                                        <b className="text-lg min-[450px]:text-xl">x{books.qty}</b>
                                     </div>
                                 </div>
                             </>
