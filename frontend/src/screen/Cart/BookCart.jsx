@@ -58,6 +58,7 @@ export const BookCart = () => {
             }
             }).then((res) => {console.log(res.status + " " + res.statusText)})
 
+            // add เสร็จล้างค่า localStorage
             secureLocalStorage.removeItem("books")
             setBookData([])
         }
