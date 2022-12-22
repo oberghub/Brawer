@@ -1,7 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    user : null,
+    user : {
+        _id:"",
+        name:"",
+        email:"",
+        role:"",
+        favouriteBooks:[],
+        imageUrl:"https://icons.veryicon.com/png/o/internet--web/55-common-web-icons/person-4.png"
+    },
     userloaded : false
 }
 

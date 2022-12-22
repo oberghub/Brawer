@@ -62,7 +62,7 @@ export const MainProfile = () => {
                     {/* <div className="absolute w-[100px] h-[100px] bg-black rounded-full opacity-50 flex justify-center items-center">
                         <p className="text-white opacity-100">Change?</p>
                     </div> */}
-                    <img src={user.imageUrl.toString()} className="w-[100px] h-[100px] bg-gray-200 rounded-full cursor-pointer" alt="profile-pic" />
+                    <img src={user.imageUrl === null ? "" : user.imageUrl} className="w-[100px] h-[100px] bg-gray-200 rounded-full cursor-pointer" alt="profile-pic" />
                 </div>
                 {/* User data */}
                 <div className="my-5 sm:my-0 sm:ml-5 slide-in-l">

@@ -51,6 +51,18 @@ function App() {
 
     return children;
   };
+  const AdminRoute = ({ user, children }) => {
+    if (!user() && store.getState().user_data.userloaded) {
+      return <Navigate to="/" replace />;
+    }
+    else if(user()){
+      if(store.getState().user_data.user.role !== "admin" ){
+        return <Navigate to="/" replace />;
+      }
+    }
+
+    return children;
+  };
   return (
     <Provider store={store}>
       <div className='Gentium-R-font relative '>
@@ -90,9 +102,9 @@ function App() {
             {/* <Route path='edit-profile' element={<EditProfile />} /> */}
           </Route>
           <Route path='management' element={
-            <ProtectedRoute user={userCheck} >
+            <AdminRoute user={userCheck} >
               <MainManage />
-            </ProtectedRoute>
+            </AdminRoute>
           }>
             <Route path='booking-manage' element={<BookingManage />} />
             <Route path='borrow-manage' element={<BorrowManage />} />

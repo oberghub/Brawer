@@ -6,9 +6,9 @@ function WorkSpaceDetail() {
   const navigate = useNavigate()
   const location = useLocation()
   const [imgData, setImgData] = useState([
-    "https://image.thepeople.co/uploads/2019/03/download-1-44.jpg",
-    "https://img.soccersuck.com/images/2020/07/30/FB_IMG_1596085181720.jpg",
-    "https://pbs.twimg.com/media/D1d3AiFVsAAUnAb.jpg"
+    "https://www.incimages.com/uploaded_files/image/1920x1080/getty_517610514_353435.jpg",
+    "https://d1tm14lrsghf7q.cloudfront.net/public/uploads/7NVgWmTWdDNFYHhIHGdhwMq7GvkGI4RypQn0LQbD.jpg",
+    "https://knowledge-leader.colliers.com/wp-content/uploads/2019/09/194588533-KL-1024x680-1024x680.jpg"
   ])
   let [count, setCount] = useState(0)
   const nextImg = () => {

@@ -16,32 +16,32 @@ function FindARoom() {
     const [time_end, setTimeEnd] = useState(null)
     const [isFiltered, setFiltered] = useState(false)
     const [allRooms, setRooms] = useState([
-        {
-            _id: 'wsw001',
-            room_name: "w01",
-            room_type: "Workstation",
-            room_capacity: "2 - 9",
-            price : 500,
-            time_rent: [
-                { date: "2022-12-10", time_start: "12:00", time_end: "14:00" },
-                { date: "2022-12-10", time_start: "14:00", time_end: "15:00" },
-                { date: "2022-12-10", time_start: "18:00", time_end: "19:00" },
-                { date: "2022-12-11", time_start: "14:00", time_end: "16:00" }
-            ],
-            desc:"room big big"
-        },
-        {
-            _id: 'wsw002',
-            room_name: "w02",
-            room_type: "Workstation",
-            room_capacity: "2 - 9",
-            price : 500,
-            time_rent: [
-                { date: "2022-12-10", time_start: "10:00", time_end: "15:00" },
-                { date: "2022-12-12", time_start: "11:00", time_end: "19:00" },
-            ],
-            desc:"big big room"
-        }
+        // {
+        //     _id: 'wsw001',
+        //     room_name: "w01",
+        //     room_type: "Workstation",
+        //     room_capacity: "2 - 9",
+        //     price : 500,
+        //     time_rent: [
+        //         { date: "2022-12-10", time_start: "12:00", time_end: "14:00" },
+        //         { date: "2022-12-10", time_start: "14:00", time_end: "15:00" },
+        //         { date: "2022-12-10", time_start: "18:00", time_end: "19:00" },
+        //         { date: "2022-12-11", time_start: "14:00", time_end: "16:00" }
+        //     ],
+        //     desc:"room big big"
+        // },
+        // {
+        //     _id: 'wsw002',
+        //     room_name: "w02",
+        //     room_type: "Workstation",
+        //     room_capacity: "2 - 9",
+        //     price : 500,
+        //     time_rent: [
+        //         { date: "2022-12-10", time_start: "10:00", time_end: "15:00" },
+        //         { date: "2022-12-12", time_start: "11:00", time_end: "19:00" },
+        //     ],
+        //     desc:"big big room"
+        // }
     ]
     )
     const [selectedRoomType, setSelectedRoomType] = useState(null)

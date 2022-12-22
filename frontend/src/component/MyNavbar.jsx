@@ -22,26 +22,27 @@ export const MyNavbar = () => {
         const profile = res.profileObj;
         setAcc(profile)
         console.log("success:", profile);
-        let userData = {name:profile.name, email:profile.email}
+        let userData = { name: profile.name, email: profile.email }
         console.log(userData)
         axios.post("http://localhost:8082/user-service/user/isexist", userData, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
         }).then((res) => {
             console.log(res.status + " " + res.statusText)
-            if(res.status == 200){
-                dispatch(userdata({...res.data,imageUrl : profile.imageUrl }))
-            }else{
+            if (res.status == 200) {
+                dispatch(userdata({ ...res.data, imageUrl: profile.imageUrl }))
+            } else {
                 dispatch(userdata({
-                    name : profile.name,
-                    email : profile.email,
-                    imageUrl : profile.imageUrl 
+                    name: profile.name,
+                    email: profile.email,
+                    imageUrl: profile.imageUrl
                 }))
             }
         })
 
-        
+
 
     };
     const onFailure = (err) => {
@@ -51,17 +52,18 @@ export const MyNavbar = () => {
         window.location.reload(false);
         setAcc(false)
         toggleslide()
+        localStorage.clear()
         //ทำเสร็จแล้ว reload page
-      };
+    };
     useEffect(() => {
         const initClient = () => {
-                gapi.client.init({
+            gapi.client.init({
                 clientId: CLIENT_ID,
                 scope: "https://www.googleapis.com/auth/userinfo.profile"
             });
-            };
-            gapi.load('client:auth2', initClient);
-            dispatch(setLoaded(true))
+        };
+        gapi.load('client:auth2', initClient);
+        dispatch(setLoaded(true))
     });
     //--- Google OAuth ---//
     // useEffect(() => {
@@ -85,7 +87,7 @@ export const MyNavbar = () => {
                                                   transition-all duration-300 ease-out translate-y-[-100%] invisible z-40">
                 {/* Top of menu */}
                 <div className="relative w-full h-[40px] border-b-[0.5px] border-gray-200 flex">
-                    <p className="text-2xl Gentium-B-font" onClick={() => {console.log(user)}}>Menu</p>
+                    <p className="text-2xl Gentium-B-font" onClick={() => { console.log(user) }}>Menu</p>
                     <div className="absolute right-0 cursor-pointer m-1" onClick={() => { toggleslide() }}>
                         <svg height="20px" viewBox="0 0 512 512" width="20px">
                             <path d="M443.6,387.1L312.4,255.4l131.5-130c5.4-5.4,5.4-14.2,0-19.6l-37.4-37.6c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4  L256,197.8L124.9,68.3c-2.6-2.6-6.1-4-9.8-4c-3.7,0-7.2,1.5-9.8,4L68,105.9c-5.4,5.4-5.4,14.2,0,19.6l131.5,130L68.4,387.1  c-2.6,2.6-4.1,6.1-4.1,9.8c0,3.7,1.4,7.2,4.1,9.8l37.4,37.6c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1L256,313.1l130.7,131.1  c2.7,2.7,6.2,4.1,9.8,4.1c3.5,0,7.1-1.3,9.8-4.1l37.4-37.6c2.6-2.6,4.1-6.1,4.1-9.8C447.7,393.2,446.2,389.7,443.6,387.1z" />
@@ -107,9 +109,11 @@ export const MyNavbar = () => {
                             <Link to={'all-spaces'} onClick={toggleslide}>
                                 <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpaces</p>
                             </Link>
-                            <Link to={'management'} onClick={toggleslide}>
-                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">Management</p>
-                            </Link>
+                            {user.role !== 'admin' ? null :
+                                <Link to={'management'} onClick={toggleslide}>
+                                    <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">Management</p>
+                                </Link>
+                            }
 
                         </div>
                         {/* Bottom of menu */}
@@ -161,16 +165,20 @@ export const MyNavbar = () => {
                             <Link to={'all-spaces'} onClick={toggleslide}>
                                 <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">WorkSpaces</p>
                             </Link>
-                            <Link to={'management'} onClick={toggleslide}>
-                                <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">Management</p>
-                            </Link>
+                            {user.role !== 'admin' ? null :
+                                <Link to={'management'} onClick={toggleslide}>
+                                    <p className="text-xl cursor-pointer Gentium-B-font mt-[0.5em]">Management</p>
+                                </Link>
+                            }
 
                         </div>
                         {/* Bottom of menu */}
                         <div className="w-full border-t-[0.5px] border-gray-200 mt-[1em] sm:mt-0 flex">
                             <div className="relative block lg:hidden">
-                                <img onClick={() => {navigate("/profile/favourite")
-                                                     toggleslide()}} src={acc.imageUrl.toString()} className="w-10 h-10 rounded-full mt-4 mr-3 cursor-pointer" alt='profile-pic' />
+                                <img onClick={() => {
+                                    navigate("/profile/favourite")
+                                    toggleslide()
+                                }} src={acc.imageUrl.toString()} className="w-10 h-10 rounded-full mt-4 mr-3 cursor-pointer" alt='profile-pic' />
                                 {bookInCart.length !== 0 ?
                                     <div className="w-5 h-5 rounded-full bg-red-500 flex justify-center items-center absolute right-0 bottom-[-5px]">
                                         <p className="text-lg text-white Gentium-B-font">{bookInCart.length}</p>
@@ -197,7 +205,7 @@ export const MyNavbar = () => {
                                 h-10 sm:h-16
                                 flex items-center bg-red relative'>
                         {/* Nav title */}
-                        <div onClick={() => {console.log(acc)}} className=' mr-8 lg:mr-10'>
+                        <div onClick={() => { console.log(acc) }} className=' mr-8 lg:mr-10'>
                             <Link to={"/"} className='Gentium-B-font text-3xl cursor-pointer'>BRAWER</Link>
                         </div>
                         {/* Nav Search Bar */}
@@ -211,7 +219,11 @@ export const MyNavbar = () => {
                         <div className='hidden lg:flex ml-[3em]'>
                             <Link to={"all-books"} className='text-2xl mr-10 cursor-pointer'>Books</Link>
                             <Link to={'all-spaces'} className='text-2xl mr-10 cursor-pointer'>WorkSpaces</Link>
-                            <Link to={'management'} className='text-2xl cursor-pointer'>Management</Link>
+                            {user.role !== 'admin' ? null :
+                                <Link to={'management'} onClick={() => {}}>
+                                    <p className="text-2xl cursor-pointer">Management</p>
+                                </Link>
+                            }
                         </div>
                         {/* Image Profile */}
                         <div className='absolute right-0 cursor-pointer hidden lg:flex'>
@@ -230,7 +242,7 @@ export const MyNavbar = () => {
                                 />
                                 :
                                 <div className="flex gap-5">
-                                    <p className="mt-2 text-lg Gentium-B-font" onClick={() => {navigate('/profile')}}>{acc.name}</p>
+                                    <p className="mt-2 text-lg Gentium-B-font" onClick={() => { navigate('/profile') }}>{acc.name}</p>
                                     <img onClick={() => { toggleslide() }} src={acc.imageUrl.toString()} className="w-10 h-10 rounded-full" alt='profile-pic' />
                                 </div>
                             }
