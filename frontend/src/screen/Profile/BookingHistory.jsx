@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+import { useSelector } from 'react-redux';
 const BookingHistory = () => {
     const [myRoomHistory, setMyRoomHistory] = useState([
         {
@@ -46,6 +47,7 @@ const BookingHistory = () => {
         }
     ]
     )
+    const user = useSelector((state) => state.user_data.user)
     const [selectDetail, setSelectDetail] = useState(null)
     const seeDetail = (index) => {
         if (selectDetail == index) {
@@ -55,6 +57,43 @@ const BookingHistory = () => {
             setSelectDetail(index)
         }
     }
+    useEffect( ()=>{
+        (async()=>{
+            let bookingList = []
+            await axios.get("http://localhost:8082/reserve-service/reserve/user/"+user._id, {
+            }).then(async (res) => {
+                if(res.status == 200){
+                    for(let i=0;i<res.data.length;i++){
+                        let equiments = []
+                        let room = {}
+                        
+                        let requestEqui = res.data[i].equipmentsId
+                        equiments =  await (await axios.post("http://localhost:8082/equipment-service/equipment/ids",requestEqui, {})).data
+                        room = await (await axios.get("http://localhost:8082/workspace-service/workspace/"+res.data[i].roomId, {})).data
+                        let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
+                        let booking = {
+                            bookingId: res.data[i]._id,
+                            roomId: res.data[i].roomId,
+                            roomName: room.room_name,
+                            roomType: room.room_type,
+                            roomCapacity: room.room_capacity,
+                            timeRent: { date: res.data[i].reserveFrom.substring(0,10), timeStart: res.data[i].reserveFrom.substring(11,19), timeEnd: res.data[i].reserveTo.substring(11,19) },
+                            additionalItem: equiments,
+                            bookingBy: res.data[i].userId,
+                            status: res.data[i].status,
+                            total:equiments.length !== 0 ? equiments.map(item => item.price * 1).reduce((a, b) => a+b) + sum : sum
+                        }
+                        bookingList.push(booking)
+                    }
+                    
+                }
+            }).catch((e) => console.log(e))
+
+            setMyRoomHistory(bookingList)
+        })()
+        
+       
+    },[user])
     return (
         <div>
             <p className='text-3xl Gentium-B-font mb-5'>Booking History</p>
@@ -64,7 +103,7 @@ const BookingHistory = () => {
                         <div key={item.bookingId} onClick={() => { seeDetail(index) }} className="w-full cursor-pointer bg-[#FAFAFA] p-3 sm:p-5 rounded drop-shadow-xl">
                             <div className='border-b-[1px] border-gray-300 flex relative'>
                                 <p className='text-2xl sm:text-3xl Gentium-B-font mb-3'>ID : {item.bookingId}</p>
-                                <p className='text-xl sm:text-2xl absolute Gentium-B-font right-0 mb-3' style={{ color: item.status == "Approved" ? "green" : item.status == "Cancel" ? "red" : "blue" }}>{item.status}</p>
+                                <p className='text-xl sm:text-2xl absolute Gentium-B-font right-0 mb-3' style={{ color: item.status == "APPROVED" ? "green" : item.status == "PENDING" ? "blue" : "red" }}>{item.status}</p>
                             </div>
                             {selectDetail == index ?
                                 <div>
@@ -78,7 +117,7 @@ const BookingHistory = () => {
                                             </div>
                                             <div className='w-full text-lg sm:text-xl flex relative'>
                                                 <p className='Gentium-B-font'>Capacity :</p>
-                                                <p className='absolute right-[3%]'>{item.roomCapacity} Person</p>
+                                                <p className='absolute right-[3%]'>{item.roomCapacity.length > 1?`${item.roomCapacity[0]}-${item.roomCapacity[1]}`:item.roomCapacity[0]} Person</p>
                                             </div>
                                             <div className='w-full text-lg sm:text-xl flex relative'>
                                                 <p className='Gentium-B-font'>Date :</p>
@@ -103,8 +142,8 @@ const BookingHistory = () => {
                                                 {item.additionalItem.map(item => <>
                                                     <div className='indent-5'>
                                                         <div className='w-full text-lg sm:text-xl flex relative'>
-                                                            <p className='Gentium-B-font'>- {item.itemName}</p>
-                                                            <p className='absolute right-[3%]'>x{item.quantity} : {item.price * item.quantity} THB</p>
+                                                            <p className='Gentium-B-font'>- {item.name}</p>
+                                                            <p className='absolute right-[3%]'>x1 : {item.price * 1} THB</p>
                                                         </div>
                                                     </div>
                                                 </>)}

@@ -2,6 +2,7 @@ package com.sopproject.reserveservice.query;
 
 import com.sopproject.reserveservice.core.ReserveEntity;
 import com.sopproject.reserveservice.core.data.ReserveRepository;
+import com.sopproject.reserveservice.query.rest.FindReserveByUserIdQuery;
 import com.sopproject.reserveservice.query.rest.FindReserveQuery;
 import com.sopproject.reserveservice.query.rest.ReserveRestModel;
 import org.axonframework.queryhandling.QueryHandler;
@@ -23,6 +24,18 @@ public class ReserveQueryHandler {
     List<ReserveRestModel> findReserves(FindReserveQuery query){
         List<ReserveRestModel> reserveRestModels = new ArrayList<>();
         List<ReserveEntity> storedReserves = reserveRepository.findAll();
+        for (ReserveEntity reserveEntity: storedReserves){
+            ReserveRestModel reserveRestModel = new ReserveRestModel();
+            BeanUtils.copyProperties(reserveEntity, reserveRestModel);
+            reserveRestModels.add(reserveRestModel);
+        }
+        return reserveRestModels;
+    }
+
+    @QueryHandler
+    List<ReserveRestModel> findReserveByUserId(FindReserveByUserIdQuery query){
+        List<ReserveRestModel> reserveRestModels = new ArrayList<>();
+        List<ReserveEntity> storedReserves = reserveRepository.findReserveByUserId(query.getUserId());
         for (ReserveEntity reserveEntity: storedReserves){
             ReserveRestModel reserveRestModel = new ReserveRestModel();
             BeanUtils.copyProperties(reserveEntity, reserveRestModel);

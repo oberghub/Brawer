@@ -4,6 +4,7 @@ import com.sopproject.equipmentservice.core.EquipmentEntity;
 import com.sopproject.equipmentservice.core.data.EquipmentRepository;
 import com.sopproject.equipmentservice.query.rest.EquipmentQuery;
 import com.sopproject.equipmentservice.query.rest.EquipmentRestModel;
+import com.sopproject.equipmentservice.query.rest.FindEquimentsByIdsQuery;
 import com.sopproject.equipmentservice.query.rest.FindEquipmentByIdQuery;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
@@ -39,5 +40,17 @@ public class EquipmentQueryHandler {
         BeanUtils.copyProperties(equipment, equipmentRestModel);
 
         return equipmentRestModel;
+    }
+
+    @QueryHandler
+    List<EquipmentRestModel> findEquipmentsByIds(FindEquimentsByIdsQuery query){
+        List<EquipmentRestModel> equipmentRestModels = new ArrayList<>();
+        for(int i = 0;i<query.getIdList().size();i++){
+            EquipmentRestModel equipmentRestModel = new EquipmentRestModel();
+            EquipmentEntity equipment = equipmentRepository.findEquipmentById(query.getIdList().get(i));
+            BeanUtils.copyProperties(equipment, equipmentRestModel);
+            equipmentRestModels.add(equipmentRestModel);
+        }
+        return equipmentRestModels;
     }
 }

@@ -3,10 +3,7 @@ package com.sopproject.equipmentservice.query.rest;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +30,14 @@ public class EquipmentQueryController {
                 .query(findEquipmentByIdQuery, ResponseTypes.instanceOf(EquipmentRestModel.class)).join();
 
         return equipment;
+    }
+
+    @PostMapping("/ids")
+    public List<EquipmentRestModel> findEquipmentsByIdsQuery(@RequestBody List<String> idList){
+        FindEquimentsByIdsQuery findEquimentsByIdsQuery = new FindEquimentsByIdsQuery();
+        findEquimentsByIdsQuery.setIdList(idList);
+        List<EquipmentRestModel> models = queryGateway
+                .query(findEquimentsByIdsQuery, ResponseTypes.multipleInstancesOf(EquipmentRestModel.class)).join();
+        return models;
     }
 }
