@@ -51,13 +51,46 @@ export const BorrowList = () => {
     const [selectPaymentMethod, setSelectPayment] = useState(null)
     const [confirmPaymentModal, setConfirmPaymentModal] = useState(false)
     const [confirmText, setConfirmText] = useState()
+
+    const [borrowToPay, setBorrowToPay] = useState(null)
+    const [currentDate, setCurrentDate] = useState("1978-12-01")
+    const [lateDays, setLateDays] = useState(0)
+    const [price, setPrice] = useState(0)
+    useEffect(()=>{
+        if(borrowToPay){
+            let nowdate = new Date().toISOString().substring(0,10)
+            const dueDate = new Date(borrowToPay.d_date);
+            const returnDate = new Date(nowdate);
+            const difference = returnDate - dueDate;
+            const daysLate = Math.ceil(difference / (1000 * 60 * 60 * 24));
+            setPrice(daysLate * 15 * borrowToPay.books.map(item => item.quantity).reduce((a, b) => a + b))
+            setLateDays(daysLate)
+            setCurrentDate(nowdate)
+        }
+        
+    },[borrowToPay])
     const handleChange = (event) => {
         setConfirmText(event.target.value);
       };
-      const confirmPayment = () => {
+    const confirmPayment = () => {
         setConfirmPaymentModal(false)
+        let ts = new Date().toISOString()
         // setConfirmModal(true)
-      }
+        let addPayment = {
+            userId:user._id,
+            reserveId:"",
+            status:"SUCCESS",
+            timestamp:ts.substring(0, 10)+" "+ts.substring(11, 19),
+            price:price,
+            borrowId:borrowToPay.borrowId
+        }
+        console.log(addPayment)
+        axios.post("http://localhost:8082/payment-service/payment", JSON.stringify(addPayment), {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then((res) => console.log(res.status + " " + res.statusText + " "+res.data))
+    }
     useEffect(()=>{
         (async ()=>{
             let borrowList = []
@@ -111,7 +144,7 @@ export const BorrowList = () => {
                                     <div onClick={() => { setConfirmPaymentModal(false) }} className='rounded bg-[#EEE] hover:bg-[#E1E1E1] flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
                                         <p className='text-2xl'>Cancel</p>
                                     </div>
-                                    {confirmText == "OkBaeTonk" ?
+                                    {confirmText == "Confirm" ?
                                         <div onClick={() => { confirmPayment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
                                             <p className='text-2xl'>Confirm</p>
                                         </div>
@@ -135,20 +168,20 @@ export const BorrowList = () => {
                                     </div>
                                     <div className="mt-3 relative flex">
                                         <p className="text-xl">Due Date</p>
-                                        <p className="text-xl absolute right-[5%]">2022-12-21</p>
+                                        <p className="text-xl absolute right-[5%]">{borrowToPay.d_date}</p>
                                     </div>
                                     <div className="relative flex">
                                         <p className="text-xl">Return Date :</p>
-                                        <p className="text-xl absolute right-[5%]">2022-12-26</p>
+                                        <p className="text-xl absolute right-[5%]">{currentDate}</p>
                                     </div>
                                     <div className="relative flex">
                                         <p className="text-xl">Total Late :</p>
-                                        <p className="text-xl absolute right-[5%]">5 Day</p>
+                                        <p className="text-xl absolute right-[5%]">{lateDays} Day</p>
                                     </div>
                                     <div className="relative flex text-2xl border-t-[1px] border-gray-300 my-5">
                                         <p className="Gentium-B-font mt-3">Total : </p>
                                         {/* เงื่อนไขการคิดเงินคือ ถ้าคืนช้า วันละ15บาทคูณกับจำนวนวันทั้งหมด และคูณอีกว่ายืมไปกี่เล่ม ถ้า2เล่มก็คูณ2 ex(สมมติชื่อตัวแปรเฉยๆ). (totalLate * 15 * bookCount) */}
-                                        <p className="absolute right-[5%] mt-3">150 THB</p>
+                                        <p className="absolute right-[5%] mt-3">{price} THB</p>
                                     </div>
                                 </div>
                                 <div className='bg-[#FAFAFA] drop-shadow-xl p-5'>
@@ -231,7 +264,7 @@ export const BorrowList = () => {
                                 </div>
                                 {item.late ?
                                     <>
-                                        <div className="lg:absolute right-0" onClick={() => { setPayAFineModal(true) }}>
+                                        <div className="lg:absolute right-0" onClick={() => { console.log(item);setBorrowToPay(item);setPayAFineModal(true) }}>
                                             <p>You are late! <u className="text-red-500 cursor-pointer ml-3">Pay a fine</u></p>
                                         </div>
                                     </>
