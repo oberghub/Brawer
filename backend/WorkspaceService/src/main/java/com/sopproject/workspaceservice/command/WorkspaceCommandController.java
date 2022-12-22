@@ -69,7 +69,7 @@ public class WorkspaceCommandController {
         System.out.println("onReserveWorkspace " + model.getRoomId());
         WorkspaceRestModel workspaceRestModel = WebClient.create()
                 .get()
-                .uri("http://localhost:8082/workspace-service/workspaces/" + model.getRoomId())
+                .uri("http://localhost:8082/workspace-service/workspace/" + model.getRoomId())
                 .retrieve()
                 .bodyToMono(WorkspaceRestModel.class)
                 .block();
@@ -99,7 +99,7 @@ public class WorkspaceCommandController {
         System.out.println("onCancelReserve " + model.getRoomId());
         WorkspaceRestModel workspaceRestModel = WebClient.create()
                 .get()
-                .uri("http://localhost:8082/workspace-service/workspaces/" + model.getRoomId())
+                .uri("http://localhost:8082/workspace-service/workspace/" + model.getRoomId())
                 .retrieve()
                 .bodyToMono(WorkspaceRestModel.class)
                 .block();

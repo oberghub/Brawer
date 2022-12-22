@@ -89,7 +89,7 @@ const WorkSpaceManage = () => {
   }
   const addWorkSpaces = () => {
     let addData = JSON.stringify({ room_name: roomName, room_type: roomType, room_capacity: roomCapacity.split(","), price : price, desc : desc, time_rent: [], status : "AVAILABLE" })
-    axios.post("http://localhost:8082/workspace-service/workspaces", addData, {
+    axios.post("http://localhost:8082/workspace-service/workspace", addData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -120,16 +120,16 @@ const WorkSpaceManage = () => {
     console.log(selectedWorkSpace)
     console.log(rooms)
     let updateData = JSON.stringify({ _id:selectedWorkSpace._id,room_name: e_roomName, room_type: e_roomType, room_capacity: e_roomCapacity.split(","), price : e_price, desc : e_desc, time_rent: [], status : selectedWorkSpace.status })
-    axios.put("http://localhost:8082/workspace-service/workspaces", updateData, {
+    axios.put("http://localhost:8082/workspace-service/workspace", updateData, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).then((res) => console.log(res.status + " " + res.statusText))
   }
   const deleteWorkSpace = () =>{
-    // let deleteData = "http://localhost:8082/workspace-service/workspaces/"+selectedWorkSpace._id
+    // let deleteData = "http://localhost:8082/workspace-service/workspace/"+selectedWorkSpace._id
     // console.log(deleteData)
-    axios.delete("http://localhost:8082/workspace-service/workspaces/"+selectedWorkSpace._id,{
+    axios.delete("http://localhost:8082/workspace-service/workspace/"+selectedWorkSpace._id,{
       headers: {
         'Content-Type': 'application/json'
       }
@@ -142,7 +142,7 @@ const WorkSpaceManage = () => {
 
   //Get Data When First Time Render
   useEffect(() => {
-    axios.get("http://localhost:8082/workspace-service/workspaces/all", {
+    axios.get("http://localhost:8082/workspace-service/workspace/all", {
     }).then((res) => {
       setRooms(res.data)
       setSelectedWorkSpace(res.data.length>0?res.data[0]:null)

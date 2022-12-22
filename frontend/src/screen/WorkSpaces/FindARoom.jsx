@@ -80,18 +80,17 @@ function FindARoom() {
             } else {
                 datebase = new Date(date).toISOString().slice(0, 10)
             }
-
+            
             let start = new Date(datebase + "T" + time_start)
             let end = new Date(datebase + "T" + time_end)
             const availableRooms = [];
             for (const room of roomsT) {
                 let occupied = false
                 for (const time of room.time_rent) {
-
+                    console.log(time)
                     let roombase = new Date(time.date).toISOString().slice(0, 10)
                     let roomstart = new Date(roombase + "T" + time.time_start)
                     let roomend = new Date(roombase + "T" + time.time_end)
-                    console.log(roomstart, roomend)
                     if (roombase == datebase) {
                         if ((start >= roomstart && start < roomend) || (end > roomstart && end <= roomend)) {
                             occupied = true
@@ -112,7 +111,7 @@ function FindARoom() {
             setFiltered(true)
             setSelectedRoom(allRooms[0])
         }
-        axios.get("http://localhost:8082/workspace-service/workspaces/all", {
+        axios.get("http://localhost:8082/workspace-service/workspace/all", {
         }).then((res) => {
           setRooms(res.data)
           let myrooms = res.data
@@ -155,7 +154,7 @@ function FindARoom() {
         }
     }, [])
     useEffect(() => {
-        axios.get("http://localhost:8082/workspace-service/workspaces/all", {
+        axios.get("http://localhost:8082/workspace-service/workspace/all", {
         }).then((res) => {
           setRooms(res.data)
         }).catch((e) => console.log(e))

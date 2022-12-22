@@ -90,7 +90,7 @@ const EquipmentsStock = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
   }
   useEffect(() => {
-    const URL = "http://localhost:8082/equipment-service/equipments/all"
+    const URL = "http://localhost:8082/equipment-service/equipment/all"
     axios.get(URL).then((res) => {
       console.log(res)
       setEquipments(res.data)

@@ -6,7 +6,9 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import secureLocalStorage from 'react-secure-storage';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 const Payment = () => {
+  const user = useSelector((state) => state.user_data.user)
   const [resultRoom, setResultRoom] = useState(
     //ชุดทดสอบ ลบออกแล้วมัน error T_T
     {
@@ -52,7 +54,7 @@ const Payment = () => {
     })
     let ts = new Date().toISOString()
     let addReserve = {
-      userId:"u001",
+      userId:user._id,
       roomId:resultRoom._id,
       equipmentsId:arr,
       reserveFrom:resultRoom.date+" "+resultRoom.time_start+":00",
@@ -71,14 +73,14 @@ const Payment = () => {
       if(res.status == 200){
         console.log(res.data)
         let addPayment = {
-          userId:"u001",
+          userId:user._id,
           reserveId:res.data,
           status:"SUCCESS",
           timestamp:ts.substring(0, 10)+" "+ts.substring(11, 19),
           price:resultRoom.equipments.length !== 0 ? resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b) + resultRoom.sumPrice : resultRoom.sumPrice,
           borrowId:null
         }
-        axios.post("http://localhost:8082/payment-service/payments", JSON.stringify(addPayment), {
+        axios.post("http://localhost:8082/payment-service/payment", JSON.stringify(addPayment), {
           headers: {
             'Content-Type': 'application/json'
           }

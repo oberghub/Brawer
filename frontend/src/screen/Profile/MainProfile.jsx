@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { CiEdit } from 'react-icons/ci'
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TextField } from "@mui/material";
+import axios from "axios";
+import { userdata } from "../../userSlice";
 export const MainProfile = () => {
     const navigate = useNavigate()
     const selected = useLocation()
@@ -19,7 +21,23 @@ export const MainProfile = () => {
     const handle_eName = (event) =>{
         setE_Name(event.target.value)
     }
+    const dispatch = useDispatch()
     const changeName = () =>{
+        
+        let updateUser = {
+            _id:user._id,
+            role:user.role,
+            name:e_name,
+            email:user.email,
+            favouriteBooks:user.favouriteBooks
+        }
+        console.log(user, updateUser)
+        axios.put("http://localhost:8082/user-service/user", JSON.stringify(updateUser), {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        }).then((res) => {console.log(res.status + " " + res.statusText)})
+        dispatch(userdata({...user,name:e_name}))
         setEditState(false)
     }
     useEffect(() => {
@@ -56,6 +74,9 @@ export const MainProfile = () => {
                             <p className="text-2xl sm:text-3xl mr-3">Display Name : <TextField  label="" id="title" value={e_name} onChange={handle_eName}/></p>
                             <div onClick={() => {changeName()}} className='mr-3 mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
                                 <p className='text-white text-xl'>Change</p>
+                            </div>
+                            <div onClick={() => { setEditState(false)}} className='mt-[1em] lg:mt-0 rounded cursor-pointer w-[150px] h-[50px] bg-[#bf1321] hover:bg-[#a8111d] flex justify-center items-center'>
+                            <p className='text-white text-xl'>Cancel</p>
                             </div>
                         </>}
                         
