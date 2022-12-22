@@ -134,13 +134,19 @@ const AddEquipments = () => {
                                     <p className='text-2xl sm:text-3xl'>Click to choose an item</p>
                                     <p className='text-3xl absolute right-[2%] cursor-pointer'>X</p>
                                 </div>
-                                {equipments.map((item, index) =>
-                                    <>
-                                        <div key={index} onClick={() => { addItem(item, index) }} className='bg-[#FAFAFA] drop-shadow md:w-[500px] md:h-[100px] p-5 my-5 cursor-pointer'>
-                                            <p className='text-2xl'>{item.name}</p>
-                                            <p className='text-xl'>{item.price} THB / 1 Pcs.</p>
-                                        </div>
-                                    </>
+                                {equipments.map((item, index) =>{
+                                    if(item.quantity > 0){
+                                        return(<>
+                                            <div key={index} onClick={() => { addItem(item, index) }} className='bg-[#FAFAFA] drop-shadow md:w-[500px] md:h-[100px] p-5 my-5 cursor-pointer'>
+                                                <p className='text-2xl'>{item.name}</p>
+                                                <p className='text-xl'>{item.price} THB / 1 Pcs.</p>
+                                            </div>
+                                            </>)
+                                    }
+
+                                }
+
+                    
                                 )}
                             </div>
                         </div>
