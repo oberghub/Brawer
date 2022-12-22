@@ -99,7 +99,7 @@ export const BorrowList = () => {
                 if(res.status == 200){
                     for(let i = 0;i<res.data.length;i++){
                         let bookIds = [...res.data[i].booksId]
-                        let books = await (await axios.post("http://localhost:8082/book-service/book/ids",bookIds, {})).data
+                        let books = await (await axios.get("http://localhost:8082/book-service/book/ids/"+bookIds.join(","), {})).data
                         let borrow = {
                             borrowId:res.data[i]._id,
                             b_date:res.data[i].borrow_date,

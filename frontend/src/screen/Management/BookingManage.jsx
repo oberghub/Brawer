@@ -321,7 +321,7 @@ const BookingManage = () => {
                   </div>
                 </div>
                 {/* update status button */}
-                {selectedDetail.status != 'APPROVEd' && selectedDetail.status != 'CANCELLEd' && selectedDetail.status != 'TIMEOUT' ?
+                {selectedDetail.status != 'APPROVED' && selectedDetail.status != 'CANCELLED' && selectedDetail.status != 'TIMEOUT' ?
                   <>
                     <div className="flex gap-5 mt-5">
                       {/* confirm button */}

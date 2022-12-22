@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { GiHamburgerMenu } from 'react-icons/gi';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import axios from 'axios'
+import { useSelector } from 'react-redux';
 const BorrowManage = () => {
+  const user = useSelector((state) => state.user_data.user)
   const [borrowList, setBorrowList] = useState([
     {
       b_date: '15 December 2022',
@@ -24,7 +27,7 @@ const BorrowManage = () => {
         },
       ],
       borrowId: 'ifmw-wij41-dk241-skdn',
-      borrower: "shwpasp",
+      userId: "shwpasp",
       status: 'PENDING'
     },
     {
@@ -40,7 +43,7 @@ const BorrowManage = () => {
         },
       ],
       borrowId: 'eqmw-wdqwj41-dk241-s344n',
-      borrower: "dsadq12121",
+      userId: "dsadq12121",
       status: 'RETURNED'
     },
     {
@@ -56,8 +59,8 @@ const BorrowManage = () => {
         },
       ],
       borrowId: 'eqmw-wdqwj41-dk241-s344n-we1',
-      borrower: "asdhsoppt21",
-      status: 'CANCELED'
+      userId: "asdhsoppt21",
+      status: 'CANCELLED'
     },
     {
       b_date: '15 December 2022',
@@ -72,7 +75,7 @@ const BorrowManage = () => {
         },
       ],
       borrowId: 'eqmw-wdqwj41-dk241-s344n-we1',
-      borrower: "asdhsoppt21",
+      userId: "asdhsoppt21",
       status: 'BORROWING'
     }
   ])
@@ -88,9 +91,9 @@ const BorrowManage = () => {
   const [b_date, setB_date] = useState("")
   const [d_date, setD_date] = useState("")
   const [late, setLate] = useState(null)
-  const [books, setBooks] = useState(null)
+  const [books, setBooks] = useState([])
   const [borrowId, setBorrowId] = useState("")
-  const [borrower, setBorrower] = useState("")
+  const [userId, setBorrower] = useState("")
   const [status, setStatus] = useState("")
   const handleChange = (event) => {
     setConfirmText(event.target.value);
@@ -106,7 +109,80 @@ const BorrowManage = () => {
     //กดดูรายละเอียดในแว่นขยาย
     //* ใน borrow state ที่เป็น pending จะมีปุ่ม accept และ cancel ปุ่ม accept คือเปลี่ยนสถานะให้เป็น borrowing ส่วนปุ่ม cancel คือเปลี่ยนสถานะเป็น cancel และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
     //* ใน borrow state ที่เป็น borrowing จะมีปุ่ม Return กดแล้วสถานะจะเปลี่ยนเป็น RETURNED และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
-    console.log("asda")
+    if(confirmState == "accept"){
+      let updateBorrow = {
+        _id:borrowId,
+        status:"BORROWING",
+        borrow_date:b_date,
+        due_date:d_date,
+        late:late,
+        userId:userId,
+        booksId:books.map(e=>e._id),
+      }
+      console.log(updateBorrow)
+      axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => {
+        console.log(res.status + " " + res.statusText + " "+res.data)
+        if(res.status == 200){
+          let selected = borrowList.filter((e)=>e.borrowId==borrowId)[0]
+          selected.status = "BORROWING"
+          setBorrowList([...borrowList.filter((e)=>e.borrowId!=borrowId), selected])
+
+        }
+      })
+    }else if(confirmState == "cancel"){
+      let updateBorrow = {
+        _id:borrowId,
+        status:"CANCELLED",
+        borrow_date:b_date,
+        due_date:d_date,
+        late:late,
+        userId:userId,
+        booksId:books.map(e=>e._id),
+      }
+      console.log(updateBorrow)
+      axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => {
+        console.log(res.status + " " + res.statusText + " "+res.data)
+        if(res.status == 200){
+          let selected = borrowList.filter((e)=>e.borrowId==borrowId)[0]
+          selected.status = "CANCELLED"
+          setBorrowList([...borrowList.filter((e)=>e.borrowId!=borrowId), selected])
+
+        }
+      })
+    }else if(confirmState == "return"){
+      let updateBorrow = {
+        _id:borrowId,
+        status:"RETURNED",
+        borrow_date:b_date,
+        due_date:d_date,
+        late:late,
+        userId:userId,
+        booksId:books.map(e=>e._id),
+      }
+      console.log(updateBorrow)
+      axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => {
+        console.log(res.status + " " + res.statusText + " "+res.data)
+        if(res.status == 200){
+          let selected = borrowList.filter((e)=>e.borrowId==borrowId)[0]
+          selected.status = "RETURNED"
+          setBorrowList([...borrowList.filter((e)=>e.borrowId!=borrowId), selected])
+
+        }
+      })
+    }
+    console.log(confirmState)
     setConfirmText("")
     setConfirmModal(false)
   }
@@ -116,9 +192,38 @@ const BorrowManage = () => {
     setLate(data.late)
     setBooks(data.books)
     setBorrowId(data.borrowId)
-    setBorrower(data.borrower)
+    setBorrower(data.userId)
     setStatus(data.status)
   }
+  useEffect(()=>{
+    (async ()=>{
+        let borrowList = []
+        await axios.get("http://localhost:8082/borrow-service/borrow/all", {
+        }).then(async (res) => {
+            if(res.status == 200){
+                for(let i = 0;i<res.data.length;i++){
+                    let bookIds = [...res.data[i].booksId]
+                    let books = await (await axios.get("http://localhost:8082/book-service/book/ids/"+bookIds.join(","), {})).data
+                    let borrow = {
+                        borrowId:res.data[i]._id,
+                        b_date:res.data[i].borrow_date,
+                        d_date:res.data[i].due_date,
+                        late:res.data[i].late,
+                        status:res.data[i].status,
+                        userId:res.data[i].userId,
+                        books:books
+                    }
+                    borrowList.push(borrow)
+                }
+                
+                
+            }
+        }).catch((e) => console.log(e))
+        console.log(borrowList)
+        setBorrowList(borrowList)
+    })()
+    
+},[user])
   return (
     <div>
       {confirmModal ?
@@ -212,7 +317,7 @@ const BorrowManage = () => {
                       {late ?
                         <>
                           <div className="lg:absolute right-0">
-                            <p>You are lated! <u className="text-red-500 cursor-pointer ml-3">Pay a fine</u></p>
+                            <p><u className="text-red-500 cursor-pointer ml-3">Late</u></p>
                           </div>
                         </>
                         :
@@ -224,7 +329,7 @@ const BorrowManage = () => {
                     <>
                       <div className="w-full sm:h-auto bg-white drop-shadow min-[450px]:flex mt-3 p-0">
                         <div className="w-auto">
-                          <img src={require('../../local_image/think_python.png')} className="min-[450px]:w-[180px] min-[450px]:h-[220px] cursor-pointer" alt='book' />
+                          <img src={books.image} className="min-[450px]:w-[180px] min-[450px]:h-[220px] cursor-pointer" alt='book' />
                         </div>
                         <div className="min-[450px]:w-full p-5">
                           <p className="text-xl min-[450px]:text-2xl line-clamp-2">{books.title}</p>
@@ -235,7 +340,7 @@ const BorrowManage = () => {
                   )}
                 </div>
                 {/* update status button */}
-                {status != 'RETURNED' && status != 'BORROWING' && status != 'CANCELED' ?
+                {status != 'RETURNED' && status != 'BORROWING' && status != 'CANCELLED' ?
                   <>
                     <div className="flex gap-5 mt-5">
                       {/* confirm button */}
@@ -265,7 +370,7 @@ const BorrowManage = () => {
                     <div onClick={() => {
                       setIsActiveModal(false)
                       setConfirmModal(true)
-                      setConfirmState("accept")
+                      setConfirmState("return")
                     }} className='rounded cursor-pointer w-[150px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center'>
                       <div className="text-xl">
                         <p className='text-white'>Returned</p>
@@ -295,8 +400,8 @@ const BorrowManage = () => {
             {borrowList.map((item, index) =>
               <tr className='h-[2.5em]' style={{ backgroundColor: index % 2 == 0 ? "#2F5D62" : "white", color: index % 2 == 0 ? 'white' : 'black' }}>
                 <td>{item.borrowId}</td>
-                <td>{item.borrower}</td>
-                <td className='Gentium-B-font' style={{color : item.status == 'CANCELED' ? 'red' : index % 2 == 0 ? 'white' : 'black'}}>{item.status}</td>
+                <td>{item.userId}</td>
+                <td className='Gentium-B-font' style={{color : item.status == 'CANCELLED' ? 'red' : index % 2 == 0 ? 'white' : 'black'}}>{item.status}</td>
                 <td className='Gentium-R-font'>
                   <div className='flex items-center justify-center'>
                     <AiOutlineSearch onClick={() => {
