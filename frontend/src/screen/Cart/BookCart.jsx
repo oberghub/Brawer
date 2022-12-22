@@ -5,9 +5,13 @@ import { AiOutlinePlus, AiOutlineMinus } from 'react-icons/ai'
 import {RiDeleteBin5Line} from 'react-icons/ri'
 import { useLocation, useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
+import {  useSelector } from "react-redux";
+import axios from "axios";
+
 
 export const BookCart = () => {
     const location = useLocation()
+    const user = useSelector((state) => state.user_data.user)
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [BookData, setBookData] = useState([])
@@ -31,9 +35,31 @@ export const BookCart = () => {
             // ]
             //}
             //หลังจากส่งไป create ปุ๊ป ไปหักจำนวนหนังสือตามที่ user ได้ยืมไป
+            console.log(arr)
+            let booksId = []
+            let bdate = new Date()
+            let ddate = new Date()
+            arr.forEach(element => {
+                booksId.push(element._id)
+            });
+            ddate.setDate(bdate.getDate()+7)
+            let borrowBooks = {
+                status:"PENDING",
+                late:false,
+                userId:user._id,
+                booksId:booksId,
+                borrow_date:bdate.toISOString().slice(0,10),
+                due_date:ddate.toISOString().slice(0,10)
+            }
+            console.log(user, borrowBooks)
+            axios.post("http://localhost:8082/borrow-service/borrow", JSON.stringify(borrowBooks), {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            }).then((res) => {console.log(res.status + " " + res.statusText)})
 
-            //add เสร็จล้างค่า localStorage
-            //secureLocalStorage.removeItem("books")
+            secureLocalStorage.removeItem("books")
+            setBookData([])
         }
     }
     const incrementQuantity = (ind) => {
