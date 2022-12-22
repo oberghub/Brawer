@@ -33,8 +33,8 @@ public class BookQueryController {
         return book;
     }
 
-    @PostMapping("/ids")
-    public List<BookRestModel> findBooksByIdsQuery(@RequestBody List<String> idList){
+    @GetMapping("/ids/{idList}")
+    public List<BookRestModel> findBooksByIdsQuery(@PathVariable("idList") List<String> idList){
         FindBooksByIdsQuery findBooksByIdsQuery = new FindBooksByIdsQuery();
         findBooksByIdsQuery.setIdList(idList);
         List<BookRestModel> books = queryGateway

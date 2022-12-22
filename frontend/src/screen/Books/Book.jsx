@@ -168,7 +168,7 @@ export const Book = () => {
                         </div>
                     </div>
                     :
-                    <p>Loading...</p>
+                    <div className="pt-[5em] text-4xl">Loading...</div>
                 }
             </div>
         </>
