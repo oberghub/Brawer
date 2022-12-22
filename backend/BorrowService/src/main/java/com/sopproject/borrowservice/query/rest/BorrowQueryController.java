@@ -4,6 +4,7 @@ import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,5 +23,13 @@ public class BorrowQueryController {
                 .query(findBorrowQuery, ResponseTypes.multipleInstancesOf(BorrowRestModel.class)).join();
 
         return borrows;
+    }
+    @GetMapping("/{id}")
+    public List<BorrowRestModel> findBorrowByUserIdQuery(@PathVariable String id){
+        FindBorrowByUserIdQuery findBorrowByUserIdQuery = new FindBorrowByUserIdQuery();
+        findBorrowByUserIdQuery.setUserId(id);
+        List<BorrowRestModel> borrows = queryGateway
+                .query(findBorrowByUserIdQuery, ResponseTypes.multipleInstancesOf(BorrowRestModel.class)).join();
+        return  borrows;
     }
 }

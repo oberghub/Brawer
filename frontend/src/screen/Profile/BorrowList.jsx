@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineCreditCard, AiOutlineBank, AiOutlineQrcode } from 'react-icons/ai'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import axios from 'axios'
+import { useSelector } from 'react-redux';
 export const BorrowList = () => {
+    const user = useSelector((state) => state.user_data.user)
     const [borrowList, setBorrowList] = useState([
         {
             borrowId: "asdiqoqwe22212",
@@ -55,7 +58,35 @@ export const BorrowList = () => {
         setConfirmPaymentModal(false)
         // setConfirmModal(true)
       }
-
+    useEffect(()=>{
+        (async ()=>{
+            let borrowList = []
+            await axios.get("http://localhost:8082/borrow-service/borrow/"+user._id, {
+            }).then(async (res) => {
+                if(res.status == 200){
+                    for(let i = 0;i<res.data.length;i++){
+                        let bookIds = [...res.data[i].booksId]
+                        let books = await (await axios.post("http://localhost:8082/book-service/book/ids",bookIds, {})).data
+                        let borrow = {
+                            borrowId:res.data[i]._id,
+                            b_date:res.data[i].borrow_date,
+                            d_date:res.data[i].due_date,
+                            late:res.data[i].late,
+                            status:res.data[i].status,
+                            userId:res.data[i].userId,
+                            books:books
+                        }
+                        borrowList.push(borrow)
+                    }
+                    
+                    
+                }
+            }).catch((e) => console.log(e))
+            console.log(borrowList)
+            setBorrowList(borrowList)
+        })()
+        
+    },[user])
     return (
         <div className="w-full">
             {confirmPaymentModal ?
