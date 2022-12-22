@@ -53,7 +53,7 @@ public class ReserveCommandController {
                 return "Rabbitmq Create Reserve Error";
             }
             result = commandGateway.sendAndWait(command);
-            return result;
+            return entity.get_id();
         } catch (Exception e) {
             return e.getLocalizedMessage();
         }
@@ -124,9 +124,7 @@ public class ReserveCommandController {
                 .timestamp(model.getTimestamp())
                 .status("CANCELLED")
                 .build();
-
         BeanUtils.copyProperties(command, model);
-
         boolean isDone;
         try {
             Object rabbit = rabbitTemplate.convertSendAndReceive("ReserveExchange", "cancel", model);
@@ -146,7 +144,7 @@ public class ReserveCommandController {
 
     //    cron every hour = "0 0 * ? * *"
 //    cron every minute = "0 * * ? * *"
-    @Scheduled(cron = "0 * * ? * *")
+    @Scheduled(cron = "0 0 * ? * *")
     public void onHourPast() {
         System.out.println("Doing cron job");
         List<ReserveRestModel> reserveRestModelList = WebClient.create()
@@ -156,7 +154,6 @@ public class ReserveCommandController {
                 .bodyToFlux(ReserveRestModel.class)
                 .collectList()
                 .block();
-//        System.out.println(reserveRestModelList);
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

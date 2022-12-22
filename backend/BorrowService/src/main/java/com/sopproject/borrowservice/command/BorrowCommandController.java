@@ -69,12 +69,9 @@ public class BorrowCommandController {
             return e.getLocalizedMessage();
         }
     }
-
-
-
 //    cron every day = 0 0 0 * * ?
 //    cron every minute = "0 * * ? * *"
-    @Scheduled(cron = "0 * * ? * *")
+    @Scheduled(cron = "0 0 0 * * ?")
     public void onDayPast() {
         System.out.println("Doing cron job");
         List<BorrowRestModel> borrowRestModelList = WebClient.create()
@@ -84,7 +81,6 @@ public class BorrowCommandController {
                 .bodyToFlux(BorrowRestModel.class)
                 .collectList()
                 .block();
-
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         for (BorrowRestModel borrowRestModel : borrowRestModelList) {
