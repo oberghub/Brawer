@@ -136,7 +136,8 @@ export const BookCart = () => {
         <>
             {isActiveModal ?
                 <>
-                    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => { setIsActiveModal(false) }}>
+                    <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => { setIsActiveModal(false)
+                                                                                                                                            window.location.reload() }}>
                         <div className="bg-white p-2 rounded w-72 h-72 flex items-center justify-center">
                             <div className="text-center">
                                 <BsCheckCircleFill size={100} color={'green'} className="m-auto" />

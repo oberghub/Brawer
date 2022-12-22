@@ -8,72 +8,72 @@ import { useSelector } from 'react-redux';
 const BookingManage = () => {
   const user = useSelector((state) => state.user_data.user)
   const [myRoomHistory, setMyRoomHistory] = useState([
-    {
-      bookingId: 'booking001',
-      roomId: 'wsw001',
-      roomName: "w01",
-      roomType: "Workstation",
-      roomCapacity: "2 - 9",
-      pricePerHour : 500,
-      sumPrice : 1000,
-      date: "2022-11-25",
-      timeStart: "14:00",
-      timeEnd: "16:00",
-      equipments: [
-        { itemName: "Microphone", price: 150, quantity: 2 },
-        { itemName: "Projector", price: 250, quantity: 1 },
-      ],
-      bookingBy: "sheepSheepy",
-      status: "CANCELLED",
-    },
-    {
-      bookingId: 'booking002',
-      roomId: 'wsw001',
-      roomName: "w01",
-      roomType: "Workstation",
-      roomCapacity: "2 - 9",
-      pricePerHour : 500,
-      sumPrice : 1000,
-      date: "2022-12-07", timeStart: "17:00", timeEnd: "19:00" ,
-      equipments: [
-        { itemName: "Microphone", price: 150, quantity: 2 },
-        { itemName: "Projector", price: 250, quantity: 1 },
-      ],
-      bookingBy: "zibirian",
-      status: "APPROVED"
-    },
-    {
-      bookingId: 'booking003',
-      roomId: 'wsw001',
-      roomName: "w01",
-      roomType: "Workstation",
-      roomCapacity: "2 - 9",
-      pricePerHour : 500,
-      sumPrice : 1000,
-      date: "2022-12-08", timeStart: "11:00", timeEnd: "13:00",
-      equipments: [
-        { itemName: "Microphone", price: 150, quantity: 2 },
-        { itemName: "Projector", price: 250, quantity: 1 },
-      ],
-      bookingBy: "eggcrumble",
-      status: "PENDING"
-    },
-    {
-      bookingId: 'booking004',
-      roomId: 'smr001',
-      roomName: "sr1",
-      roomType: "Seminar Room",
-      pricePerHour : 5500,
-      sumPrice : 33000,
-      roomCapacity: "50-100",
-      date: "2022-12-17", timeStart: "11:00", timeEnd: "17:00",
-      equipments: [
-        { itemName: "Microphone", price: 150, quantity: 10 },
-        { itemName: "Projector", price: 250, quantity: 2 },
-      ],
-      bookingBy: "dannylee",
-      status: "TIMEOUT"
-    }
+    // {
+    //   bookingId: 'booking001',
+    //   roomId: 'wsw001',
+    //   roomName: "w01",
+    //   roomType: "Workstation",
+    //   roomCapacity: "2 - 9",
+    //   pricePerHour : 500,
+    //   sumPrice : 1000,
+    //   date: "2022-11-25",
+    //   timeStart: "14:00",
+    //   timeEnd: "16:00",
+    //   equipments: [
+    //     { itemName: "Microphone", price: 150, quantity: 2 },
+    //     { itemName: "Projector", price: 250, quantity: 1 },
+    //   ],
+    //   bookingBy: "sheepSheepy",
+    //   status: "CANCELLED",
+    // },
+    // {
+    //   bookingId: 'booking002',
+    //   roomId: 'wsw001',
+    //   roomName: "w01",
+    //   roomType: "Workstation",
+    //   roomCapacity: "2 - 9",
+    //   pricePerHour : 500,
+    //   sumPrice : 1000,
+    //   date: "2022-12-07", timeStart: "17:00", timeEnd: "19:00" ,
+    //   equipments: [
+    //     { itemName: "Microphone", price: 150, quantity: 2 },
+    //     { itemName: "Projector", price: 250, quantity: 1 },
+    //   ],
+    //   bookingBy: "zibirian",
+    //   status: "APPROVED"
+    // },
+    // {
+    //   bookingId: 'booking003',
+    //   roomId: 'wsw001',
+    //   roomName: "w01",
+    //   roomType: "Workstation",
+    //   roomCapacity: "2 - 9",
+    //   pricePerHour : 500,
+    //   sumPrice : 1000,
+    //   date: "2022-12-08", timeStart: "11:00", timeEnd: "13:00",
+    //   equipments: [
+    //     { itemName: "Microphone", price: 150, quantity: 2 },
+    //     { itemName: "Projector", price: 250, quantity: 1 },
+    //   ],
+    //   bookingBy: "eggcrumble",
+    //   status: "PENDING"
+    // },
+    // {
+    //   bookingId: 'booking004',
+    //   roomId: 'smr001',
+    //   roomName: "sr1",
+    //   roomType: "Seminar Room",
+    //   pricePerHour : 5500,
+    //   sumPrice : 33000,
+    //   roomCapacity: "50-100",
+    //   date: "2022-12-17", timeStart: "11:00", timeEnd: "17:00",
+    //   equipments: [
+    //     { itemName: "Microphone", price: 150, quantity: 10 },
+    //     { itemName: "Projector", price: 250, quantity: 2 },
+    //   ],
+    //   bookingBy: "dannylee",
+    //   status: "TIMEOUT"
+    // }
   ]
   )
   const [confirmModal, setConfirmModal] = useState(false)
@@ -183,7 +183,7 @@ const BookingManage = () => {
                     let room = {}
                     
                     let requestEqui = res.data[i].equipmentsId
-                    equiments =  await (await axios.post("http://localhost:8082/equipment-service/equipment/ids",requestEqui, {})).data
+                    equiments =  await (await axios.get("http://localhost:8082/equipment-service/equipment/ids/"+requestEqui.join(","), {})).data
                     room = await (await axios.get("http://localhost:8082/workspace-service/workspace/"+res.data[i].roomId, {})).data
                     let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
                     let booking = {

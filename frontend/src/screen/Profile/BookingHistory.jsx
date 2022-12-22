@@ -68,7 +68,7 @@ const BookingHistory = () => {
                         let room = {}
                         
                         let requestEqui = res.data[i].equipmentsId
-                        equiments =  await (await axios.post("http://localhost:8082/equipment-service/equipment/ids",requestEqui, {})).data
+                        equiments =  await (await axios.post("http://localhost:8082/equipment-service/equipment/ids/"+requestEqui.join(","), {})).data
                         room = await (await axios.get("http://localhost:8082/workspace-service/workspace/"+res.data[i].roomId, {})).data
                         let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
                         let booking = {

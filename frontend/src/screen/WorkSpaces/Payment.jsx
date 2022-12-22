@@ -250,8 +250,8 @@ const Payment = () => {
             <p className='text-2xl'>Confirm</p>
           </div>
           :
-          <div onClick={() => { setIsActiveModal(true) }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
-          {/* <div onClick={() => {confirmPayment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'> */}
+          // <div onClick={() => { setIsActiveModal(true) }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+          <div onClick={() => {confirmPayment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
             <p className='text-2xl'>Confirm</p>
           </div>
         }

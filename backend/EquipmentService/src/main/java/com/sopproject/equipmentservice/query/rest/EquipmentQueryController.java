@@ -32,8 +32,8 @@ public class EquipmentQueryController {
         return equipment;
     }
 
-    @PostMapping("/ids")
-    public List<EquipmentRestModel> findEquipmentsByIdsQuery(@RequestBody List<String> idList){
+    @GetMapping("/ids/{ids}")
+    public List<EquipmentRestModel> findEquipmentsByIdsQuery(@PathVariable("ids") List<String> idList){
         FindEquimentsByIdsQuery findEquimentsByIdsQuery = new FindEquimentsByIdsQuery();
         findEquimentsByIdsQuery.setIdList(idList);
         List<EquipmentRestModel> models = queryGateway
