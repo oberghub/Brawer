@@ -52,7 +52,7 @@ function WorkSpaceDetail() {
         </div>
         <div className='sm:w-[700px] sm:h-[500px] p-3 xl:p-10 sm:mt-[5em]'>
             <p className='text-4xl'>{location.state.title}</p>
-            <p className='indent-5 text-xl mt-5'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dignissimos nulla nisi ut recusandae tempora at, assumenda quasi amet ullam quia ipsam nostrum voluptates corrupti maiores expedita! Velit repellat asperiores ipsam!</p>
+            <p className='indent-5 text-xl mt-5'>ค้นหาพื้นที่ที่สมบูรณ์แบบสำหรับการนั่งทำงาน การประชุม สัมมนา หรือจัดงานอีเว้นท์ ได้รับการออกแบบมาอย่างดี และมีอุปกรณ์อำนวยความสะดวกครบครัน สามารถกำหนดและจัดการได้อย่างง่ายดายตามความต้องการของคุณ</p>
             <div onClick={() => {navigate('/booking/find-a-room')}} className='w-[100%] h-[50px] mt-[3em] bg-[#2F5D62] hover:bg-[#2B5155] flex justify-center items-center cursor-pointer'>
                 <p className='text-2xl text-white'>Reserve</p>
             </div>
