@@ -70,6 +70,8 @@ public class PaymentAggregate {
 
     }
 
+
+
     @CommandHandler
     public void PaymentAggregate(DeletePaymentCommand command){
         boolean blankDataCheck = command.get_id().isBlank();

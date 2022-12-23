@@ -22,8 +22,8 @@ function WorkSpace() {
                     <img src={require('../../local_image/hot-desk.jpg')} className="w-[1280px] h-[450px] xl:h-[550px]" />
                     {/* Card */}
                     <div className='absolute right-[1%] inset-y-[20%] w-[400px] h-[350px] bg-white drop-shadow p-8'>
-                        <p className='Kanit-B-font text-3xl'>Workspace คืออะไร?</p>
-                        <p className='Kanit-R-font indent-5 mt-3'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam reprehenderit doloremque autem sint quia molestias!</p>
+                        <p className='Kanit-B-font text-3xl'>จอง Workspace ของคุณ</p>
+                        <p className='Kanit-R-font indent-5 mt-3'>ในวันที่การทำงานไม่ได้จำกัดอยู่ที่โต๊ะออฟฟิศอีกต่อไป หลายคนที่รู้สึกเบื่อกับที่ทำงานเดิม ๆ ลองเปลี่ยนบรรยากาศมานั่งทำงานที่ Coworking space เหมาะกับทั้งสตาร์ทอัพ ฟรีแลนซ์ หรือคนที่อยากทำงานนอกบ้านอย่างทั่วถึง</p>
                         <div className='mt-3 Kanit-R-font'>
                             <p className='text-2xl Kanit-B-font'>มาที่นี่แล้วได้อะไรบ้าง?</p>
                             <li>เครื่องดืม เช่น ชา กาแฟ ฟรี !</li>
@@ -42,7 +42,7 @@ function WorkSpace() {
                         <div className='slide-in w-[400px] h-[400px] bg-white drop-shadow-2xl p-10 relative flex justify-center'>
                             <div>
                                 <p className='text-4xl'>Workstation</p>
-                                <p className='mt-3 indent-5'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, ea rerum? Fugit amet beatae, a suscipit sunt voluptate consequuntur! Vero assumenda ullam dolorem facilis molestiae unde quis laboriosam sit esse!</p>
+                                <p className='mt-3 indent-5'>เลือกรูปแบบสมาชิกและการใช้งานที่เหมาะสมกับคุณ เพื่อสร้างบรรยากาศการทำงานให้มีชีวิตชีวาในพื้นที่ Co-working Space สำหรับการทำงานแบบร่วมกัน</p>
                             </div>
                             <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info', {state : {title : "Workstation", desc : "eiei"}})}}>
                                 <p className='text-xl text-white Gentium-B-font'>Learn More</p>
@@ -52,7 +52,7 @@ function WorkSpace() {
                         <div className='slide-in w-[400px] h-[400px] bg-white drop-shadow-2xl p-10 relative flex justify-center'>
                             <div>
                                 <p className='text-4xl'>Meeting Room</p>
-                                <p className='mt-3 indent-5'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, ea rerum? Fugit amet beatae, a suscipit sunt voluptate consequuntur! Vero assumenda ullam dolorem facilis molestiae unde quis laboriosam sit esse!</p>
+                                <p className='mt-3 indent-5'>ห้องประชุมส่วนตัวของคุณ มีสิ่งอำนวยความสะดวกสำหรับส่วนรวมอย่างครบครัน</p>
                             </div>
                             <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info', {state : {title : "Meeting Room", desc : "eiei"}})}}>
                                 <p className='text-xl text-white Gentium-B-font'>Learn More</p>
@@ -62,7 +62,7 @@ function WorkSpace() {
                         <div className='slide-in w-[400px] h-[400px] bg-white drop-shadow-2xl p-10 relative flex justify-center'>
                             <div>
                                 <p className='text-4xl'>Seminar Room</p>
-                                <p className='mt-3 indent-5'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Excepturi, ea rerum? Fugit amet beatae, a suscipit sunt voluptate consequuntur! Vero assumenda ullam dolorem facilis molestiae unde quis laboriosam sit esse!</p>
+                                <p className='mt-3 indent-5'>ห้องสัมมนาขนาดใหญ่ พร้อมทีมบริการและสิ่งอำนวยความสะดวกครบครัน</p>
                             </div>
                             <div className='w-[300px] h-[50px] bg-[#2F5D62] hover:bg-[#2B5155] rounded m-auto flex items-center justify-center absolute bottom-[10%] cursor-pointer' onClick={() => {navigate('/space-info', {state : {title : "Seminar Room", desc : "eiei"}})}}>
                                 <p className='text-xl text-white Gentium-B-font'>Learn More</p>
