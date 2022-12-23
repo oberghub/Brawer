@@ -4,31 +4,50 @@ import { AiOutlineCreditCard, AiOutlineBank, AiOutlineQrcode } from 'react-icons
 import { BsCheckCircleFill } from 'react-icons/bs'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import secureLocalStorage from 'react-secure-storage';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 const Payment = () => {
   const user = useSelector((state) => state.user_data.user)
-  const [resultRoom, setResultRoom] = useState(
-    //ชุดทดสอบ ลบออกแล้วมัน error T_T
-    {
-      bookingId: 'booking001',
-      roomId: 'wsw001',
-      roomName: "w01",
-      roomType: "Workstation",
-      room_capacity: ["2","9"],
-      pricePerHour : 500,
-      sumPrice : 1000,
-      date: "2022-11-25",
-      timeStart: "14:00",
-      timeEnd: "16:00",
-      equipments: [
-        { itemName: "Microphone", price: 150, quantity: 2 },
-        { itemName: "Projector", price: 250, quantity: 1 },
-      ],
-      bookingBy: "sheepSheepy",
-      // status: "Cancel",
-    },
+  const [resultRoom, setResultRoom] = useState({
+    date
+      :
+      "",
+    desc
+      :
+      "",
+    equipments
+      :
+      [{ name: "", price: 0, quantity: 1, _id: "", desc: "" }],
+    price
+      :
+      0,
+    room_capacity
+      :
+      [""],
+    room_name
+      :
+      "",
+    room_type
+      :
+      "",
+    status
+      :
+      "",
+    sumPrice
+      :
+      0,
+    time_end
+      :
+      "",
+    time_rent
+      :
+      [],
+    time_start
+      :
+      "",
+    _id
+      :"",
+  }
   )
   const [paymentMethod, setMethod] = useState([
     { type: "Credit / Debit", icon: <AiOutlineCreditCard size={100} className="m-auto" /> },
@@ -46,23 +65,23 @@ const Payment = () => {
   const confirmPayment = () => {
     setIsActiveModal(false)
     setConfirmModal(true)
-    
+
     //add reserve with pending
     let arr = []
-    resultRoom.equipments.forEach((e)=>{
-      for(let i = 0;i<e.quantity;i++){
+    resultRoom.equipments.forEach((e) => {
+      for (let i = 0; i < e.quantity; i++) {
         arr.push(e._id)
       }
     })
     let ts = new Date().toISOString()
     let addReserve = {
-      userId:user._id,
-      roomId:resultRoom._id,
-      equipmentsId:arr,
-      reserveFrom:resultRoom.date+" "+resultRoom.time_start+":00",
-      reserveTo:resultRoom.date+" "+resultRoom.time_end+":00",
-      timestamp: ts.substring(0, 10)+" "+ts.substring(11, 19),
-      status:"PENDING"
+      userId: user._id,
+      roomId: resultRoom._id,
+      equipmentsId: arr,
+      reserveFrom: resultRoom.date + " " + resultRoom.time_start + ":00",
+      reserveTo: resultRoom.date + " " + resultRoom.time_end + ":00",
+      timestamp: ts.substring(0, 10) + " " + ts.substring(11, 19),
+      status: "PENDING"
     }
     console.log(ts)
     console.log(addReserve)
@@ -72,15 +91,15 @@ const Payment = () => {
       }
     }).then((res) => {
       console.log(res.status + " " + res.statusText)
-      if(res.status == 200){
+      if (res.status == 200) {
         console.log(res.data)
         let addPayment = {
-          userId:user._id,
-          reserveId:res.data,
-          status:"SUCCESS",
-          timestamp:ts.substring(0, 10)+" "+ts.substring(11, 19),
-          price:resultRoom.equipments.length !== 0 ? resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b) + resultRoom.sumPrice : resultRoom.sumPrice,
-          borrowId:null
+          userId: user._id,
+          reserveId: res.data,
+          status: "SUCCESS",
+          timestamp: ts.substring(0, 10) + " " + ts.substring(11, 19),
+          price: resultRoom.equipments.length !== 0 ? resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a + b) + resultRoom.sumPrice : resultRoom.sumPrice,
+          borrowId: null
         }
         axios.post("http://localhost:8082/payment-service/payment", JSON.stringify(addPayment), {
           headers: {
@@ -90,16 +109,16 @@ const Payment = () => {
       }
     })
 
- 
-    
+
+
   }
   useEffect(() => {
-    let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
-    if(!!room){
+    let room = JSON.parse(localStorage.getItem("myRoom"))
+    console.log(room)
+    if (!!room) {
       setResultRoom(room)
-      console.log(room)
     }
-    else{
+    else {
       navigate("/")
     }
   }, [])
@@ -107,7 +126,10 @@ const Payment = () => {
     <div>
       {confirmModal ?
         <>
-          <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => { setConfirmModal(false) }}>
+          <div className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => {
+            setConfirmModal(false)
+            navigate("/profile/booking-history")
+          }}>
             <div className="bg-white p-2 rounded w-72 h-72 flex items-center justify-center slide-down-fade">
               <div className="text-center">
                 <BsCheckCircleFill size={100} color={'green'} className="m-auto" />
@@ -167,7 +189,7 @@ const Payment = () => {
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Capacity :</p>
-                <p className='absolute right-[3%]'>{resultRoom.room_capacity.length > 1?`${resultRoom.room_capacity[0]}-${resultRoom.room_capacity[1]}`:resultRoom.room_capacity[0]} Person</p>
+                <p className='absolute right-[3%]'>{resultRoom.room_capacity.length > 1 ? `${resultRoom.room_capacity[0]}-${resultRoom.room_capacity[1]}` : resultRoom.room_capacity[0]} Person</p>
               </div>
               <div className='w-full text-xl sm:text-2xl flex relative'>
                 <p className='Gentium-B-font'>Room Price :</p>
@@ -205,7 +227,7 @@ const Payment = () => {
             }
             <div className='w-full mt-[1em] flex p-5 text-xl sm:text-3xl border-t-[1px] border-gray-300 relative'>
               <p className='Gentium-B-font'>Total</p>
-              <p className='absolute right-[3%]'>{resultRoom.equipments.length !== 0 ? resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a+b) + resultRoom.sumPrice : resultRoom.sumPrice} THB</p>
+              <p className='absolute right-[3%]'>{resultRoom.equipments.length !== 0 ? resultRoom.equipments.map(item => item.price * item.quantity).reduce((a, b) => a + b) + resultRoom.sumPrice : resultRoom.sumPrice} THB</p>
             </div>
           </div>
         </div>
@@ -253,7 +275,7 @@ const Payment = () => {
           </div>
           :
           // <div onClick={() => { setIsActiveModal(true) }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
-          <div onClick={() => {confirmPayment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
+          <div onClick={() => { confirmPayment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
             <p className='text-2xl'>Confirm</p>
           </div>
         }

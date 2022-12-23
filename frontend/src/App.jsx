@@ -41,7 +41,7 @@ import { useState } from 'react';
 
 function App() {
   const userCheck = () => {
-    console.log(store.getState().user_data.user)
+    // console.log(store.getState().user_data.user)
     return store.getState().user_data.user
   }
   const ProtectedRoute = ({ user, children }) => {

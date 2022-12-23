@@ -3,52 +3,53 @@ import axios from 'axios'
 import { useSelector } from 'react-redux';
 const BookingHistory = () => {
     const [myRoomHistory, setMyRoomHistory] = useState([
-        {
-            bookingId: 'booking001',
-            roomId: 'wsw001',
-            roomName: "w01",
-            roomType: "Workstation",
-            roomCapacity: "2 - 9",
-            timeRent: { date: "2022-11-25", timeStart: "14:00", timeEnd: "16:00" },
-            additionalItem: [
-                { itemName: "Microphone", price: 150, quantity: 2 },
-                { itemName: "Projector", price: 250, quantity: 1 },
-            ],
-            bookingBy: "sheepSheepy",
-            status: "Cancel",
-        },
-        {
-            bookingId: 'booking002',
-            roomId: 'wsw001',
-            roomName: "w01",
-            roomType: "Workstation",
-            roomCapacity: "2 - 9",
-            timeRent: { date: "2022-12-07", timeStart: "17:00", timeEnd: "19:00" },
-            additionalItem: [
-                { itemName: "Microphone", price: 150, quantity: 2 },
-                { itemName: "Projector", price: 250, quantity: 1 },
-            ],
-            bookingBy: "sheepSheepy",
-            status: "Approved"
-        },
-        {
-            bookingId: 'booking003',
-            roomId: 'wsw001',
-            roomName: "w01",
-            roomType: "Workstation",
-            roomCapacity: "2 - 9",
-            timeRent: { date: "2022-12-08", timeStart: "11:00", timeEnd: "13:00" },
-            additionalItem: [
-                { itemName: "Microphone", price: 150, quantity: 2 },
-                { itemName: "Projector", price: 250, quantity: 1 },
-            ],
-            bookingBy: "sheepSheepy",
-            status: "Pending"
-        }
+        // {
+        //     bookingId: 'booking001',
+        //     roomId: 'wsw001',
+        //     roomName: "w01",
+        //     roomType: "Workstation",
+        //     roomCapacity: "2 - 9",
+        //     timeRent: { date: "2022-11-25", timeStart: "14:00", timeEnd: "16:00" },
+        //     additionalItem: [
+        //         { itemName: "Microphone", price: 150, quantity: 2 },
+        //         { itemName: "Projector", price: 250, quantity: 1 },
+        //     ],
+        //     bookingBy: "sheepSheepy",
+        //     status: "Cancel",
+        // },
+        // {
+        //     bookingId: 'booking002',
+        //     roomId: 'wsw001',
+        //     roomName: "w01",
+        //     roomType: "Workstation",
+        //     roomCapacity: "2 - 9",
+        //     timeRent: { date: "2022-12-07", timeStart: "17:00", timeEnd: "19:00" },
+        //     additionalItem: [
+        //         { itemName: "Microphone", price: 150, quantity: 2 },
+        //         { itemName: "Projector", price: 250, quantity: 1 },
+        //     ],
+        //     bookingBy: "sheepSheepy",
+        //     status: "Approved"
+        // },
+        // {
+        //     bookingId: 'booking003',
+        //     roomId: 'wsw001',
+        //     roomName: "w01",
+        //     roomType: "Workstation",
+        //     roomCapacity: "2 - 9",
+        //     timeRent: { date: "2022-12-08", timeStart: "11:00", timeEnd: "13:00" },
+        //     additionalItem: [
+        //         { itemName: "Microphone", price: 150, quantity: 2 },
+        //         { itemName: "Projector", price: 250, quantity: 1 },
+        //     ],
+        //     bookingBy: "sheepSheepy",
+        //     status: "Pending"
+        // }
     ]
     )
     const user = useSelector((state) => state.user_data.user)
     const [selectDetail, setSelectDetail] = useState(null)
+    const [isLoaded, setIsLoaded] = useState(false)
     const seeDetail = (index) => {
         if (selectDetail == index) {
             setSelectDetail(null)
@@ -102,13 +103,18 @@ const BookingHistory = () => {
             }).catch((e) => console.log(e))
 
             setMyRoomHistory(bookingList)
+            setIsLoaded(true)
         })()
         
        
     },[user])
     return (
         <div>
-            <p className='text-3xl Gentium-B-font mb-5'>Booking History</p>
+            {isLoaded ? 
+                <p className='text-3xl Gentium-B-font'>Booking History</p>
+            :
+                <p className='text-3xl Gentium-B-font'>Booking History (Loading...)</p>
+            }
             <div className="w-full grid grid-cols-1 gap-5">
                 {myRoomHistory.map((item, index) =>
                     <>

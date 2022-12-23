@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useSelector } from 'react-redux';
 const BorrowManage = () => {
   const user = useSelector((state) => state.user_data.user)
+  const [isLoaded, setIsLoaded] = useState(false)
   const [borrowList, setBorrowList] = useState([
     // {
     //   b_date: '15 December 2022',
@@ -109,15 +110,15 @@ const BorrowManage = () => {
     //กดดูรายละเอียดในแว่นขยาย
     //* ใน borrow state ที่เป็น pending จะมีปุ่ม accept และ cancel ปุ่ม accept คือเปลี่ยนสถานะให้เป็น borrowing ส่วนปุ่ม cancel คือเปลี่ยนสถานะเป็น cancel และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
     //* ใน borrow state ที่เป็น borrowing จะมีปุ่ม Return กดแล้วสถานะจะเปลี่ยนเป็น RETURNED และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
-    if(confirmState == "accept"){
+    if (confirmState == "accept") {
       let updateBorrow = {
-        _id:borrowId,
-        status:"BORROWING",
-        borrow_date:b_date,
-        due_date:d_date,
-        late:late,
-        userId:userId,
-        booksId:books.map(e=>e._id),
+        _id: borrowId,
+        status: "BORROWING",
+        borrow_date: b_date,
+        due_date: d_date,
+        late: late,
+        userId: userId,
+        booksId: books.map(e => e._id),
       }
       console.log(updateBorrow)
       axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
@@ -125,23 +126,23 @@ const BorrowManage = () => {
           'Content-Type': 'application/json'
         }
       }).then((res) => {
-        console.log(res.status + " " + res.statusText + " "+res.data)
-        if(res.status == 200){
-          let selected = borrowList.filter((e)=>e.borrowId==borrowId)[0]
+        console.log(res.status + " " + res.statusText + " " + res.data)
+        if (res.status == 200) {
+          let selected = borrowList.filter((e) => e.borrowId == borrowId)[0]
           selected.status = "BORROWING"
-          setBorrowList([...borrowList.filter((e)=>e.borrowId!=borrowId), selected])
+          setBorrowList([...borrowList.filter((e) => e.borrowId != borrowId), selected])
 
         }
       })
-    }else if(confirmState == "cancel"){
+    } else if (confirmState == "cancel") {
       let updateBorrow = {
-        _id:borrowId,
-        status:"CANCELLED",
-        borrow_date:b_date,
-        due_date:d_date,
-        late:late,
-        userId:userId,
-        booksId:books.map(e=>e._id),
+        _id: borrowId,
+        status: "CANCELLED",
+        borrow_date: b_date,
+        due_date: d_date,
+        late: late,
+        userId: userId,
+        booksId: books.map(e => e._id),
       }
       console.log(updateBorrow)
       axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
@@ -149,23 +150,23 @@ const BorrowManage = () => {
           'Content-Type': 'application/json'
         }
       }).then((res) => {
-        console.log(res.status + " " + res.statusText + " "+res.data)
-        if(res.status == 200){
-          let selected = borrowList.filter((e)=>e.borrowId==borrowId)[0]
+        console.log(res.status + " " + res.statusText + " " + res.data)
+        if (res.status == 200) {
+          let selected = borrowList.filter((e) => e.borrowId == borrowId)[0]
           selected.status = "CANCELLED"
-          setBorrowList([...borrowList.filter((e)=>e.borrowId!=borrowId), selected])
+          setBorrowList([...borrowList.filter((e) => e.borrowId != borrowId), selected])
 
         }
       })
-    }else if(confirmState == "return"){
+    } else if (confirmState == "return") {
       let updateBorrow = {
-        _id:borrowId,
-        status:"RETURNED",
-        borrow_date:b_date,
-        due_date:d_date,
-        late:late,
-        userId:userId,
-        booksId:books.map(e=>e._id),
+        _id: borrowId,
+        status: "RETURNED",
+        borrow_date: b_date,
+        due_date: d_date,
+        late: late,
+        userId: userId,
+        booksId: books.map(e => e._id),
       }
       console.log(updateBorrow)
       axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
@@ -173,11 +174,11 @@ const BorrowManage = () => {
           'Content-Type': 'application/json'
         }
       }).then((res) => {
-        console.log(res.status + " " + res.statusText + " "+res.data)
-        if(res.status == 200){
-          let selected = borrowList.filter((e)=>e.borrowId==borrowId)[0]
+        console.log(res.status + " " + res.statusText + " " + res.data)
+        if (res.status == 200) {
+          let selected = borrowList.filter((e) => e.borrowId == borrowId)[0]
           selected.status = "RETURNED"
-          setBorrowList([...borrowList.filter((e)=>e.borrowId!=borrowId), selected])
+          setBorrowList([...borrowList.filter((e) => e.borrowId != borrowId), selected])
 
         }
       })
@@ -195,45 +196,46 @@ const BorrowManage = () => {
     setBorrower(data.userId)
     setStatus(data.status)
   }
-  const nodupe = (arr = [])=>{
-    return arr.reduce((acc,item)=>{
+  const nodupe = (arr = []) => {
+    return arr.reduce((acc, item) => {
       let index = acc.map(item => item._id).indexOf(item._id)
-      if(index != -1){
+      if (index != -1) {
         acc[index].qty++
-      }else{
-        acc.push({...item,qty:1})
+      } else {
+        acc.push({ ...item, qty: 1 })
       }
       return acc
-    },[])
-    
+    }, [])
+
   }
-  useEffect(()=>{
-    (async ()=>{
-        let borrowList = []
-        await axios.get("http://localhost:8082/borrow-service/borrow/all", {
-        }).then(async (res) => {
-            if(res.status == 200){
-                for(let i = 0;i<res.data.length;i++){
-                    let bookIds = [...res.data[i].booksId]
-                    let books = await (await axios.get("http://localhost:8082/book-service/book/ids/"+bookIds.join(","), {})).data
-                    let borrow = {
-                        borrowId:res.data[i]._id,
-                        b_date:res.data[i].borrow_date,
-                        d_date:res.data[i].due_date,
-                        late:res.data[i].late,
-                        status:res.data[i].status,
-                        userId:res.data[i].userId,
-                        books:books
-                    }
-                    borrowList.push(borrow)
-                }    
+  useEffect(() => {
+    (async () => {
+      let borrowList = []
+      await axios.get("http://localhost:8082/borrow-service/borrow/all", {
+      }).then(async (res) => {
+        if (res.status == 200) {
+          for (let i = 0; i < res.data.length; i++) {
+            let bookIds = [...res.data[i].booksId]
+            let books = await (await axios.get("http://localhost:8082/book-service/book/ids/" + bookIds.join(","), {})).data
+            let borrow = {
+              borrowId: res.data[i]._id,
+              b_date: res.data[i].borrow_date,
+              d_date: res.data[i].due_date,
+              late: res.data[i].late,
+              status: res.data[i].status,
+              userId: res.data[i].userId,
+              books: books
             }
-        }).catch((e) => console.log(e))
-        console.log(borrowList)
-        setBorrowList(borrowList)
+            borrowList.push(borrow)
+          }
+        }
+      }).catch((e) => console.log(e))
+      console.log(borrowList)
+      setBorrowList(borrowList)
+      setIsLoaded(true)
     })()
-    
-},[user])
+
+  }, [user])
   return (
     <div>
       {confirmModal ?
@@ -376,7 +378,7 @@ const BorrowManage = () => {
                     </div>
                   </>
                   :
-                  status == 'BORROWING' ? 
+                  status == 'BORROWING' ?
                     <div onClick={() => {
                       setIsActiveModal(false)
                       setConfirmModal(true)
@@ -386,7 +388,7 @@ const BorrowManage = () => {
                         <p className='text-white'>Returned</p>
                       </div>
                     </div>
-                  : null
+                    : null
                 }
               </div>
             </div>
@@ -407,22 +409,26 @@ const BorrowManage = () => {
             </tr>
           </thead>
           <tbody className='text-xl'>
-            {borrowList.map((item, index) =>
-              <tr className='h-[2.5em]' style={{ backgroundColor: index % 2 == 0 ? "#2F5D62" : "white", color: index % 2 == 0 ? 'white' : 'black' }}>
-                <td>{item.borrowId}</td>
-                <td>{item.userId}</td>
-                <td className='Gentium-B-font' style={{color : item.status == 'CANCELLED' ? 'red' : index % 2 == 0 ? 'white' : 'black'}}>{item.status}</td>
-                <td className='Gentium-R-font'>
-                  <div className='flex items-center justify-center'>
-                    <AiOutlineSearch onClick={() => {
-                      setIsActiveModal(true)
-                      seeADetail(item)
-                    }} size={30} className="cursor-pointer" />
-                  </div>
-                </td>
-              </tr>
-            )
-            }
+            {isLoaded ?
+              <>
+                {borrowList.map((item, index) =>
+                  <tr className='h-[2.5em]' style={{ backgroundColor: index % 2 == 0 ? "#2F5D62" : "white", color: index % 2 == 0 ? 'white' : 'black' }}>
+                    <td>{item.borrowId}</td>
+                    <td>{item.userId}</td>
+                    <td className='Gentium-B-font' style={{ color: item.status == 'CANCELLED' ? 'red' : index % 2 == 0 ? 'white' : 'black' }}>{item.status}</td>
+                    <td className='Gentium-R-font'>
+                      <div className='flex items-center justify-center'>
+                        <AiOutlineSearch onClick={() => {
+                          setIsActiveModal(true)
+                          seeADetail(item)
+                        }} size={30} className="cursor-pointer" />
+                      </div>
+                    </td>
+                  </tr>
+                )
+                }
+              </>
+              : <div className='text-4xl'>Loading...</div>}
           </tbody>
         </table>
       </div>

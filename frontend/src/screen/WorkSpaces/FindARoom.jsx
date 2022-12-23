@@ -6,7 +6,6 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react';
-import secureLocalStorage from 'react-secure-storage';
 import axios from 'axios';
 function FindARoom() {
     const navigate = useNavigate()
@@ -129,17 +128,18 @@ function FindARoom() {
             datebase = date
         }
         let data = { ...selectedRoom, date : datebase, time_start : time_start, time_end : time_end, equipments : [], sumPrice : selectedRoom.price * (parseInt(time_end) - parseInt(time_start))}
-        secureLocalStorage.setItem("myRoom", JSON.stringify(data))
+        console.log(data)
+        localStorage.setItem("myRoom", JSON.stringify(data))
     }
 
     //ตอนกดปุ่ม Cancel
     const cancelReserve = () => {
-        secureLocalStorage.removeItem("myRoom")
+        localStorage.removeItem("myRoom")
     }
 
-    //get ข้อมูลจาก secureLocalStorage
+    //get ข้อมูลจาก localStorage
     useEffect(() => {
-        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+        let room = JSON.parse(localStorage.getItem("myRoom"))
         if(!!room){
             setDate(room.date)
             setTimeStart(room.time_start)
@@ -240,7 +240,7 @@ function FindARoom() {
                             setRoomIndex(index)
                             setSelectedRoom(data)
                             console.log(data)
-                        }} className='cursor-pointer flex items-center rounded my-3 min-[1280px]:w-[980px] h-[120px] drop-shadow-xl m-auto p-4 relative' 
+                        }} key={data._id} className='cursor-pointer flex items-center rounded my-3 min-[1280px]:w-[980px] h-[120px] drop-shadow-xl m-auto p-4 relative' 
                             style={{backgroundColor : index === roomIndex ? '#F1F1F1' : 'white'}}>
                             <div>
                                 <p className='text-2xl'>{data.room_type} : Room {data.room_name}</p>

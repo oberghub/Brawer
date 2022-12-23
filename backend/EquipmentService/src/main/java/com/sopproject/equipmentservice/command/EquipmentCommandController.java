@@ -30,6 +30,7 @@ public class EquipmentCommandController {
                 .name(model.getName())
                 .desc(model.getDesc())
                 .price(model.getPrice())
+                .quantity(model.getQuantity())
                 .build();
         String result;
         try {
@@ -47,6 +48,7 @@ public class EquipmentCommandController {
                 .name(model.getName())
                 .desc(model.getDesc())
                 .price(model.getPrice())
+                .quantity(model.getQuantity())
                 .build();
         String result;
         try {

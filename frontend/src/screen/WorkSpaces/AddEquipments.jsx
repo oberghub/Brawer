@@ -2,16 +2,10 @@ import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import secureLocalStorage from 'react-secure-storage'
 const AddEquipments = () => {
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
     const [equipments, setEquipments] = useState([
-        { name: "Projector", price: 300, _id:"01", desc:"p" },
-        { name: "Laptop", price: 500, _id:"02", desc:"p"  },
-        { name: "Charging Adapter", price: 50, _id:"03", desc:"p"  },
-        { name: "Microphone", price: 100, _id:"04", desc:"p"  },
-        { name: "Upgrade Speaker", price: 250, _id:"05", desc:"p"  },
     ])
     const [added, setAdded] = useState([
     ])
@@ -29,9 +23,9 @@ const AddEquipments = () => {
         // console.log(BookData[index])
 
         //เพิ่ม จน. ของแล้วเก็บลง local
-        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+        let room = JSON.parse(localStorage.getItem("myRoom"))
         room.equipments = newAdded
-        secureLocalStorage.setItem("myRoom", JSON.stringify(room))
+        localStorage.setItem("myRoom", JSON.stringify(room))
     }
     //กด - ลดจำนวนของที่เลือก
     const decrementQuantity = (ind) => {
@@ -49,14 +43,14 @@ const AddEquipments = () => {
         setAdded(newAdded)
 
         //ลด จน. ของแล้วเก็บลง local
-        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+        let room = JSON.parse(localStorage.getItem("myRoom"))
         room.equipments = newAdded
-        secureLocalStorage.setItem("myRoom", JSON.stringify(room))
+        localStorage.setItem("myRoom", JSON.stringify(room))
     }
     const delItem = (data, index) => {
         //คืนของเข้า modal
         let copyEquipments = [...equipments]
-        copyEquipments.push({ name: data.name, price: data.price, _id:data._id, desc:data.desc  })
+        copyEquipments.push({ name: data.name, price: data.price, _id:data._id, desc:data.desc, quantity : data.quantity  })
         setEquipments(copyEquipments)
 
         //ลบของออกจากหน้าหลัก
@@ -64,10 +58,10 @@ const AddEquipments = () => {
         copyAddedItem.splice(index, 1)
         setAdded(copyAddedItem)
 
-        //ลบของออกจาก secureLocalStorage
-        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+        //ลบของออกจาก localStorage
+        let room = JSON.parse(localStorage.getItem("myRoom"))
         room.equipments = copyAddedItem
-        secureLocalStorage.setItem("myRoom", JSON.stringify(room))
+        localStorage.setItem("myRoom", JSON.stringify(room))
     }
     const addItem = (data, index) => {
         //add ของเข้าไปใน added
@@ -81,25 +75,24 @@ const AddEquipments = () => {
         setEquipments(copyEquipments)
         
         //เพิ่มของลง local
-        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+        let room = JSON.parse(localStorage.getItem("myRoom"))
         room.equipments = copyAddedItem
-        secureLocalStorage.setItem("myRoom", JSON.stringify(room))
+        localStorage.setItem("myRoom", JSON.stringify(room))
 
     }
     //กด Next
     const storeEquipment = () => {
-        let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
-        secureLocalStorage.setItem("myRoom", JSON.stringify({...room, equipments : added}))
+        let room = JSON.parse(localStorage.getItem("myRoom"))
+        localStorage.setItem("myRoom", JSON.stringify({...room, equipments : added}))
     }
 
     //Get Data When First Time Render
-    useEffect(() => {   //ติดบัคตรงพอกดเลือกของแล้วกด next แล้วกดกลับมาหน้าเดิม ใน click to add ของมันลบออกไม่หมด
-                        //คือใน click to add ของต้องไม่ซ้ำกันกับของที่แสดงบนหน้าหลัก **ที่บัคคือใน comment** ***แก้แล้ว***
+    useEffect(() => { 
         axios.get("http://localhost:8082/equipment-service/equipment/all", {
         }).then((res) => {
             setEquipments(res.data)
             console.log(res.data)
-            let room = JSON.parse(secureLocalStorage.getItem("myRoom"))
+            let room = JSON.parse(localStorage.getItem("myRoom"))
             if(!!room && room.length !== 0){
                 let copyItem = [...res.data]
                 let tempitems = []
@@ -190,6 +183,7 @@ const AddEquipments = () => {
                     </div>
                     :
                     <div onClick={() => { navigate("/booking/payment")
+                                          console.log(JSON.parse(localStorage.getItem("myRoom")))
                                           storeEquipment() }} className='rounded bg-[#2F5D62] hover:bg-[#2B5155] text-white flex items-center justify-center w-[100px] md:w-[150px] h-[50px] cursor-pointer'>
                         <p className='text-2xl'>Next</p>
                     </div>

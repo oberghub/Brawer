@@ -56,6 +56,8 @@ export const BorrowList = () => {
     const [currentDate, setCurrentDate] = useState("1978-12-01")
     const [lateDays, setLateDays] = useState(0)
     const [price, setPrice] = useState(0)
+
+    const [isLoaded, setIsLoaded] = useState(false)
     useEffect(()=>{
         if(borrowToPay){
             let nowdate = new Date().toISOString().substring(0,10)
@@ -129,6 +131,7 @@ export const BorrowList = () => {
             }).catch((e) => console.log(e))
             console.log(borrowList)
             setBorrowList(borrowList)
+            setIsLoaded(true)
         })()
         
     },[user])
@@ -241,7 +244,11 @@ export const BorrowList = () => {
                 :
                 null
             }
-            <p className='text-3xl Gentium-B-font'>Borrow History</p>
+            {isLoaded ? 
+                <p className='text-3xl Gentium-B-font'>Borrow History</p>
+            :
+                <p className='text-3xl Gentium-B-font'>Borrow History (Loading...)</p>
+            }
             {borrowList.map((item, index) =>
                 <>
                     {/* Book card */}
@@ -283,6 +290,16 @@ export const BorrowList = () => {
                                     :
                                     null
                                 }
+                            </div>
+                            <div className="w-full lg:flex relative mb-10">
+                                <div className="flex">
+                                    <div className="w-[150px] Gentium-B-font">
+                                        <p>Status</p>
+                                    </div>
+                                    <div className="">
+                                        <p>{item.status}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         {nodupe(item.books).map((books, index) =>

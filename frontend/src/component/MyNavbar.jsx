@@ -21,9 +21,9 @@ export const MyNavbar = () => {
     const onSuccess = (res) => {
         const profile = res.profileObj;
         setAcc(profile)
-        console.log("success:", profile);
+        // console.log("success:", profile);
         let userData = { name: profile.name, email: profile.email }
-        console.log(userData)
+        // console.log(userData)
         axios.post("http://localhost:8082/user-service/user/isexist", userData, {
             headers: {
                 'Content-Type': 'application/json',

@@ -14,6 +14,7 @@ const EquipmentsStock = () => {
   const [title, setTitle] = useState("")
   const [price, setPrice] = useState("")
   const [desc, setDesc] = useState("")
+  const [quantity, setQuantity] = useState("")
   //----------------------New Equipments----------------------//
 
   //----------------------Edit Equipments----------------------//
@@ -21,8 +22,15 @@ const EquipmentsStock = () => {
   const [e_Price, sete_Price] = useState("")
   const [e_desc, sete_Desc] = useState("")
   const [itemId, setItemId] = useState("")
+  const [e_quantity, setE_Quantity] = useState('')
   //----------------------Edit Equipments----------------------//
 
+  const handleQuantity = (event) => {
+    setQuantity(event.target.value)
+  }
+  const handleE_Quantity = (event) => {
+    setE_Quantity(event.target.value)
+  }
   const handleTitle = (event) => {
     setTitle(event.target.value);
   };
@@ -42,7 +50,7 @@ const EquipmentsStock = () => {
     sete_Desc(event.target.value);
   };
   const addEquipments= () => {
-    let addItem = {name : title, price : price, desc : desc}
+    let addItem = {name : title, price : price, desc : desc, quantity : quantity}
     
     axios.post("http://localhost:8082/equipment-service/equipment", addItem, {
       headers: {
@@ -57,8 +65,8 @@ const EquipmentsStock = () => {
         setTitle("")
         setPrice("")
         setDesc("")
+        setQuantity("")
         setIsActiveModal(false)
-        window.location.reload()
       }
     })
     
@@ -67,7 +75,8 @@ const EquipmentsStock = () => {
     selectedEquipments.name =e_Title
     selectedEquipments.price = e_Price
     selectedEquipments.desc = e_desc
-    let updateItem = {_id : itemId, name : e_Title, price : e_Price, desc : e_desc}
+    selectedEquipments.quantity = e_quantity
+    let updateItem = {_id : itemId, name : e_Title, price : e_Price, desc : e_desc, quantity : e_quantity}
     axios.put("http://localhost:8082/equipment-service/equipment", updateItem, {
       headers: {
         'Content-Type': 'application/json'
@@ -103,6 +112,7 @@ const EquipmentsStock = () => {
       sete_Price(selectedEquipments.price)
       sete_Desc(selectedEquipments.desc)
       setItemId(selectedEquipments._id)
+      setE_Quantity(selectedEquipments.quantity)
     }
   },[selectedEquipments])
   return (
@@ -134,6 +144,12 @@ const EquipmentsStock = () => {
                   >
                     <p className='text-xl mb-1 Gentium-B-font'>Price :</p>
                     <TextField type={"number"} fullWidth label="" id="price" value={price} onChange={handlePrice} />
+                  </Box>
+                  <Box
+                    className='w-full'
+                  >
+                    <p className='text-xl mb-1 Gentium-B-font'>Quantity :</p>
+                    <TextField type={"number"} fullWidth label="" id="price" value={quantity} onChange={handleQuantity} />
                   </Box>
                 </div>
                 <div className="w-full grid grid-cols-1 mt-5">
@@ -228,6 +244,12 @@ const EquipmentsStock = () => {
                 >
                   <p className='text-xl mb-1 Gentium-B-font'>Price per 1 :</p>
                   <TextField fullWidth type={"number"} id="title" value={e_Price} onChange={handleE_Price} />
+                </Box>
+                <Box
+                  className='w-full'
+                >
+                  <p className='text-xl mb-1 Gentium-B-font'>Quantity</p>
+                  <TextField fullWidth type={"number"} id="title" value={e_quantity} onChange={handleE_Quantity} />
                 </Box>
               </div>
               <div className="w-full grid grid-cols-1 mt-5">
