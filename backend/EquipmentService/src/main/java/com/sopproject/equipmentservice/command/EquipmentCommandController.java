@@ -74,9 +74,13 @@ public class EquipmentCommandController {
 
     @RabbitListener(queues = "onReserveWorkspace")
     public boolean onReserveWorkspace(ReserveRestModel model) {
+        boolean isDone = false;
         System.out.println("onReserveWorkspace " + model.getEquipmentsId());
         Set<String> ids = new LinkedHashSet<>(model.getEquipmentsId());
-        boolean isDone = false;
+        if(ids.isEmpty()){
+            isDone = true;
+            return isDone;
+        }
         for (String id : ids) {
             int decrease = Collections.frequency(model.getEquipmentsId(), id);
             QtyDecreaseCommand command = QtyDecreaseCommand.builder()
@@ -100,6 +104,10 @@ public class EquipmentCommandController {
         System.out.println("onCancelReserve " + model.getEquipmentsId());
         Set<String> ids = new LinkedHashSet<>(model.getEquipmentsId());
         boolean isDone = false;
+        if(ids.isEmpty()){
+            isDone = true;
+            return isDone;
+        }
         for (String id : ids) {
             int increase = Collections.frequency(model.getEquipmentsId(), id);
             QtyIncreaseCommand command = QtyIncreaseCommand.builder()

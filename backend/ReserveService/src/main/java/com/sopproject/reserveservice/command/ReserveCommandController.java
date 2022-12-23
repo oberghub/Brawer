@@ -71,7 +71,6 @@ public class ReserveCommandController {
                 .timestamp(model.getTimestamp())
                 .status(model.getStatus())
                 .build();
-
         ReserveEntity entity = new ReserveEntity();
         BeanUtils.copyProperties(command, entity);
         String result;
