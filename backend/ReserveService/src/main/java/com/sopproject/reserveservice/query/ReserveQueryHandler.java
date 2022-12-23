@@ -2,6 +2,7 @@ package com.sopproject.reserveservice.query;
 
 import com.sopproject.reserveservice.core.ReserveEntity;
 import com.sopproject.reserveservice.core.data.ReserveRepository;
+import com.sopproject.reserveservice.query.rest.FindReserveByIdQuery;
 import com.sopproject.reserveservice.query.rest.FindReserveByUserIdQuery;
 import com.sopproject.reserveservice.query.rest.FindReserveQuery;
 import com.sopproject.reserveservice.query.rest.ReserveRestModel;
@@ -43,4 +44,16 @@ public class ReserveQueryHandler {
         }
         return reserveRestModels;
     }
+
+    @QueryHandler
+    ReserveRestModel findReserveById(FindReserveByIdQuery query){
+        ReserveRestModel model = new ReserveRestModel();
+        ReserveEntity entity = reserveRepository.findReserveById(query.get_id());
+        if(entity != null){
+            BeanUtils.copyProperties(entity,model);
+            return model;
+        }
+        return null;
+    }
+
 }

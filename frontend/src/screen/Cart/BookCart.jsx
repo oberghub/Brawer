@@ -37,6 +37,7 @@ export const BookCart = () => {
             //หลังจากส่งไป create ปุ๊ป ไปหักจำนวนหนังสือตามที่ user ได้ยืมไป
             console.log(arr)
             let booksId = []
+            let ts = new Date().toISOString()
             let bdate = new Date()
             let ddate = new Date()
             arr.forEach(element => {
@@ -58,7 +59,24 @@ export const BookCart = () => {
             headers: {
                 'Content-Type': 'application/json'
             }
-            }).then((res) => {console.log(res.status + " " + res.statusText)})
+            }).then((res) => {
+                console.log(res.status + " " + res.statusText + res.data)
+                let addPayment = {
+                    userId: user._id,
+                    reserveId: "",
+                    status: "SUCCESS",
+                    timestamp: ts.substring(0, 10) + " " + ts.substring(11, 19),
+                    price: 15,
+                    borrowId: res.data
+                  }
+                  console.log(addPayment)
+                  axios.post("http://localhost:8082/payment-service/payment", JSON.stringify(addPayment), {
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }).then((res) => console.log(res.status + " " + res.statusText + res.data))
+            })
+            
 
             // add เสร็จล้างค่า localStorage
             secureLocalStorage.removeItem("books")

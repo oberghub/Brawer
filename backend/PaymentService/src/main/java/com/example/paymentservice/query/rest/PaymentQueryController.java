@@ -32,4 +32,22 @@ public class PaymentQueryController {
                 .query(query, ResponseTypes.multipleInstancesOf(PaymentRestModel.class)).join();
         return models;
     }
+
+    @GetMapping("/reserveId/{id}")
+    public PaymentRestModel findPaymentByReserveId(@PathVariable String id){
+        FindPaymentByReserveIdQuery query = new FindPaymentByReserveIdQuery();
+        query.setReserveId(id);
+        PaymentRestModel model = queryGateway
+                .query(query, ResponseTypes.instanceOf(PaymentRestModel.class)).join();
+        return model;
+    }
+
+    @GetMapping("/borrowId/{id}")
+    public PaymentRestModel findPaymentByBorrowId(@PathVariable String id){
+        FindPaymentByBorrowIdQuery query = new FindPaymentByBorrowIdQuery();
+        query.setBorrowId(id);
+        PaymentRestModel model = queryGateway
+                .query(query, ResponseTypes.instanceOf(PaymentRestModel.class)).join();
+        return model;
+    }
 }

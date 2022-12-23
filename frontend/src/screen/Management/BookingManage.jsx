@@ -157,6 +157,22 @@ const BookingManage = () => {
         }
       })
     }else if(confirmState == "Cancel"){
+      (async()=>{
+        let payment = (await axios.get("http://localhost:8082/payment-service/payment/reserveId/"+selectedDetail.bookingId, {headers: {'Content-Type': 'application/json'}})).data
+        payment.status = "REFUNDED"
+        console.log(payment)
+        axios.put("http://localhost:8082/payment-service/payment", payment, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+        }).then((res) => {
+        console.log(res.status + " " + res.statusText + " "+res.data)
+        if(res.status == 200){
+          // selectedDetail.status = "CANCELLED"
+          // setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!=selectedDetail.bookingId), selectedDetail])
+
+        }})
+      })()
       let updateReserve = {
         _id:selectedDetail.bookingId,
         userId:selectedDetail.bookingBy,
@@ -180,6 +196,9 @@ const BookingManage = () => {
 
         }
       })
+      
+     
+      
     }
     setConfirmModal(false)
   }

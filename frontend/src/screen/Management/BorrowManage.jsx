@@ -135,6 +135,22 @@ const BorrowManage = () => {
         }
       })
     } else if (confirmState == "cancel") {
+      (async()=>{
+        let payment = (await axios.get("http://localhost:8082/payment-service/payment/borrowId/"+borrowId, {headers: {'Content-Type': 'application/json'}})).data
+        payment.status = "CANCELLEd"
+        console.log(payment)
+        axios.put("http://localhost:8082/payment-service/payment", payment, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+        }).then((res) => {
+        console.log(res.status + " " + res.statusText + " "+res.data)
+        if(res.status == 200){
+          // selectedDetail.status = "CANCELLED"
+          // setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!=selectedDetail.bookingId), selectedDetail])
+
+        }})
+      })()
       let updateBorrow = {
         _id: borrowId,
         status: "CANCELLED",
@@ -158,6 +174,8 @@ const BorrowManage = () => {
 
         }
       })
+
+      
     } else if (confirmState == "return") {
       let updateBorrow = {
         _id: borrowId,

@@ -13,6 +13,11 @@ public interface PaymentRepository  extends MongoRepository<PaymentEntity, Strin
     List<PaymentEntity> findByUserId(String userId);
     @Query("{_id:'?0'}")
     PaymentEntity findByPaymentId(String _id);
+    @Query("{reserveId: '?0'}")
+    PaymentEntity findByReserveId(String reserveId);
+
+    @Query("{borrowId: '?0'}")
+    PaymentEntity findByBorrowId(String borrowId);
 
 }
 

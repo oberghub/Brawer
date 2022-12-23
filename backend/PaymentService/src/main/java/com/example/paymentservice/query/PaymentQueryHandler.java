@@ -2,9 +2,7 @@ package com.example.paymentservice.query;
 
 import com.example.paymentservice.core.PaymentEntity;
 import com.example.paymentservice.core.data.PaymentRepository;
-import com.example.paymentservice.query.rest.FindPaymentsQuery;
-import com.example.paymentservice.query.rest.FindUserPaymentsQuery;
-import com.example.paymentservice.query.rest.PaymentRestModel;
+import com.example.paymentservice.query.rest.*;
 import org.axonframework.queryhandling.QueryHandler;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -42,5 +40,27 @@ public class PaymentQueryHandler {
             models.add(model);
         }
         return models;
+    }
+
+    @QueryHandler
+    PaymentRestModel findPaymentByReserveId(FindPaymentByReserveIdQuery query){
+        PaymentRestModel model = new PaymentRestModel();
+        PaymentEntity entity = paymentRepository.findByReserveId(query.getReserveId());
+        if(entity != null){
+            BeanUtils.copyProperties(entity,model);
+            return model;
+        }
+        return null;
+    }
+
+    @QueryHandler
+    PaymentRestModel findPaymentByBorrowId(FindPaymentByBorrowIdQuery query){
+        PaymentRestModel model = new PaymentRestModel();
+        PaymentEntity entity = paymentRepository.findByBorrowId(query.getBorrowId());
+        if(entity != null){
+            BeanUtils.copyProperties(entity,model);
+            return model;
+        }
+        return null;
     }
 }
