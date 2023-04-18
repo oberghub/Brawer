@@ -1,4 +1,0 @@
-1.เปิด Axon Server
-2.ตั้ง Exchanges และ Queues
-3.เปิดทุก Services
-**UserService ต้องเปิด 2 อย่างคือ UserServer และ Gradle->bootRun
