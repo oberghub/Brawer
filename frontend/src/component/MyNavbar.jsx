@@ -20,7 +20,7 @@ export const MyNavbar = () => {
     //--- Google OAuth ---//
     const CLIENT_ID = "657796919531-5h1omqe0i3dt1t6pkue7lin4rj7nd4tb.apps.googleusercontent.com"
     const onSuccess = async (res) => {
-        const { name, email, imageUrl } = response.profileObj;
+        const { name, email, imageUrl } = res.profileObj;
 
         const existingUser = await userService.getUserData(email);
         if (existingUser) {
