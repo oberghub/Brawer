@@ -9,6 +9,7 @@ import { gapi } from "gapi-script";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { setLoaded, userdata } from "../userSlice";
 import axios from "axios";
+import userService from "../userService";
 export const MyNavbar = () => {
     const [acc, setAcc] = useState(false)
     const [bookInCart, setBookInCart] = useState([])
@@ -18,29 +19,49 @@ export const MyNavbar = () => {
 
     //--- Google OAuth ---//
     const CLIENT_ID = "657796919531-5h1omqe0i3dt1t6pkue7lin4rj7nd4tb.apps.googleusercontent.com"
-    const onSuccess = (res) => {
-        const profile = res.profileObj;
-        setAcc(profile)
-        // console.log("success:", profile);
-        let userData = { name: profile.name, email: profile.email }
-        // console.log(userData)
-        axios.post("http://localhost:8082/user-service/user/isexist", userData, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        }).then((res) => {
-            console.log(res.status + " " + res.statusText)
-            if (res.status == 200) {
-                dispatch(userdata({ ...res.data, imageUrl: profile.imageUrl }))
-            } else {
-                dispatch(userdata({
-                    name: profile.name,
-                    email: profile.email,
-                    imageUrl: profile.imageUrl
-                }))
-            }
-        })
+    const onSuccess = async (res) => {
+        const { name, email, imageUrl } = response.profileObj;
+
+        const existingUser = await userService.getUserData(email);
+        if (existingUser) {
+            // Set the user data in the state using the existing data from DynamoDB
+            setAcc(existingUser);
+        } else {
+            // Save the new user data to DynamoDB
+            const newUser = {
+            name: name,
+            email: email,
+            imageUrl: imageUrl,
+            role: "user", // default role
+            favouriteBooks: [], // default empty array
+            };
+            userService.saveUserData(newUser);
+            setAcc(newUser);
+  }
+
+        // OLD CODE
+        // const profile = res.profileObj;
+        // setAcc(profile)
+        // // console.log("success:", profile);
+        // let userData = { name: profile.name, email: profile.email }
+        // // console.log(userData)
+        // axios.post("http://localhost:8082/user-service/user/isexist", userData, {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Access-Control-Allow-Origin': '*'
+        //     }
+        // }).then((res) => {
+        //     console.log(res.status + " " + res.statusText)
+        //     if (res.status == 200) {
+        //         dispatch(userdata({ ...res.data, imageUrl: profile.imageUrl }))
+        //     } else {
+        //         dispatch(userdata({
+        //             name: profile.name,
+        //             email: profile.email,
+        //             imageUrl: profile.imageUrl
+        //         }))
+        //     }
+        // })
 
 
 
