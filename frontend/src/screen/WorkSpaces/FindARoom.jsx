@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react';
 import axios from 'axios';
 
-const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
 
 function FindARoom() {
     const navigate = useNavigate()

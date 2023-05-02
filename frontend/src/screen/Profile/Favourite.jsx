@@ -4,7 +4,7 @@ import { BsFillBookmarkFill, BsBookmark } from 'react-icons/bs'
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { userdata } from "../../userSlice";
-
+const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
 export const Favourite = () => {
     const user = useSelector((state) => state.user_data.user)
     const dispatch = useDispatch()
@@ -26,7 +26,7 @@ export const Favourite = () => {
             favouriteBooks: newfavs
         }
         console.log(user, updateUser)
-        axios.put("http://localhost:8082/user-service/user", JSON.stringify(updateUser), {
+        axios.post("http://localhost:8082/user-service/user", JSON.stringify(updateUser), {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -37,9 +37,9 @@ export const Favourite = () => {
     useEffect(() => {
         let requestBook = user.favouriteBooks
         console.log(requestBook, user)
-        console.log("http://localhost:8082/book-service/book/ids/" + requestBook.join(","))
+        // console.log("http://localhost:8082/book-service/book/ids/" + requestBook.join(","))
         if (requestBook.length > 0 && user._id != "") {
-            axios.get("http://localhost:8082/book-service/book/ids/" + requestBook.join(","), {
+            axios.get(dns + "/books/" + requestBook.join(","), {
             }).then((res) => {
                 setBookData(res.data)
                 setIsLoaded(true)

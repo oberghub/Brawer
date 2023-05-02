@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
 const AddEquipments = () => {
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
