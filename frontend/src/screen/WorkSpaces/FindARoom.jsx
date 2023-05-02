@@ -7,6 +7,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react';
 import axios from 'axios';
+
+const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+
 function FindARoom() {
     const navigate = useNavigate()
     let currentTime = new Date().toISOString().slice(0, 10)
@@ -14,35 +17,7 @@ function FindARoom() {
     const [time_start, setTimeStart] = useState(null)
     const [time_end, setTimeEnd] = useState(null)
     const [isFiltered, setFiltered] = useState(false)
-    const [allRooms, setRooms] = useState([
-        // {
-        //     _id: 'wsw001',
-        //     room_name: "w01",
-        //     room_type: "Workstation",
-        //     room_capacity: "2 - 9",
-        //     price : 500,
-        //     time_rent: [
-        //         { date: "2022-12-10", time_start: "12:00", time_end: "14:00" },
-        //         { date: "2022-12-10", time_start: "14:00", time_end: "15:00" },
-        //         { date: "2022-12-10", time_start: "18:00", time_end: "19:00" },
-        //         { date: "2022-12-11", time_start: "14:00", time_end: "16:00" }
-        //     ],
-        //     desc:"room big big"
-        // },
-        // {
-        //     _id: 'wsw002',
-        //     room_name: "w02",
-        //     room_type: "Workstation",
-        //     room_capacity: "2 - 9",
-        //     price : 500,
-        //     time_rent: [
-        //         { date: "2022-12-10", time_start: "10:00", time_end: "15:00" },
-        //         { date: "2022-12-12", time_start: "11:00", time_end: "19:00" },
-        //     ],
-        //     desc:"big big room"
-        // }
-    ]
-    )
+    const [allRooms, setRooms] = useState([])
     const [selectedRoomType, setSelectedRoomType] = useState(null)
     const [filterRooms, setFilterRooms] = useState(allRooms)
     const room_type = [
@@ -110,7 +85,7 @@ function FindARoom() {
             setFiltered(true)
             setSelectedRoom(allRooms[0])
         }
-        axios.get("http://localhost:8082/workspace-service/workspace/all", {
+        axios.get(dns + "/workspaces", {
         }).then((res) => {
           setRooms(res.data)
           let myrooms = res.data
@@ -154,7 +129,7 @@ function FindARoom() {
         }
     }, [])
     useEffect(() => {
-        axios.get("http://localhost:8082/workspace-service/workspace/all", {
+        axios.get(dns + "/workspaces", {
         }).then((res) => {
           setRooms(res.data)
         }).catch((e) => console.log(e))

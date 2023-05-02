@@ -56,7 +56,7 @@ export const BookCart = () => {
                 due_date:ddate.toISOString().slice(0,10)
             }
             console.log(user, borrowBooks)
-            axios.post(dns + "/borrow", JSON.stringify(borrowBooks), {
+            axios.post("http://localhost:8082/borrow-service/borrow", JSON.stringify(borrowBooks), {
             headers: {
                 'Content-Type': 'application/json'
             }

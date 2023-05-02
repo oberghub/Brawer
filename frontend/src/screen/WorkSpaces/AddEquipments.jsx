@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
 const AddEquipments = () => {
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
@@ -88,7 +89,7 @@ const AddEquipments = () => {
 
     //Get Data When First Time Render
     useEffect(() => { 
-        axios.get("http://localhost:8082/equipment-service/equipment/all", {
+        axios.get(dns + "/equipment", {
         }).then((res) => {
             setEquipments(res.data)
             console.log(res.data)
