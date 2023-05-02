@@ -6,7 +6,7 @@ import secureLocalStorage from "react-secure-storage";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { userdata } from "../../userSlice";
-const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
 export const BookInfo = () => {
     const location = useLocation()
     const user = useSelector((state) => state.user_data.user)
