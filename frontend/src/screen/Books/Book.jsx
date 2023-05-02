@@ -4,70 +4,12 @@ import { BsBookmark , BsFillBookmarkFill} from 'react-icons/bs'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { userdata } from "../../userSlice";
-const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
 export const Book = () => {
     const navigate = useNavigate()
     const user = useSelector((state) => state.user_data.user)
     const dispatch = useDispatch()
 
-    // //เก็บ type ของหนังสือแบบ Distinct
-    // const [filterTypeData, setFilterTypeData] = useState([])
-    // const [filterLangData, setFilterLangData] = useState([])
-    // //เก็บ value ที่จะเอาไป filter หาหนังสือ
-    // const [filterLangStack, setFilterLangStack] = useState([])
-    // const [filterTypeStack, setFilterTypeStack] = useState([])
-
-    // const handleLangFilter = (e) => { //ถ้ามีการติ๊ก CheckBox ฟังก์ชันนี้จะทำงาน
-    //     let state = e.target.checked
-    //     let value = e.target.value
-    //     let filterStackCopy = [...filterLangStack]
-    //     if (state) {
-    //         filterStackCopy.push(value)
-    //         setFilterLangStack(filterStackCopy)
-    //     }
-    //     else {
-    //         filterStackCopy.splice(filterLangStack.indexOf(value), 1)
-    //         setFilterLangStack(filterStackCopy)
-    //     }
-    //     console.log(filterStackCopy)
-    // }
-    // const handleTypeFilter = (e) => { //ถ้ามีการติ๊ก CheckBox ฟังก์ชันนี้จะทำงาน
-    //     let state = e.target.checked
-    //     let value = e.target.value
-    //     let filterStackCopy = [...filterTypeStack]
-    //     if (state) {
-    //         filterStackCopy.push(value)
-    //         setFilterTypeStack(filterStackCopy)
-    //     }
-    //     else {
-    //         filterStackCopy.splice(filterTypeStack.indexOf(value), 1)
-    //         setFilterTypeStack(filterStackCopy)
-    //     }
-    //     console.log(filterStackCopy)
-    // }
-    // useEffect(() => { //ถ้ามีการติ๊กใน Checkbox useEffect จะทำงาน
-    //     let filterBook = [...showBooks]
-    //     if (filterLangStack.length != 0) {
-    //         filterBook = filterBook.filter(item => {
-    //             for (let filter of filterLangStack) {
-    //                 if (item.language == filter) {
-    //                     return true
-    //                 }
-    //             }
-    //         })
-    //     }
-    //     if(filterTypeStack.length != 0){
-    //         filterBook = filterBook.filter(item => {
-    //             for(let filter of filterTypeStack){
-    //                 if(!!item.genres.find(find => find === filter)){
-    //                     return true
-    //                 }
-    //             }
-    //         })
-    //     }
-    //     const result = filterLangStack.length == 0 && filterTypeStack.length == 0 ? cloneBooks : filterBook
-    //     setShowBooks(result)
-    // }, [filterLangStack, filterTypeStack]) //[filterLangStack, filterTypeStack] ใส่ค่าไว้เก็บการเปลี่ยนแปลง
     //Get Data When First Time Render
     const [showBooks, setShowBooks] = useState([]) //เอาไว้ show ข้อมูลในหน้าเว็บ
     const [isLoaded, setIsLoaded] = useState(false)
