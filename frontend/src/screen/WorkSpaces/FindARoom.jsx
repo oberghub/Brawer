@@ -9,7 +9,11 @@ import { useEffect } from 'react';
 import axios from 'axios';
 
 const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
-
+const headerConfig = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 function FindARoom() {
     const navigate = useNavigate()
     let currentTime = new Date().toISOString().slice(0, 10)
@@ -85,8 +89,7 @@ function FindARoom() {
             setFiltered(true)
             setSelectedRoom(allRooms[0])
         }
-        axios.get(dns + "/workspaces", {
-        }).then((res) => {
+        axios.get(dns + "/workspaces", headerConfig).then((res) => {
           setRooms(res.data)
           let myrooms = res.data
           findRooms(myrooms)

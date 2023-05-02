@@ -11,6 +11,11 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useSelector } from "react-redux";
 const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
+const headerConfig = {
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
 const Payment = () => {
   const user = useSelector((state) => state.user_data.user);
   const [resultRoom, setResultRoom] = useState({

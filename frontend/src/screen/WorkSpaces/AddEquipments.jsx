@@ -3,6 +3,11 @@ import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
+const headerConfig = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 const AddEquipments = () => {
     const navigate = useNavigate()
     const [isActiveModal, setIsActiveModal] = useState(false)
@@ -89,8 +94,7 @@ const AddEquipments = () => {
 
     //Get Data When First Time Render
     useEffect(() => { 
-        axios.get(dns + "/equipment", {
-        }).then((res) => {
+        axios.get(dns + "/equipment", headerConfig).then((res) => {
             setEquipments(res.data)
             console.log(res.data)
             let room = JSON.parse(localStorage.getItem("myRoom"))
