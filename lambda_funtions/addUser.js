@@ -1,12 +1,16 @@
+// addUser.js
 const AWS = require("aws-sdk");
 const dynamo = new AWS.DynamoDB.DocumentClient();
+const uuid = require('uuid');
 
 exports.handler = async (event) => {
+  console.log("event.body:", event.body); // Add this line
   const user = JSON.parse(event.body);
-
+  const _id = uuid.v4();
   const params = {
     TableName: "users",
     Item: {
+      _id: user._id || _id,
       email: user.email,
       name: user.name,
       imageUrl: user.imageUrl,
@@ -25,7 +29,7 @@ exports.handler = async (event) => {
     console.error(error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Internal Server Error" }),
+      body: JSON.stringify({ message: error }),
     };
   }
 };

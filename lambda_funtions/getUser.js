@@ -2,12 +2,12 @@ const AWS = require("aws-sdk");
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async (event) => {
-  const email = event.pathParameters.email;
+  const _id = event.pathParameters._id;
 
   const params = {
     TableName: "users",
     Key: {
-      email: email,
+      _id: _id,
     },
   };
 
@@ -21,14 +21,15 @@ exports.handler = async (event) => {
     } else {
       return {
         statusCode: 404,
-        body: JSON.stringify({ message: "User not found" }),
+        body: JSON.stringify({ message: "User not found" + error }),
       };
     }
   } catch (error) {
     console.error(error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Internal Server Error" }),
+      body: JSON.stringify({ message: "Internal Server Error" + error }),
     };
   }
 };
+
