@@ -14,6 +14,7 @@ const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
 const headerConfig = {
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin" : "*"
   },
 };
 const Payment = () => {
@@ -82,11 +83,7 @@ const Payment = () => {
       .post(
         dns + "/workspaces/" + resultRoom._id +"/rent-time-slot",
         JSON.stringify(addReserve),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        headerConfig
       )
       .then((res) => {
         console.log(res.status + " " + res.statusText);
