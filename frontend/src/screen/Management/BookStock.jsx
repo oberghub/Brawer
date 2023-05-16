@@ -4,6 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import axios from 'axios';
+const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
 const BookStock = () => {
   const [books, setBooks] = useState([])
   const toggleslide = () => {
@@ -116,7 +117,7 @@ const BookStock = () => {
   const addBook = () => {
     const addThatBook = (image) =>{
       let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
-      axios.post("http://localhost:8082/book-service/book", addData, {
+      axios.post(dns + "/books", addData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -163,9 +164,9 @@ const BookStock = () => {
 
 
     //Update SelectedBook to db
-    let updateData = JSON.stringify({_id:selectedBook._id,title: e_bookTitle, language: e_bookLanguage, genres: e_bookType.split(","), image: imageUrls[0], quantity: parseInt(e_quantity), authors: e_Authors.split(","), desc: e_desc })
+    let updateData = JSON.stringify({title: e_bookTitle, language: e_bookLanguage, genres: e_bookType.split(","), image: imageUrls[0], quantity: parseInt(e_quantity), authors: e_Authors.split(","), desc: e_desc })
     console.log(updateData)
-    axios.put("http://localhost:8082/book-service/book", updateData, {
+    axios.put(dns+"/books/"+selectedBook._id, updateData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -175,9 +176,9 @@ const BookStock = () => {
   //Delete Book
   const deleteBook = () => {
     //Delete with selectedBook._id   in db
-    let deleteData = "http://localhost:8082/book-service/book/"+selectedBook._id
+    let deleteData = dns+"/books/"+selectedBook._id
     console.log(deleteData)
-    axios.delete("http://localhost:8082/book-service/book/"+selectedBook._id, {
+    axios.delete(dns+"/books/"+selectedBook._id, {
     }).then((res) => console.log(res.status + " " + res.statusText))
 
 
@@ -189,7 +190,7 @@ const BookStock = () => {
 
   //Get Data When First Time Render
   useEffect(() => {
-    axios.get("http://localhost:8082/book-service/book/all", {
+    axios.get(dns+"/books", {
     }).then((res) => {
       setBooks(res.data)
       setSelectedBook(res.data.length>0?res.data[0]:null)

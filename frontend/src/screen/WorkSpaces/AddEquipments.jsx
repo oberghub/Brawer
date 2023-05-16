@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const headerConfig = {
     headers: {
       "Content-Type": "application/json",

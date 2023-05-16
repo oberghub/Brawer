@@ -4,7 +4,7 @@ import { BsBookmark , BsFillBookmarkFill} from 'react-icons/bs'
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
 import { userdata } from "../../userSlice";
-const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 export const Book = () => {
     const navigate = useNavigate()
     const user = useSelector((state) => state.user_data.user)

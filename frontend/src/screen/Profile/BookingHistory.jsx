@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useSelector } from 'react-redux';
-const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy"
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const BookingHistory = () => {
     const [myRoomHistory, setMyRoomHistory] = useState([
         // {

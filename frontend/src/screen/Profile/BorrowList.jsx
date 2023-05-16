@@ -8,7 +8,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const dns = "https://jo1a3f0ow5.execute-api.us-east-1.amazonaws.com/proxy";
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev";
 export const BorrowList = () => {
   const user = useSelector((state) => state.user_data.user);
   const [borrowList, setBorrowList] = useState([
