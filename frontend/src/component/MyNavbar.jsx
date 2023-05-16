@@ -31,6 +31,7 @@ export const MyNavbar = () => {
   const login = useGoogleLogin({
     onSuccess: (res) => {
       setCredential(res)
+      sessionStorage.setItem('cred', JSON.stringify(res))
       console.log("success");
     },
     onError: (error) => console.log("Login Failed:", error),
@@ -40,7 +41,14 @@ export const MyNavbar = () => {
   const logout = () => {
     googleLogout();
     setAcc(null);
+    sessionStorage.removeItem('cred')
   };
+  useEffect(()=>{
+    let credential = JSON.parse(sessionStorage.getItem('cred'))
+    if(credential){
+      setCredential(credential)
+    }
+  },[])
   useEffect(() => {
     if(credential){
       console.log(credential);
