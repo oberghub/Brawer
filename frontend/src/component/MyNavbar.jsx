@@ -13,10 +13,11 @@ import axios from "axios";
 import userService from "../userService";
 
 // new code //
-import { googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { googleLogout, hasGrantedAllScopesGoogle, useGoogleLogin } from "@react-oauth/google";
 // new code //
 export const MyNavbar = () => {
   const [acc, setAcc] = useState();
+  const [credential, setCredential] = useState([])
   const [bookInCart, setBookInCart] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,29 +30,38 @@ export const MyNavbar = () => {
   //ของใหม่ใช้ func login กับ logout
   const login = useGoogleLogin({
     onSuccess: (res) => {
-      axios
-        .get(
-          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${res.access_token}`,
-          {
-            headers: {
-              Authorization: `Bearer ${res.access_token}`,
-              Accept: "application/json",
-            },
-          }
-        )
-        .then((res) => {
-          setAcc(res.data);
-          dispatch(userdata({...res.data}))
-          console.log(acc);
-        })
-        .catch((err) => console.log(err));
+      setCredential(res)
+      console.log("success");
     },
     onError: (error) => console.log("Login Failed:", error),
+    scope : 'https://www.googleapis.com/auth/userinfo.profile',
+    // flow : ''
   });
   const logout = () => {
     googleLogout();
     setAcc(null);
   };
+  useEffect(() => {
+    if(credential){
+      console.log(credential);
+      axios
+      .get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credential.access_token}`,
+        {
+          headers: {
+            Authorization: `Bearer ${credential.access_token}`,
+            Accept: "application/json",
+          },
+        }
+      )
+      .then((res) => {
+        setAcc(res.data);
+        dispatch(userdata({...res.data}))
+        console.log(res);
+      })
+      .catch((err) => console.log(err));
+    }
+  }, [credential])
   const onSuccess = async (res) => {
     // const { name, email, imageUrl } = res.profileObj;
     // const existingUser = await userService.getUserData(email);
