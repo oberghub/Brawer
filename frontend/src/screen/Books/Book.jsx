@@ -17,7 +17,7 @@ export const Book = () => {
 
         let newfavs = [...user.favouriteBooks,bookid]
         let updateUser = {
-            _id:user._id,
+            id:user.id,
             role:user.role,
             name:user.name,
             email:user.email,
@@ -38,7 +38,7 @@ export const Book = () => {
             newfavs.splice(index, 1)
         }
         let updateUser = {
-            _id:user._id,
+            id:user.id,
             role:user.role,
             name:user.name,
             email:user.email,
@@ -101,9 +101,9 @@ export const Book = () => {
                                                 h-auto
                                                 mt-5 pl-2 relative">
                                             {user.favouriteBooks? 
-                                            user.favouriteBooks.filter((e)=>e==book._id)[0]? 
-                                            <BsFillBookmarkFill size={25} color={"gold"} className="cursor-pointer" onClick={() => { removeBookmark(book._id) }} />: 
-                                            <BsBookmark size={25} className="cursor-pointer" onClick={() => { addBookmark(book._id) }} />
+                                            user.favouriteBooks.filter((e)=>e==book.id)[0]? 
+                                            <BsFillBookmarkFill size={25} color={"gold"} className="cursor-pointer" onClick={() => { removeBookmark(book.id) }} />: 
+                                            <BsBookmark size={25} className="cursor-pointer" onClick={() => { addBookmark(book.id) }} />
                                             :""}
                                         </div>
                                     </div>)}

@@ -4,6 +4,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import axios from 'axios';
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const WorkSpaceManage = () => {
   const [selectedWorkSpace, setSelectedWorkSpace] = useState(null)
   const [isActiveModal, setIsActiveModal] = useState(false)
@@ -89,7 +90,7 @@ const WorkSpaceManage = () => {
   }
   const addWorkSpaces = () => {
     let addData = JSON.stringify({ room_name: roomName, room_type: roomType, room_capacity: roomCapacity.split(","), price : price, desc : desc, time_rent: [], status : "AVAILABLE" })
-    axios.post("http://localhost:8082/workspace-service/workspace", addData, {
+    axios.post(dns + "/workspace", addData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -97,7 +98,7 @@ const WorkSpaceManage = () => {
       console.log(res.status + " " + res.statusText)
       if(res.status == 200){
         const copyWorkSpace = [...rooms]
-        copyWorkSpace.push({_id:res.data, room_name: roomName, room_type: roomType, room_capacity: roomCapacity.split(","), price : price, desc : desc, time_rent: [], status : "AVAILABLE" })
+        copyWorkSpace.push({id:res.data, room_name: roomName, room_type: roomType, room_capacity: roomCapacity.split(","), price : price, desc : desc, time_rent: [], status : "AVAILABLE" })
         setRooms(copyWorkSpace)
         setRoomType("")
         setRoomName("")
@@ -119,30 +120,30 @@ const WorkSpaceManage = () => {
 
     console.log(selectedWorkSpace)
     console.log(rooms)
-    let updateData = JSON.stringify({ _id:selectedWorkSpace._id,room_name: e_roomName, room_type: e_roomType, room_capacity: e_roomCapacity.split(","), price : e_price, desc : e_desc, time_rent: [], status : selectedWorkSpace.status })
-    axios.put("http://localhost:8082/workspace-service/workspace", updateData, {
+    let updateData = JSON.stringify({ id:selectedWorkSpace.id,room_name: e_roomName, room_type: e_roomType, room_capacity: e_roomCapacity.split(","), price : e_price, desc : e_desc, time_rent: [], status : selectedWorkSpace.status })
+    axios.put(dns + "/workspace", updateData, {
       headers: {
         'Content-Type': 'application/json'
       }
     }).then((res) => console.log(res.status + " " + res.statusText))
   }
   const deleteWorkSpace = () =>{
-    // let deleteData = "http://localhost:8082/workspace-service/workspace/"+selectedWorkSpace._id
+    // let deleteData = "http://localhost:8082/workspace-service/workspace/"+selectedWorkSpace.id
     // console.log(deleteData)
-    axios.delete("http://localhost:8082/workspace-service/workspace/"+selectedWorkSpace._id,{
+    axios.delete(dns + "/workspace/"+selectedWorkSpace.id,{
       headers: {
         'Content-Type': 'application/json'
       }
     }).then((res) => console.log(res.status + " " + res.statusText))
 
-    let todelete = rooms.filter((e)=>e._id != selectedWorkSpace._id)
+    let todelete = rooms.filter((e)=>e.id != selectedWorkSpace.id)
     setRooms(todelete)
     setSelectedWorkSpace(todelete.length>0?todelete[0]:null)
   }
 
   //Get Data When First Time Render
   useEffect(() => {
-    axios.get("http://localhost:8082/workspace-service/workspace/all", {
+    axios.get(dns + "/workspaces", {
     }).then((res) => {
       setRooms(res.data)
       setSelectedWorkSpace(res.data.length>0?res.data[0]:null)
@@ -274,7 +275,7 @@ const WorkSpaceManage = () => {
               disablePortal
               id="combo-box-workspaces"
               options={rooms}
-              getOptionLabel={(option)=>"(" + rooms.findIndex((e)=>e._id==option._id) + ") " + option.room_name}
+              getOptionLabel={(option)=>"(" + rooms.findIndex((e)=>e.id==option.id) + ") " + option.room_name}
               value={selectedWorkSpace}
               onChange={(event, newValue) => { 
                 setSelectedWorkSpace(newValue);

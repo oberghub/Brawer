@@ -26,7 +26,7 @@ export const MainProfile = () => {
     const changeName = () =>{
         
         let updateUser = {
-            _id:user._id,
+            id:user.id,
             role:user.role,
             name:e_name,
             email:user.email,

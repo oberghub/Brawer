@@ -61,7 +61,7 @@ const BookingHistory = () => {
     }
     const nodupe = (arr = [])=>{
         return arr.reduce((acc,item)=>{
-          let index = acc.map(item => item._id).indexOf(item._id)
+          let index = acc.map(item => item.id).indexOf(item.id)
           if(index != -1){
             acc[index].qty++
           }else{
@@ -74,7 +74,7 @@ const BookingHistory = () => {
     useEffect( ()=>{
         (async()=>{
             let bookingList = []
-            await axios.get("http://localhost:8082/reserve-service/reserve/user/"+user._id, {
+            await axios.get("http://localhost:8082/reserve-service/reserve/user/"+user.id, {
             }).then(async (res) => {
                 if(res.status == 200){
                     for(let i=0;i<res.data.length;i++){
@@ -86,7 +86,7 @@ const BookingHistory = () => {
                         room = await (await axios.get("http://localhost:8082/workspace-service/workspace/"+res.data[i].roomId, {})).data
                         let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
                         let booking = {
-                            bookingId: res.data[i]._id,
+                            bookingId: res.data[i].id,
                             roomId: res.data[i].roomId,
                             roomName: room.room_name,
                             roomType: room.room_type,

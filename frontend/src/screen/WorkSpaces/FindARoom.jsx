@@ -218,7 +218,7 @@ function FindARoom() {
                             setRoomIndex(index)
                             setSelectedRoom(data)
                             console.log(data)
-                        }} key={data._id} className='cursor-pointer flex items-center rounded my-3 min-[1280px]:w-[980px] h-[120px] drop-shadow-xl m-auto p-4 relative' 
+                        }} key={data.id} className='cursor-pointer flex items-center rounded my-3 min-[1280px]:w-[980px] h-[120px] drop-shadow-xl m-auto p-4 relative' 
                             style={{backgroundColor : index === roomIndex ? '#F1F1F1' : 'white'}}>
                             <div>
                                 <p className='text-2xl'>{data.room_type} : Room {data.room_name}</p>

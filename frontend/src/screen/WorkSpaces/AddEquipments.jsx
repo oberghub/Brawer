@@ -56,7 +56,7 @@ const AddEquipments = () => {
     const delItem = (data, index) => {
         //คืนของเข้า modal
         let copyEquipments = [...equipments]
-        copyEquipments.push({ name: data.name, price: data.price, _id:data._id, desc:data.desc, quantity : data.quantity  })
+        copyEquipments.push({ name: data.name, price: data.price, id:data.id, desc:data.desc, quantity : data.quantity  })
         setEquipments(copyEquipments)
 
         //ลบของออกจากหน้าหลัก
@@ -72,7 +72,7 @@ const AddEquipments = () => {
     const addItem = (data, index) => {
         //add ของเข้าไปใน added
         let copyAddedItem = [...added]
-        copyAddedItem.push({ name: data.name, price: data.price, quantity: 1, _id:data._id, desc:data.desc })
+        copyAddedItem.push({ name: data.name, price: data.price, quantity: 1, id:data.id, desc:data.desc })
         setAdded(copyAddedItem)
 
         //ลบของออกจาก modal

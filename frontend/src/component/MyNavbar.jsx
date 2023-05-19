@@ -24,7 +24,7 @@ export const MyNavbar = () => {
   const user = useSelector((state) => state.user_data.user);
 
   //--- Google OAuth ---//
-  const CLIENT_ID =
+  const CLIENTid =
     "657796919531-5h1omqe0i3dt1t6pkue7lin4rj7nd4tb.apps.googleusercontent.com";
 
   //ของใหม่ใช้ func login กับ logout
@@ -62,11 +62,36 @@ export const MyNavbar = () => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         setAcc(res.data);
-        dispatch(userdata({...res.data}))
-        console.log(res);
+        
+        console.log(res.data.email);
+        const existingUser = await userService.getUserData(res.data.email);
+        console.log(existingUser)
+        if (existingUser) {
+            // Set the user data in the state using the existing data from DynamoDB
+            setAcc(existingUser);
+            dispatch(userdata(existingUser))
+        } else {
+            // Save the new user data to DynamoDB
+            const newUser = {
+            ...res.data,
+            imageUrl: res.data.picture,
+            role: "user", // default role
+            favouriteBooks: [], // default empty array
+            };
+            userService.saveUserData(newUser);
+            setAcc(newUser);
+            dispatch(userdata(newUser))
+        }
       })
+      // OLD CODE
+      // .then((res) => {
+      //   setAcc(res.data);
+      //   dispatch(userdata({...res.data}))
+      //   console.log(res);
+      // })
+
       .catch((err) => console.log(err));
     }
   }, [credential])
@@ -118,7 +143,7 @@ export const MyNavbar = () => {
   // useEffect(() => {
   //     const initClient = () => {
   //         gapi.client.init({
-  //             clientId: CLIENT_ID,
+  //             clientId: CLIENTid,
   //             scope: "https://www.googleapis.com/auth/userinfo.profile"
   //         });
   //     };
@@ -208,7 +233,7 @@ export const MyNavbar = () => {
                             </button> */}
               {/* <GoogleLogin
                                 className="mt-3"
-                                clientId={CLIENT_ID}
+                                clientId={CLIENTid}
                                 buttonText="Sign in with Google"
                                 onSuccess={onSuccess}
                                 onFailure={onFailure}
@@ -386,7 +411,7 @@ export const MyNavbar = () => {
                 //     Sign in with Google
                 // </button>
                 // <GoogleLogin
-                //     clientId={CLIENT_ID}
+                //     clientId={CLIENTid}
                 //     buttonText="Sign in with Google"
                 //     onSuccess={onSuccess}
                 //     onFailure={onFailure}

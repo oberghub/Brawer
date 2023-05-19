@@ -98,7 +98,7 @@ export const BorrowList = () => {
     let ts = new Date().toISOString();
     // setConfirmModal(true)
     let addPayment = {
-      userId: user._id,
+      userId: user.id,
       reserveId: "",
       status: "SUCCESS",
       timestamp: ts.substring(0, 10) + " " + ts.substring(11, 19),
@@ -122,7 +122,7 @@ export const BorrowList = () => {
   };
   const nodupe = (arr = []) => {
     return arr.reduce((acc, item) => {
-      let index = acc.map((item) => item._id).indexOf(item._id);
+      let index = acc.map((item) => item.id).indexOf(item.id);
       if (index != -1) {
         acc[index].qty++;
       } else {
@@ -135,7 +135,7 @@ export const BorrowList = () => {
     (async () => {
       let borrowList = [];
       await axios
-        .get(dns + "/borrow/" + user._id, {})
+        .get(dns + "/borrow/user?userId=" + user.id, {})
         .then(async (res) => {
           if (res.status == 200) {
             for (let i = 0; i < res.data.length; i++) {
@@ -144,7 +144,7 @@ export const BorrowList = () => {
                 await axios.get(dns + "/books/" + bookIds.join(","), {})
               ).data;
               let borrow = {
-                borrowId: res.data[i]._id,
+                borrowId: res.data[i].id,
                 b_date: res.data[i].borrow_date,
                 d_date: res.data[i].due_date,
                 late: res.data[i].late,

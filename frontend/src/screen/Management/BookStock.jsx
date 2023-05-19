@@ -4,7 +4,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import axios from 'axios';
-const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+import { v4 as uuidv4 } from 'uuid';
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const BookStock = () => {
   const [books, setBooks] = useState([])
   const toggleslide = () => {
@@ -33,7 +34,7 @@ const BookStock = () => {
   const [e_desc, sete_Desc] = useState("")
   const [e_chooseImage, sete_Image] = useState("")
   const [e_Authors, sete_Authors] = useState("")
-  const [e_id, sete_Id] = useState("")
+  const [eid, seteid] = useState("")
   //----------------------Edit Book----------------------//
 
   const handleBookTitle = (event) => {
@@ -51,7 +52,7 @@ const BookStock = () => {
   // Handle change in selection box
   useEffect(() => {
     if(selectedBook){
-      sete_Id(selectedBook._id)
+      seteid(selectedBook.id)
       sete_BookTitle(selectedBook.title)
       sete_BookLanguage(selectedBook.language)
       sete_BookType(selectedBook.genres.join(","))
@@ -116,7 +117,7 @@ const BookStock = () => {
   //เพิ่ม  Book
   const addBook = () => {
     const addThatBook = (image) =>{
-      let addData = JSON.stringify({ title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
+      let addData = JSON.stringify({id:uuidv4(), title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
       axios.post(dns + "/books", addData, {
         headers: {
           'Content-Type': 'application/json'
@@ -125,7 +126,7 @@ const BookStock = () => {
         console.log(res.status + " " + res.statusText)
         if(res.status == 200){
           const copyBooks = [...books]
-          copyBooks.push({ _id:res.data,title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
+          copyBooks.push({ id:res.data,title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
           setBooks(copyBooks)
           setBookTitle("")
           setBookLanguage("")
@@ -166,7 +167,7 @@ const BookStock = () => {
     //Update SelectedBook to db
     let updateData = JSON.stringify({title: e_bookTitle, language: e_bookLanguage, genres: e_bookType.split(","), image: imageUrls[0], quantity: parseInt(e_quantity), authors: e_Authors.split(","), desc: e_desc })
     console.log(updateData)
-    axios.put(dns+"/books/"+selectedBook._id, updateData, {
+    axios.put(dns+"/books/"+selectedBook.id, updateData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -175,14 +176,14 @@ const BookStock = () => {
   }
   //Delete Book
   const deleteBook = () => {
-    //Delete with selectedBook._id   in db
-    let deleteData = dns+"/books/"+selectedBook._id
+    //Delete with selectedBook.id   in db
+    let deleteData = dns+"/books/"+selectedBook.id
     console.log(deleteData)
-    axios.delete(dns+"/books/"+selectedBook._id, {
+    axios.delete(dns+"/books/"+selectedBook.id, {
     }).then((res) => console.log(res.status + " " + res.statusText))
 
 
-    let todelete = books.filter((e)=>e._id != selectedBook._id)
+    let todelete = books.filter((e)=>e.id != selectedBook.id)
     setBooks(todelete)
     setSelectedBook(todelete.length>0?todelete[0]:null)
   }
@@ -318,11 +319,11 @@ const BookStock = () => {
               id="combo-box-books"
               options={books}
               // renderOption={(props,option)=>{
-              //   return(<li {...props} key={option._id}>
-              //     {"(" + books.findIndex((e)=>e._id==option._id) + ") " + option.title + " x" + option.quantity}
+              //   return(<li {...props} key={option.id}>
+              //     {"(" + books.findIndex((e)=>e.id==option.id) + ") " + option.title + " x" + option.quantity}
               //   </li>)
               // }}
-              getOptionLabel={(option,index)=>"(" + books.findIndex((e)=>e._id==option._id) + ") " + option.title + " x" + option.quantity}
+              getOptionLabel={(option,index)=>"(" + books.findIndex((e)=>e.id==option.id) + ") " + option.title + " x" + option.quantity}
               value={selectedBook}
               onChange={(event, newValue) => {
                 setSelectedBook(newValue);

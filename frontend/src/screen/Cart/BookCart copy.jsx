@@ -8,7 +8,7 @@ import secureLocalStorage from "react-secure-storage";
 import {  useSelector } from "react-redux";
 import axios from "axios";
 
-const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 
 export const BookCart = () => {
     const location = useLocation()
@@ -43,27 +43,27 @@ export const BookCart = () => {
             let ddate = new Date()
             arr.forEach(element => {
                 for(let i=0;i<element.quantity;i++){
-                    booksId.push(element._id)
+                    booksId.push(element.id)
                 }
             });
             ddate.setDate(bdate.getDate()+7)
             let borrowBooks = {
                 status:"PENDING",
                 late:false,
-                userId:user._id,
+                userId:user.id,
                 booksId:booksId,
                 borrow_date:bdate.toISOString().slice(0,10),
                 due_date:ddate.toISOString().slice(0,10)
             }
             console.log(user, borrowBooks)
-            axios.post("http://localhost:8082/borrow-service/borrow", JSON.stringify(borrowBooks), {
+            axios.post(dns+"/borrow", JSON.stringify(borrowBooks), {
             headers: {
                 'Content-Type': 'application/json'
             }
             }).then((res) => {
                 console.log(res.status + " " + res.statusText + res.data)
                 let addPayment = {
-                    userId: user._id,
+                    userId: user.id,
                     reserveId: "",
                     status: "SUCCESS",
                     timestamp: ts.substring(0, 10) + " " + ts.substring(11, 19),

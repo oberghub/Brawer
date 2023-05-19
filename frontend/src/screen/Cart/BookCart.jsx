@@ -8,7 +8,7 @@ import secureLocalStorage from "react-secure-storage";
 import {  useSelector } from "react-redux";
 import axios from "axios";
 
-const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 
 export const BookCart = () => {
     const location = useLocation()
@@ -43,14 +43,14 @@ export const BookCart = () => {
             let ddate = new Date()
             arr.forEach(element => {
                 for(let i=0;i<element.quantity;i++){
-                    booksId.push(element._id)
+                    booksId.push(element.id)
                 }
             });
             ddate.setDate(bdate.getDate()+7)
             let borrowBooks = {
                 status:"PENDING",
                 late:false,
-                userId:user._id,
+                userId:user.id,
                 booksId:booksId,
                 borrow_date:bdate.toISOString().slice(0,10),
                 due_date:ddate.toISOString().slice(0,10)
@@ -63,15 +63,15 @@ export const BookCart = () => {
             }).then((res) => {
                 console.log(res.status + " " + res.statusText + res.data)
                 let addPayment = {
-                    userId: user._id,
+                    userId: user.id,
                     reserveId: "",
                     status: "SUCCESS",
                     timestamp: ts.substring(0, 10) + " " + ts.substring(11, 19),
                     price: 15,
-                    borrowId: res.data
+                    borrowId: res.data.id
                   }
                   console.log(addPayment)
-                  axios.post("http://localhost:8082/payment-service/payment", JSON.stringify(addPayment), {
+                  axios.post(dns + "/payment", JSON.stringify(addPayment), {
                     headers: {
                       'Content-Type': 'application/json'
                     }

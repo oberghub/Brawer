@@ -42,7 +42,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   //--- Google OAuth ---//
-  const CLIENT_ID = "657796919531-5h1omqe0i3dt1t6pkue7lin4rj7nd4tb.apps.googleusercontent.com"
+  const CLIENTid = "657796919531-5h1omqe0i3dt1t6pkue7lin4rj7nd4tb.apps.googleusercontent.com"
   const userCheck = () => {
     // console.log(store.getState().user_data.user)
     return store.getState().user_data.user;
@@ -66,7 +66,7 @@ function App() {
     return children;
   };
   return (
-    <GoogleOAuthProvider clientId={CLIENT_ID}>
+    <GoogleOAuthProvider clientId={CLIENTid}>
       <Provider store={store}>
         <div className="Gentium-R-font relative ">
           {/* navbar */}

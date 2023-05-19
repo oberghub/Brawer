@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios'
 import { useSelector } from 'react-redux';
 
-const dns = "http://ecs-alb-1093572598.us-east-1.elb.amazonaws.com"
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const BookingManage = () => {
   const user = useSelector((state) => state.user_data.user)
   const [myRoomHistory, setMyRoomHistory] = useState([])
@@ -52,7 +52,7 @@ const BookingManage = () => {
   };
   const nodupe = (arr = [])=>{
     return arr.reduce((acc,item)=>{
-      let index = acc.map(item => item._id).indexOf(item._id)
+      let index = acc.map(item => item.id).indexOf(item.id)
       if(index != -1){
         acc[index].qty++
       }else{
@@ -68,17 +68,17 @@ const BookingManage = () => {
     console.log(confirmState)
     if(confirmState == "Confirm"){
       let updateReserve = {
-        _id:selectedDetail.bookingId,
+        id:selectedDetail.bookingId,
         userId:selectedDetail.bookingBy,
         roomId:selectedDetail.roomId,
-        equipmentsId:selectedDetail.equipments.map(e=>e._id),
+        equipmentsId:selectedDetail.equipments.map(e=>e.id),
         reserveFrom:selectedDetail.timeRent.date+" "+selectedDetail.timeRent.timeStart,
         reserveTo:selectedDetail.timeRent.date+" "+selectedDetail.timeRent.timeEnd,
         timestamp:selectedDetail.timestamp,
         status:"APPROVED",
       }
       console.log(updateReserve)
-      axios.put("http://localhost:8082/reserve-service/reserve", JSON.stringify(updateReserve), {
+      axios.put(dns + "/reserve", JSON.stringify(updateReserve), {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -92,10 +92,10 @@ const BookingManage = () => {
       })
     }else if(confirmState == "Cancel"){
       (async()=>{
-        let payment = (await axios.get("http://localhost:8082/payment-service/payment/reserveId/"+selectedDetail.bookingId, {headers: {'Content-Type': 'application/json'}})).data
+        let payment = (await axios.get(dns + "/reserveById/"+selectedDetail.bookingId, {headers: {'Content-Type': 'application/json'}})).data
         payment.status = "REFUNDED"
         console.log(payment)
-        axios.put("http://localhost:8082/payment-service/payment", payment, {
+        axios.put(dns + "/payment", payment, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -108,17 +108,17 @@ const BookingManage = () => {
         }})
       })()
       let updateReserve = {
-        _id:selectedDetail.bookingId,
+        id:selectedDetail.bookingId,
         userId:selectedDetail.bookingBy,
         roomId:selectedDetail.roomId,
-        equipmentsId:selectedDetail.equipments.map(e=>e._id),
+        equipmentsId:selectedDetail.equipments.map(e=>e.id),
         reserveFrom:selectedDetail.timeRent.date+" "+selectedDetail.timeRent.timeStart,
         reserveTo:selectedDetail.timeRent.date+" "+selectedDetail.timeRent.timeEnd,
         timestamp:selectedDetail.timestamp,
         status:"CANCELLED",
       }
       console.log(updateReserve)
-      axios.put("http://localhost:8082/reserve-service/reserve", JSON.stringify(updateReserve), {
+      axios.put(dns + "/reserve", JSON.stringify(updateReserve), {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -152,7 +152,7 @@ const BookingManage = () => {
                     room = await (await axios.get(dns + "/workspace/"+res.data[i].roomId, {})).data
                     let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
                     let booking = {
-                        bookingId: res.data[i]._id,
+                        bookingId: res.data[i].id,
                         roomId: res.data[i].roomId,
                         roomName: room.room_name,
                         roomType: room.room_type,

@@ -19,7 +19,7 @@ export const Favourite = () => {
             newfavs.splice(index, 1)
         }
         let updateUser = {
-            _id: user._id,
+            id: user.id,
             role: user.role,
             name: user.name,
             email: user.email,
@@ -38,7 +38,7 @@ export const Favourite = () => {
         let requestBook = user.favouriteBooks
         console.log(requestBook, user)
         // console.log("http://localhost:8082/book-service/book/ids/" + requestBook.join(","))
-        if (requestBook.length > 0 && user._id != "") {
+        if (requestBook.length > 0 && user.id != "") {
             axios.get(dns + "/books/" + requestBook.join(","), {
             }).then((res) => {
                 setBookData(res.data)
@@ -84,7 +84,7 @@ export const Favourite = () => {
                                 <div className="w-full
                                                     h-auto
                                                     mt-5 pl-2 relative">
-                                    <BsFillBookmarkFill size={25} color={"gold"} className="cursor-pointer" onClick={() => { removeBookmark(book._id) }} />
+                                    <BsFillBookmarkFill size={25} color={"gold"} className="cursor-pointer" onClick={() => { removeBookmark(book.id) }} />
                                 </div>
                             </div>)}
                     </div>

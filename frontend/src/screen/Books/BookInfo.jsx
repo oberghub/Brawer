@@ -49,7 +49,7 @@ export const BookInfo = () => {
     const addBookmark = (bookid) =>{
         let newfavs = [...user.favouriteBooks,bookid]
         let updateUser = {
-            _id:user._id,
+            id:user.id,
             role:user.role,
             name:user.name,
             email:user.email,
@@ -70,7 +70,7 @@ export const BookInfo = () => {
             newfavs.splice(index, 1)
         }
         let updateUser = {
-            _id:user._id,
+            id:user.id,
             role:user.role,
             name:user.name,
             email:user.email,
@@ -132,9 +132,9 @@ export const BookInfo = () => {
                             {/* Bookmark icon */}
                             <div className="md:w-[20%] md:h-[50px] flex items-center">
                                 {user.favouriteBooks? 
-                                user.favouriteBooks.filter((e)=>e==location.state.item._id)[0]? 
-                                <BsFillBookmarkFill size={25} color={"gold"} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => { removeBookmark(location.state.item._id) }} />: 
-                                <BsBookmark size={25} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => { addBookmark(location.state.item._id) }} />
+                                user.favouriteBooks.filter((e)=>e==location.state.item.id)[0]? 
+                                <BsFillBookmarkFill size={25} color={"gold"} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => { removeBookmark(location.state.item.id) }} />: 
+                                <BsBookmark size={25} className="cursor-pointer ml-[1em] sm:ml-[2em]" onClick={() => { addBookmark(location.state.item.id) }} />
                                  :""} 
                             </div>
                         </div>

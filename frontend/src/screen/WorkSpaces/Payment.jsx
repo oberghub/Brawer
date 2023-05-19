@@ -22,7 +22,7 @@ const Payment = () => {
   const [resultRoom, setResultRoom] = useState({
     date: "",
     desc: "",
-    equipments: [{ name: "", price: 0, quantity: 1, _id: "", desc: "" }],
+    equipments: [{ name: "", price: 0, quantity: 1, id: "", desc: "" }],
     price: 0,
     room_capacity: [""],
     room_name: "",
@@ -32,7 +32,7 @@ const Payment = () => {
     time_end: "",
     time_rent: [],
     time_start: "",
-    _id: "",
+    id: "",
   });
   const [paymentMethod, setMethod] = useState([
     {
@@ -64,13 +64,13 @@ const Payment = () => {
     let arr = [];
     resultRoom.equipments.forEach((e) => {
       for (let i = 0; i < e.quantity; i++) {
-        arr.push(e._id);
+        arr.push(e.id);
       }
     });
     let ts = new Date().toISOString();
     let addReserve = {
-      userId: user._id,
-      roomId: resultRoom._id,
+      userId: user.id,
+      roomId: resultRoom.id,
       equipmentsId: arr,
       reserveFrom: resultRoom.date + " " + resultRoom.time_start + ":00",
       reserveTo: resultRoom.date + " " + resultRoom.time_end + ":00",
@@ -81,7 +81,7 @@ const Payment = () => {
     console.log(addReserve);
     axios
       .post(
-        dns + "/workspaces/" + resultRoom._id +"/rent-time-slot",
+        dns + "/workspaces/" + resultRoom.id +"/rent-time-slot",
         JSON.stringify(addReserve),
         headerConfig
       )
@@ -90,7 +90,7 @@ const Payment = () => {
         if (res.status == 200) {
           console.log(res.data);
           let addPayment = {
-            userId: user._id,
+            userId: user.id,
             reserveId: res.data,
             status: "SUCCESS",
             timestamp: ts.substring(0, 10) + " " + ts.substring(11, 19),

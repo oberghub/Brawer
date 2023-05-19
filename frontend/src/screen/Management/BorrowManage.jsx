@@ -112,13 +112,13 @@ const BorrowManage = () => {
     //* ใน borrow state ที่เป็น borrowing จะมีปุ่ม Return กดแล้วสถานะจะเปลี่ยนเป็น RETURNED และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
     if (confirmState == "accept") {
       let updateBorrow = {
-        _id: borrowId,
+        id: borrowId,
         status: "BORROWING",
         borrow_date: b_date,
         due_date: d_date,
         late: late,
         userId: userId,
-        booksId: books.map(e => e._id),
+        booksId: books.map(e => e.id),
       }
       console.log(updateBorrow)
       axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
@@ -152,13 +152,13 @@ const BorrowManage = () => {
         }})
       })()
       let updateBorrow = {
-        _id: borrowId,
+        id: borrowId,
         status: "CANCELLED",
         borrow_date: b_date,
         due_date: d_date,
         late: late,
         userId: userId,
-        booksId: books.map(e => e._id),
+        booksId: books.map(e => e.id),
       }
       console.log(updateBorrow)
       axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
@@ -178,13 +178,13 @@ const BorrowManage = () => {
       
     } else if (confirmState == "return") {
       let updateBorrow = {
-        _id: borrowId,
+        id: borrowId,
         status: "RETURNED",
         borrow_date: b_date,
         due_date: d_date,
         late: late,
         userId: userId,
-        booksId: books.map(e => e._id),
+        booksId: books.map(e => e.id),
       }
       console.log(updateBorrow)
       axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
@@ -216,7 +216,7 @@ const BorrowManage = () => {
   }
   const nodupe = (arr = []) => {
     return arr.reduce((acc, item) => {
-      let index = acc.map(item => item._id).indexOf(item._id)
+      let index = acc.map(item => item.id).indexOf(item.id)
       if (index != -1) {
         acc[index].qty++
       } else {
@@ -236,7 +236,7 @@ const BorrowManage = () => {
             let bookIds = [...res.data[i].booksId]
             let books = await (await axios.get("http://localhost:8082/book-service/book/ids/" + bookIds.join(","), {})).data
             let borrow = {
-              borrowId: res.data[i]._id,
+              borrowId: res.data[i].id,
               b_date: res.data[i].borrow_date,
               d_date: res.data[i].due_date,
               late: res.data[i].late,

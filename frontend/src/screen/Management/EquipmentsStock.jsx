@@ -4,6 +4,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const EquipmentsStock = () => {
   const [equipments, setEquipments] = useState([
   ])
@@ -50,9 +52,9 @@ const EquipmentsStock = () => {
     sete_Desc(event.target.value);
   };
   const addEquipments= () => {
-    let addItem = {name : title, price : price, desc : desc, quantity : quantity}
+    let addItem = {_id:uuidv4(),name : title, price : price, desc : desc, quantity : quantity}
     
-    axios.post("http://localhost:8082/equipment-service/equipment", addItem, {
+    axios.post(dns + "/equipment", addItem, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -60,7 +62,7 @@ const EquipmentsStock = () => {
       console.log(res.status + " " + res.statusText)
       if(res.status == 200){
         const copyEquipments = [...equipments]
-        copyEquipments.push({...addItem, _id:res.data})
+        copyEquipments.push({...addItem, id:res.data})
         setEquipments(copyEquipments)
         setTitle("")
         setPrice("")
@@ -77,7 +79,7 @@ const EquipmentsStock = () => {
     selectedEquipments.desc = e_desc
     selectedEquipments.quantity = e_quantity
     let updateItem = {_id : itemId, name : e_Title, price : e_Price, desc : e_desc, quantity : e_quantity}
-    axios.put("http://localhost:8082/equipment-service/equipment", updateItem, {
+    axios.put(dns + "/equipment", updateItem, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -85,12 +87,12 @@ const EquipmentsStock = () => {
 
   }
   const deleteEquipment = () => {
-    //Delete with selectedBook._id   in db
-    let deleteData = "http://localhost:8082/equipment-service/equipment/"+itemId
+    //Delete with selectedBook.id   in db
+    let deleteData = dns + "/equipment/"+itemId
     axios.delete(deleteData, {
     }).then((res) => console.log(res.status + " " + res.statusText))
 
-    let todelete = equipments.filter((e)=>e._id != itemId)
+    let todelete = equipments.filter((e)=>e.id != itemId)
     setEquipments(todelete)
     setSelectedEquipments(todelete.length>0?todelete[0]:null)
   }
@@ -99,7 +101,7 @@ const EquipmentsStock = () => {
     document.getElementById('menu-slide-toggle').classList.toggle('translate-x-[-100%]');
   }
   useEffect(() => {
-    const URL = "http://localhost:8082/equipment-service/equipment/all"
+    const URL = dns + "/equipments"
     axios.get(URL).then((res) => {
       console.log(res)
       setEquipments(res.data)
@@ -111,7 +113,7 @@ const EquipmentsStock = () => {
       sete_Title(selectedEquipments.name)
       sete_Price(selectedEquipments.price)
       sete_Desc(selectedEquipments.desc)
-      setItemId(selectedEquipments._id)
+      setItemId(selectedEquipments.id)
       setE_Quantity(selectedEquipments.quantity)
     }
   },[selectedEquipments])
@@ -215,7 +217,7 @@ const EquipmentsStock = () => {
               disablePortal
               id="combo-box-equipments"
               options={equipments}
-              getOptionLabel={(option)=>"(" + equipments.findIndex((e)=>e._id==option._id) + ") " + option.name}
+              getOptionLabel={(option)=>"(" + equipments.findIndex((e)=>e.id==option.id) + ") " + option.name}
               value={selectedEquipments}
               onChange={(event, newValue) => {
                 setSelectedEquipments(newValue);
@@ -223,7 +225,7 @@ const EquipmentsStock = () => {
                 // sete_Title(equipments[index].name)
                 // sete_Price(equipments[index].price)
                 // sete_Desc(equipments[index].desc)
-                // setItemId(equipments[index]._id)
+                // setItemId(equipments[index].id)
               }}
               renderInput={(params) => <TextField {...params} label="" />}
             />
