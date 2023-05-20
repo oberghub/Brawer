@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios'
 import { useSelector } from 'react-redux';
 const BorrowManage = () => {
+  const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
   const user = useSelector((state) => state.user_data.user)
   const [isLoaded, setIsLoaded] = useState(false)
   const [borrowList, setBorrowList] = useState([
@@ -110,7 +111,7 @@ const BorrowManage = () => {
     //กดดูรายละเอียดในแว่นขยาย
     //* ใน borrow state ที่เป็น pending จะมีปุ่ม accept และ cancel ปุ่ม accept คือเปลี่ยนสถานะให้เป็น borrowing ส่วนปุ่ม cancel คือเปลี่ยนสถานะเป็น cancel และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
     //* ใน borrow state ที่เป็น borrowing จะมีปุ่ม Return กดแล้วสถานะจะเปลี่ยนเป็น RETURNED และคืนจำนวนหนังสือที่ยืมไปให้ bookservice *//
-    if (confirmState == "accept") {
+    if (confirmState === "accept") {
       let updateBorrow = {
         id: borrowId,
         status: "BORROWING",
@@ -127,14 +128,14 @@ const BorrowManage = () => {
         }
       }).then((res) => {
         console.log(res.status + " " + res.statusText + " " + res.data)
-        if (res.status == 200) {
+        if (res.status === 200) {
           let selected = borrowList.filter((e) => e.borrowId == borrowId)[0]
           selected.status = "BORROWING"
           setBorrowList([...borrowList.filter((e) => e.borrowId != borrowId), selected])
 
         }
       })
-    } else if (confirmState == "cancel") {
+    } else if (confirmState === "cancel") {
       (async()=>{
         let payment = (await axios.get("http://localhost:8082/payment-service/payment/borrowId/"+borrowId, {headers: {'Content-Type': 'application/json'}})).data
         payment.status = "CANCELLEd"
@@ -145,7 +146,7 @@ const BorrowManage = () => {
         }
         }).then((res) => {
         console.log(res.status + " " + res.statusText + " "+res.data)
-        if(res.status == 200){
+        if(res.status === 200){
           // selectedDetail.status = "CANCELLED"
           // setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!=selectedDetail.bookingId), selectedDetail])
 
@@ -167,16 +168,16 @@ const BorrowManage = () => {
         }
       }).then((res) => {
         console.log(res.status + " " + res.statusText + " " + res.data)
-        if (res.status == 200) {
-          let selected = borrowList.filter((e) => e.borrowId == borrowId)[0]
+        if (res.status === 200) {
+          let selected = borrowList.filter((e) => e.borrowId === borrowId)[0]
           selected.status = "CANCELLED"
-          setBorrowList([...borrowList.filter((e) => e.borrowId != borrowId), selected])
+          setBorrowList([...borrowList.filter((e) => e.borrowId !== borrowId), selected])
 
         }
       })
 
       
-    } else if (confirmState == "return") {
+    } else if (confirmState === "return") {
       let updateBorrow = {
         id: borrowId,
         status: "RETURNED",
@@ -217,7 +218,7 @@ const BorrowManage = () => {
   const nodupe = (arr = []) => {
     return arr.reduce((acc, item) => {
       let index = acc.map(item => item.id).indexOf(item.id)
-      if (index != -1) {
+      if (index !== -1) {
         acc[index].qty++
       } else {
         acc.push({ ...item, qty: 1 })
@@ -229,12 +230,13 @@ const BorrowManage = () => {
   useEffect(() => {
     (async () => {
       let borrowList = []
-      await axios.get("http://localhost:8082/borrow-service/borrow/all", {
+      await axios.get(`${dns}/borrow`, {
       }).then(async (res) => {
-        if (res.status == 200) {
+        if (res.status === 200) {
           for (let i = 0; i < res.data.length; i++) {
             let bookIds = [...res.data[i].booksId]
-            let books = await (await axios.get("http://localhost:8082/book-service/book/ids/" + bookIds.join(","), {})).data
+            //ต้องมาแก้นะ
+            // let books = await (await axios.get("http://localhost:8082/book-service/book/ids/" + bookIds.join(","), {})).data
             let borrow = {
               borrowId: res.data[i].id,
               b_date: res.data[i].borrow_date,

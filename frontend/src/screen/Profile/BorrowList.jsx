@@ -120,24 +120,25 @@ export const BorrowList = () => {
         console.log(res.status + " " + res.statusText + " " + res.data)
       );
   };
-  const nodupe = (arr = []) => {
-    return arr.reduce((acc, item) => {
+  const nodupe = (arr) => {
+    let a = arr.reduce((acc, item) => {
       let index = acc.map((item) => item.id).indexOf(item.id);
-      if (index != -1) {
+      if (index !== -1) {
         acc[index].qty++;
       } else {
         acc.push({ ...item, qty: 1 });
       }
       return acc;
     }, []);
+    return a
   };
   useEffect(() => {
     (async () => {
       let borrowList = [];
       await axios
-        .get(dns + "/borrow/user?userId=" + user.id, {})
+        .get(dns + "/borrow/user/" + user.id, {})
         .then(async (res) => {
-          if (res.status == 200) {
+          if (res.status === 200) {
             for (let i = 0; i < res.data.length; i++) {
               let bookIds = [...res.data[i].booksId];
               let books = await (
@@ -258,7 +259,7 @@ export const BorrowList = () => {
                   <div className="flex gap-5 overflow-x-scroll">
                     {paymentMethod.map((item, index) => (
                       <>
-                        {index == selectPaymentMethod ? (
+                        {index === selectPaymentMethod ? (
                           <div
                             onClick={() => {
                               setSelectPayment(index);
@@ -340,9 +341,9 @@ export const BorrowList = () => {
                 <div className="hidden lg:block lg:absolute right-0">
                   <p>
                     Total :{" "}
-                    {nodupe(item.books)
+                    {/* {nodupe(item.books)
                       .map((item) => item.qty)
-                      .reduce((a, b) => a + b)}{" "}
+                      .reduce((a, b) => a + b)}{" "} */}
                     ea
                   </p>
                 </div>
@@ -359,9 +360,9 @@ export const BorrowList = () => {
                 <div className="lg:hidden">
                   <p>
                     Total :{" "}
-                    {nodupe(item.books)
+                    {/* {nodupe(item.books)
                       .map((item) => item.qty)
-                      .reduce((a, b) => a + b)}{" "}
+                      .reduce((a, b) => a + b)}{" "} */}
                     ea
                   </p>
                 </div>
@@ -396,7 +397,7 @@ export const BorrowList = () => {
                 </div>
               </div>
             </div>
-            {nodupe(item.books).map((books, index) => (
+            {/* {nodupe(item.books).map((books, index) => (
               <>
                 <div className="w-full sm:h-auto bg-white drop-shadow min-[450px]:flex mt-3 p-0">
                   <div className="w-auto">
@@ -414,7 +415,7 @@ export const BorrowList = () => {
                   </div>
                 </div>
               </>
-            ))}
+            ))} */}
           </div>
         </>
       ))}

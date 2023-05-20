@@ -124,7 +124,7 @@ const BookStock = () => {
         }
       }).then((res) => {
         console.log(res.status + " " + res.statusText)
-        if(res.status == 200){
+        if(res.status === 200){
           const copyBooks = [...books]
           copyBooks.push({ id:res.data,title: bookTitle, language: bookLanguage, genres: bookType.split(","), image: image, quantity: quantity, authors: authors.split(","), desc: desc })
           setBooks(copyBooks)
@@ -345,7 +345,7 @@ const BookStock = () => {
           <div className="w-full lg:h-[550px] lg:grid grid-rows-3 grid-flow-col gap-5 mt-[3em]">
             <div className="w-full row-span-3">
               {imageUrls.map(item => 
-                <img src={item} className="w-[60%] h-auto cursor-pointer m-auto" alt='book_image' />
+                <img key={item} src={item} className="w-[60%] h-auto cursor-pointer m-auto" alt='book_image' />
               )}
               <div className="w-full m-auto flex items-center justify-center">
                 <input className='mt-5' type={"file"} onChange={handleE_Image} />

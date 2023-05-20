@@ -9,26 +9,31 @@ export const Book = () => {
     const navigate = useNavigate()
     const user = useSelector((state) => state.user_data.user)
     const dispatch = useDispatch()
-
+    const headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin' : "*"
+    }
     //Get Data When First Time Render
     const [showBooks, setShowBooks] = useState([]) //เอาไว้ show ข้อมูลในหน้าเว็บ
     const [isLoaded, setIsLoaded] = useState(false)
     const addBookmark = (bookid) =>{
 
         let newfavs = [...user.favouriteBooks,bookid]
+        console.log(newfavs);
         let updateUser = {
             id:user.id,
             role:user.role,
             name:user.name,
             email:user.email,
-            favouriteBooks:newfavs
+            favouriteBooks:newfavs,
+            imageUrl:user.imageUrl
         }
         console.log(user, updateUser)
-        axios.post(dns + "/users", JSON.stringify(updateUser), {
+        axios.post("https://fhp9el40di.execute-api.us-east-1.amazonaws.com/dev/add", JSON.stringify(updateUser), {
         headers: {
             'Content-Type': 'application/json'
         }
-        }).then((res) => {console.log(res.status + " " + res.statusText)})
+        }).then((res) => {console.log(res)})
         dispatch(userdata({...user,favouriteBooks:newfavs}))
     }
     const removeBookmark = (bookid) =>{
@@ -49,12 +54,15 @@ export const Book = () => {
         headers: {
             'Content-Type': 'application/json'
         }
-        }).then((res) => {console.log(res.status + " " + res.statusText)})
-        dispatch(userdata({...user,favouriteBooks:newfavs}))
+        }).then((res) => {console.log(res.status + " " + res.statusText)
+            dispatch(userdata({updateUser}))
+        })
         
     }
     useEffect(() => {
         axios.get(dns + "/books", {
+        }, {
+            headers: headers
         }).then((res) => {
             setShowBooks([...res.data])
             setIsLoaded(true)

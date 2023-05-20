@@ -11,6 +11,7 @@ import secureLocalStorage from "react-secure-storage";
 import { setLoaded, userdata } from "../userSlice";
 import axios from "axios";
 import userService from "../userService";
+import harry from "../local_image/harry.png"
 
 // new code //
 import { googleLogout, hasGrantedAllScopesGoogle, useGoogleLogin } from "@react-oauth/google";
@@ -342,7 +343,7 @@ export const MyNavbar = () => {
                   className="mt-3 lg:hidden flex w-[100%] h-[60px] items-center"
                 >
                   <img
-                    src={acc.picture}
+                    src={acc.picture || harry}
                     className="rounded-full w-[40px] mr-3"
                     alt="profile-picture"
                   />
@@ -452,12 +453,12 @@ export const MyNavbar = () => {
                   }}
                   className="flex items-center"
                 >
+                  <p>{acc.name}</p>
                   <img
-                    src={acc.picture}
-                    className="rounded-full w-[40px] mr-3"
+                    src={acc.picture || harry}
+                    className="rounded-full w-[40px] ml-3"
                     alt="profile-picture"
                   />
-                  <p>{acc.name}</p>
                 </div>
               )}
               {/* ถ้ามีการ Add Item เข้า Cart จะขึ้นตุ่มแดงๆมีเลข */}

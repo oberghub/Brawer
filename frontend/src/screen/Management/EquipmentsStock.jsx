@@ -52,7 +52,7 @@ const EquipmentsStock = () => {
     sete_Desc(event.target.value);
   };
   const addEquipments= () => {
-    let addItem = {_id:uuidv4(),name : title, price : price, desc : desc, quantity : quantity}
+    let addItem = {id:uuidv4(),name : title, price : price, desc : desc, quantity : quantity}
     
     axios.post(dns + "/equipment", addItem, {
       headers: {
@@ -60,7 +60,7 @@ const EquipmentsStock = () => {
       }
     }).then((res) => {
       console.log(res.status + " " + res.statusText)
-      if(res.status == 200){
+      if(res.status === 200){
         const copyEquipments = [...equipments]
         copyEquipments.push({...addItem, id:res.data})
         setEquipments(copyEquipments)
@@ -78,8 +78,8 @@ const EquipmentsStock = () => {
     selectedEquipments.price = e_Price
     selectedEquipments.desc = e_desc
     selectedEquipments.quantity = e_quantity
-    let updateItem = {_id : itemId, name : e_Title, price : e_Price, desc : e_desc, quantity : e_quantity}
-    axios.put(dns + "/equipment", updateItem, {
+    let updateItem = {id : itemId, name : e_Title, price : e_Price, desc : e_desc, quantity : e_quantity}
+    axios.put(dns + "/equipment/" + itemId, updateItem, {
       headers: {
         'Content-Type': 'application/json'
       }

@@ -52,7 +52,7 @@ const BookingHistory = () => {
     const [selectDetail, setSelectDetail] = useState(null)
     const [isLoaded, setIsLoaded] = useState(false)
     const seeDetail = (index) => {
-        if (selectDetail == index) {
+        if (selectDetail === index) {
             setSelectDetail(null)
         }
         else {
@@ -62,7 +62,7 @@ const BookingHistory = () => {
     const nodupe = (arr = [])=>{
         return arr.reduce((acc,item)=>{
           let index = acc.map(item => item.id).indexOf(item.id)
-          if(index != -1){
+          if(index !== -1){
             acc[index].qty++
           }else{
             acc.push({...item,qty:1})
@@ -74,16 +74,19 @@ const BookingHistory = () => {
     useEffect( ()=>{
         (async()=>{
             let bookingList = []
-            await axios.get("http://localhost:8082/reserve-service/reserve/user/"+user.id, {
+            await axios.get(`${dns}/userReserves/${user.id}`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             }).then(async (res) => {
-                if(res.status == 200){
+                if(res.status === 200){
                     for(let i=0;i<res.data.length;i++){
                         let equiments = []
                         let room = {}
                         
                         let requestEqui = res.data[i].equipmentsId
-                        equiments =  await (await axios.get("http://localhost:8082/equipment-service/equipment/ids/"+requestEqui.join(","), {})).data
-                        room = await (await axios.get("http://localhost:8082/workspace-service/workspace/"+res.data[i].roomId, {})).data
+                        // equiments =  await (await axios.get("http://localhost:8082/equipment-service/equipment/ids/"+requestEqui.join(","), {})).data
+                        room = await (await axios.get(`${dns}/workspaces/${res.data[i].roomId}`, {})).data
                         let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
                         let booking = {
                             bookingId: res.data[i].id,

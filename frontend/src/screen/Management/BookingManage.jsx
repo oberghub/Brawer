@@ -28,6 +28,7 @@ const BookingManage = () => {
   const [bookingBy, setBookingBy] = useState()
   const [sumPrice, setSumPrice] = useState()
   const [status, setStatus] = useState()
+
   const seeADetail = (data) => {
     setBookingId(data.bookingId)
     setRoomId(data.roomId)
@@ -84,13 +85,13 @@ const BookingManage = () => {
         }
       }).then((res) => {
         console.log(res.status + " " + res.statusText + " "+res.data)
-        if(res.status == 200){
+        if(res.status === 200){
           console.log(myRoomHistory)
           selectedDetail.status = "APPROVED"
-          setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!=selectedDetail.bookingId), selectedDetail])
+          setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!==selectedDetail.bookingId), selectedDetail])
         }
       })
-    }else if(confirmState == "Cancel"){
+    }else if(confirmState === "Cancel"){
       (async()=>{
         let payment = (await axios.get(dns + "/reserveById/"+selectedDetail.bookingId, {headers: {'Content-Type': 'application/json'}})).data
         payment.status = "REFUNDED"
@@ -101,7 +102,7 @@ const BookingManage = () => {
         }
         }).then((res) => {
         console.log(res.status + " " + res.statusText + " "+res.data)
-        if(res.status == 200){
+        if(res.status === 200){
           // selectedDetail.status = "CANCELLED"
           // setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!=selectedDetail.bookingId), selectedDetail])
 
@@ -124,9 +125,9 @@ const BookingManage = () => {
         }
       }).then((res) => {
         console.log(res.status + " " + res.statusText + " "+res.data)
-        if(res.status == 200){
+        if(res.status === 200){
           selectedDetail.status = "CANCELLED"
-          setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!=selectedDetail.bookingId), selectedDetail])
+          setMyRoomHistory([...myRoomHistory.filter((e)=>e.bookingId!==selectedDetail.bookingId), selectedDetail])
 
         }
       })
@@ -140,16 +141,25 @@ const BookingManage = () => {
   useEffect( ()=>{
     (async()=>{
         let bookingList = []
-        await axios.get(dns + "/workspaces", {
+        await axios.get(`${dns}/reserves`, {
         }).then(async (res) => {
-            if(res.status == 200){
+            if(res.status === 200){
                 for(let i=0;i<res.data.length;i++){
                     let equiments = []
                     let room = {}
                     
                     let requestEqui = res.data[i].equipmentsId
-                    equiments =  await (await axios.get("/equipment/"+requestEqui.join(","), {})).data
-                    room = await (await axios.get(dns + "/workspace/"+res.data[i].roomId, {})).data
+
+                    //ยังไม่เสร็จดี
+                    // for(let i=0;i<requestEqui.length;i++){
+                    //   equiments.push(await (await axios.get(`${dns}/equipment/${requestEqui[i]}`, {
+                    //     headers: {
+                    //       'Content-Type': 'application/json'
+                    //     }
+                    //   })).data)
+                    // }
+                    // equiments =  await (await axios.get(dns+"/equipment/?ids="+requestEqui.join(","), {})).data
+                    room = await (await axios.get(dns + "/workspaces/"+res.data[i].roomId, {})).data
                     let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
                     let booking = {
                         bookingId: res.data[i].id,
@@ -166,6 +176,7 @@ const BookingManage = () => {
                         sumPrice:sum,
                         timestamp:res.data[i].timestamp
                     }
+                    equiments = []
                     bookingList.push(booking)
                 }
                 
@@ -271,7 +282,7 @@ const BookingManage = () => {
                     :
                     <>
                       {nodupe(selectedDetail.equipments).map(item => <>
-                        <div className='indent-5'>
+                        <div className='indent-5' key={item}>
                           <div className='w-full text-lg sm:text-xl flex relative'>
                             <p className='Gentium-B-font'>- {item.name}</p>
                             <p className='absolute right-[3%]'>x{item.qty} : {item.price * item.qty} THB</p>
@@ -334,10 +345,10 @@ const BookingManage = () => {
           </thead>
           <tbody className='text-xl'>
             {myRoomHistory.map((item, index) =>
-              <tr className='h-[2.5em]' style={{ backgroundColor: index % 2 == 0 ? "#2F5D62" : "white", color: index % 2 == 0 ? 'white' : 'black' }}>
+              <tr key={item} className='h-[2.5em]' style={{ backgroundColor: index % 2 === 0 ? "#2F5D62" : "white", color: index % 2 === 0 ? 'white' : 'black' }}>
                 <td>{item.bookingId}</td>
                 <td>{item.bookingBy}</td>
-                <td className='Gentium-B-font' style={{color : item.status === 'CANCELLED' ? 'red' : index % 2 == 0 ? 'white' : 'black'}}>{item.status}</td>
+                <td className='Gentium-B-font' style={{color : item.status === 'CANCELLED' ? 'red' : index % 2 === 0 ? 'white' : 'black'}}>{item.status}</td>
                 <td className='Gentium-R-font'>
                   <div className='flex items-center justify-center'>
                     <AiOutlineSearch size={30} className="cursor-pointer" onClick={() => {

@@ -121,7 +121,7 @@ const WorkSpaceManage = () => {
     console.log(selectedWorkSpace)
     console.log(rooms)
     let updateData = JSON.stringify({ id:selectedWorkSpace.id,room_name: e_roomName, room_type: e_roomType, room_capacity: e_roomCapacity.split(","), price : e_price, desc : e_desc, time_rent: [], status : selectedWorkSpace.status })
-    axios.put(dns + "/workspace", updateData, {
+    axios.put(dns + "/workspace/"+ selectedWorkSpace.id, updateData, {
       headers: {
         'Content-Type': 'application/json'
       }
