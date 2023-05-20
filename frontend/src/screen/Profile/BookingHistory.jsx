@@ -74,7 +74,7 @@ const BookingHistory = () => {
     useEffect( ()=>{
         (async()=>{
             let bookingList = []
-            await axios.get("http://localhost:8082/reserve-service/reserve/user/"+user.id, {
+            await axios.get(dns + "/userReserves/"+user.id, {
             }).then(async (res) => {
                 if(res.status == 200){
                     for(let i=0;i<res.data.length;i++){

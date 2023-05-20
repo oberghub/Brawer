@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from 'axios'
 import { useSelector } from 'react-redux';
+const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const BorrowManage = () => {
   const user = useSelector((state) => state.user_data.user)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -229,7 +230,7 @@ const BorrowManage = () => {
   useEffect(() => {
     (async () => {
       let borrowList = []
-      await axios.get("http://localhost:8082/borrow-service/borrow/all", {
+      await axios.get(dns + "/borrow", {
       }).then(async (res) => {
         if (res.status == 200) {
           for (let i = 0; i < res.data.length; i++) {

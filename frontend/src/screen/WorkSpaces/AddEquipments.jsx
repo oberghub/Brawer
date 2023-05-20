@@ -94,7 +94,7 @@ const AddEquipments = () => {
 
     //Get Data When First Time Render
     useEffect(() => { 
-        axios.get(dns + "/equipment", headerConfig).then((res) => {
+        axios.get(dns + "/equipments", headerConfig).then((res) => {
             setEquipments(res.data)
             console.log(res.data)
             let room = JSON.parse(localStorage.getItem("myRoom"))
