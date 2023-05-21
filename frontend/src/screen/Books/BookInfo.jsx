@@ -49,14 +49,11 @@ export const BookInfo = () => {
     const addBookmark = (bookid) =>{
         let newfavs = [...user.favouriteBooks,bookid]
         let updateUser = {
-            id:user.id,
-            role:user.role,
-            name:user.name,
-            email:user.email,
-            favouriteBooks:newfavs
+            userId:user.id,
+            bookId:bookid
         }
         console.log(user, updateUser)
-        axios.post(dns + "/users", JSON.stringify(updateUser), {
+        axios.post("https://fhp9el40di.execute-api.us-east-1.amazonaws.com/dev/fav", JSON.stringify(updateUser), {
         headers: {
             'Content-Type': 'application/json'
         }

@@ -39,14 +39,27 @@ export const Favourite = () => {
         console.log(requestBook, user)
         // console.log("http://localhost:8082/book-service/book/ids/" + requestBook.join(","))
         if (requestBook.length > 0 && user.id != "") {
-            axios.get(dns + "/books/" + requestBook.join(","), {
-            }).then((res) => {
-                setBookData(res.data)
-                setIsLoaded(true)
-            }).catch((e) => console.log(e))
+            let books = []
+            for (let bookid of requestBook){
+                axios.get(dns + "/books/" + bookid, {
+                }).then((res) => {
+                    books.push(res.data)
+                    
+                }).catch((e) => console.log(e))
+            }
+            setBookData(books)
+            setIsLoaded(true)
+            // axios.get(dns + "/books/" + requestBook.join(","), {
+            // }).then((res) => {
+            //     // setBookData(res.data)
+            //     setBookData([])
+            //     console.log(res.data)
+            //     setIsLoaded(true)
+            // }).catch((e) => console.log(e))
         } else {
             setBookData([])
         }
+        console.log(BookData)
     }, [user])
 
     // const getFavBooks = () => {
