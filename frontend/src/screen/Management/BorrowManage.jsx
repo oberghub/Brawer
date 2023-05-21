@@ -237,6 +237,12 @@ const BorrowManage = () => {
           for (let i = 0; i < res.data.length; i++) {
             let bookIds = [...res.data[i].booksId]
             //ต้องมาแก้นะ
+            let books = []
+            for(let bookid of bookIds){
+              let book = await (await axios.get(dns + "/books/"+bookid)).data
+              books.push(book)
+            }
+            console.log(books)
             // let books = await (await axios.get("http://localhost:8082/book-service/book/ids/" + bookIds.join(","), {})).data
             let borrow = {
               borrowId: res.data[i].id,

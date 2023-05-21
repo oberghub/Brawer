@@ -141,9 +141,15 @@ export const BorrowList = () => {
           if (res.status === 200) {
             for (let i = 0; i < res.data.length; i++) {
               let bookIds = [...res.data[i].booksId];
-              let books = await (
-                await axios.get(dns + "/books/" + bookIds.join(","), {})
-              ).data;
+              let books = []
+              for(let bookid of bookIds){
+                let book = await (await axios.get(dns + "/books/"+bookid)).data
+                books.push(book)
+              }
+              console.log(books)
+              // let books = await (
+              //   await axios.get(dns + "/books/" + bookIds.join(","), {})
+              // ).data;
               let borrow = {
                 borrowId: res.data[i].id,
                 b_date: res.data[i].borrow_date,
@@ -341,9 +347,9 @@ export const BorrowList = () => {
                 <div className="hidden lg:block lg:absolute right-0">
                   <p>
                     Total :{" "}
-                    {/* {nodupe(item.books)
+                    {nodupe(item.books)
                       .map((item) => item.qty)
-                      .reduce((a, b) => a + b)}{" "} */}
+                      .reduce((a, b) => a + b)}{" "}
                     ea
                   </p>
                 </div>
@@ -360,9 +366,9 @@ export const BorrowList = () => {
                 <div className="lg:hidden">
                   <p>
                     Total :{" "}
-                    {/* {nodupe(item.books)
+                    {nodupe(item.books)
                       .map((item) => item.qty)
-                      .reduce((a, b) => a + b)}{" "} */}
+                      .reduce((a, b) => a + b)}{" "}
                     ea
                   </p>
                 </div>
@@ -397,7 +403,7 @@ export const BorrowList = () => {
                 </div>
               </div>
             </div>
-            {/* {nodupe(item.books).map((books, index) => (
+            {nodupe(item.books).map((books, index) => (
               <>
                 <div className="w-full sm:h-auto bg-white drop-shadow min-[450px]:flex mt-3 p-0">
                   <div className="w-auto">
@@ -415,7 +421,7 @@ export const BorrowList = () => {
                   </div>
                 </div>
               </>
-            ))} */}
+            ))}
           </div>
         </>
       ))}

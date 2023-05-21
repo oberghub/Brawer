@@ -159,6 +159,11 @@ const BookingManage = () => {
                     //   })).data)
                     // }
                     // equiments =  await (await axios.get(dns+"/equipment/?ids="+requestEqui.join(","), {})).data
+                    for(let equiid of requestEqui){
+                      let equiment = await (await axios.get(dns + "/equipment/"+equiid)).data
+                      equiments.push(equiment)
+                    }
+                    console.log(equiments)
                     room = await (await axios.get(dns + "/workspaces/"+res.data[i].roomId, {})).data
                     let sum = room.price*(parseInt(res.data[i].reserveTo.substring(11,19))-parseInt(res.data[i].reserveFrom.substring(11,19)))
                     let booking = {
