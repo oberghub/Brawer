@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import axios from 'axios'
 import { useSelector } from 'react-redux';
-const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const BorrowManage = () => {
   const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
   const user = useSelector((state) => state.user_data.user)
@@ -123,7 +122,7 @@ const BorrowManage = () => {
         booksId: books.map(e => e.id),
       }
       console.log(updateBorrow)
-      axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
+      axios.put(`${dns}/borrow/${borrowId}`, JSON.stringify(updateBorrow), {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -138,10 +137,10 @@ const BorrowManage = () => {
       })
     } else if (confirmState === "cancel") {
       (async()=>{
-        let payment = (await axios.get("http://localhost:8082/payment-service/payment/borrowId/"+borrowId, {headers: {'Content-Type': 'application/json'}})).data
-        payment.status = "CANCELLEd"
+        let payment = (await axios.get(`${dns}/paymentBorrowId/${borrowId}`, {headers: {'Content-Type': 'application/json'}})).data
+        payment.status = "CANCELLED"
         console.log(payment)
-        axios.put("http://localhost:8082/payment-service/payment", payment, {
+        axios.put(`${dns}/payment/${payment.id}`, payment, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -163,7 +162,7 @@ const BorrowManage = () => {
         booksId: books.map(e => e.id),
       }
       console.log(updateBorrow)
-      axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
+      axios.put(`${dns}/borrow/${borrowId}`, JSON.stringify(updateBorrow), {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -189,13 +188,13 @@ const BorrowManage = () => {
         booksId: books.map(e => e.id),
       }
       console.log(updateBorrow)
-      axios.put("http://localhost:8082/borrow-service/borrow", JSON.stringify(updateBorrow), {
+      axios.put(`${dns}/borrow/${borrowId}`, JSON.stringify(updateBorrow), {
         headers: {
           'Content-Type': 'application/json'
         }
       }).then((res) => {
         console.log(res.status + " " + res.statusText + " " + res.data)
-        if (res.status == 200) {
+        if (res.status === 200) {
           let selected = borrowList.filter((e) => e.borrowId == borrowId)[0]
           selected.status = "RETURNED"
           setBorrowList([...borrowList.filter((e) => e.borrowId != borrowId), selected])
@@ -242,7 +241,7 @@ const BorrowManage = () => {
               let book = await (await axios.get(dns + "/books/"+bookid)).data
               books.push(book)
             }
-            console.log(books)
+            // console.log(books)
             // let books = await (await axios.get("http://localhost:8082/book-service/book/ids/" + bookIds.join(","), {})).data
             let borrow = {
               borrowId: res.data[i].id,

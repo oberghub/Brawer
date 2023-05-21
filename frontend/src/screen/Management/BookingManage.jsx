@@ -67,7 +67,7 @@ const BookingManage = () => {
     //กด PENDING สถานะจะเปลี่ยนเป็น APPROVED (จองแล้ว) เปลี่ยนสถานะpaymentที่ยกเลิกเป็น REFUND
     //กด CANCEL สถานะจะเปลี่ยนเป็น CANCEL //ลบรอบเวลาที่ยกเลิกออกจาก database
     console.log(confirmState)
-    if(confirmState == "Confirm"){
+    if(confirmState === "Confirm"){
       let updateReserve = {
         id:selectedDetail.bookingId,
         userId:selectedDetail.bookingBy,
@@ -79,7 +79,7 @@ const BookingManage = () => {
         status:"APPROVED",
       }
       console.log(updateReserve)
-      axios.put(dns + "/reserve", JSON.stringify(updateReserve), {
+      axios.put(dns + "/reserve", updateReserve, {
         headers: {
           'Content-Type': 'application/json'
         }

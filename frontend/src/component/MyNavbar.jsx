@@ -52,7 +52,7 @@ export const MyNavbar = () => {
   },[])
   useEffect(() => {
     if(credential){
-      console.log(credential);
+      // console.log(credential);
       axios
       .get(
         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${credential.access_token}`,
@@ -66,9 +66,9 @@ export const MyNavbar = () => {
       .then(async (res) => {
         setAcc(res.data);
         
-        console.log(res.data.email);
+        // console.log(res.data.email);
         const existingUser = await userService.getUserData(res.data.email);
-        console.log(existingUser)
+        // console.log(existingUser)
         if (existingUser) {
             // Set the user data in the state using the existing data from DynamoDB
             setAcc(existingUser);
@@ -182,7 +182,7 @@ export const MyNavbar = () => {
           <p
             className="text-2xl Gentium-B-font"
             onClick={() => {
-              console.log(acc);
+              // console.log(acc);
             }}
           >
             Menu
@@ -375,7 +375,7 @@ export const MyNavbar = () => {
             {/* Nav title */}
             <div
               onClick={() => {
-                console.log(acc);
+                // console.log(acc);
               }}
               className=" mr-8 lg:mr-10"
             >

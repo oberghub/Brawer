@@ -126,13 +126,13 @@ const AddEquipments = () => {
                 <>
                     <div className="w-full md:w-auto absolute top:0 md:fixed md:inset-0 bg-black bg-opacity-25 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => { setIsActiveModal(false) }}>
                         <div className="w-full md:w-auto slide-down-fade bg-white p-10 rounded flex items-center justify-center">
-                            <div className="w-full md:w-auto h-[650px]">
+                            <div className="w-full md:w-auto h-[650px]" style={{overflowY : "scroll"}}>
                                 {/* พอเลือกของแล้ว ของใน modal จะหายไป ถ้าลบของ ของจะกลับมาอยู่ใน modal อีกครั้ง */}
                                 <div className='flex relative'>
                                     <p className='text-2xl sm:text-3xl'>Click to choose an item</p>
                                     <p className='text-3xl absolute right-[2%] cursor-pointer'>X</p>
                                 </div>
-                                {equipments.map((item, index) =>{
+                                {equipments.map((item, index) => {
                                     if(item.quantity > 0){
                                         return(<>
                                             <div key={index} onClick={() => { addItem(item, index) }} className='bg-[#FAFAFA] drop-shadow md:w-[500px] md:h-[100px] p-5 my-5 cursor-pointer'>

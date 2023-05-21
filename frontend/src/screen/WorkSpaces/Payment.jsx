@@ -14,7 +14,7 @@ const dns = "https://2igwz38ku9.execute-api.us-east-1.amazonaws.com/dev"
 const headerConfig = {
   headers: {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin" : "*"
+    // "Access-Control-Allow-Origin" : "*"
   },
 };
 const Payment = () => {
@@ -81,17 +81,16 @@ const Payment = () => {
     console.log(addReserve);
     axios
       .post(
-        dns + "/workspaces/" + resultRoom.id +"/rent-time-slot",
-        JSON.stringify(addReserve),
+        dns + "/reserve",
+        addReserve,
         headerConfig
       )
       .then((res) => {
         console.log(res.status + " " + res.statusText);
-        if (res.status == 200) {
-          console.log(res.data);
+        if (res.status === 200) {
           let addPayment = {
             userId: user.id,
-            reserveId: res.data,
+            reserveId: res.data.id,
             status: "SUCCESS",
             timestamp: ts.substring(0, 10) + " " + ts.substring(11, 19),
             price:
@@ -102,6 +101,11 @@ const Payment = () => {
                 : resultRoom.sumPrice,
             borrowId: null,
           };
+          axios.post(`${dns}/payment`, addPayment,
+          {headers: {
+            'Content-Type': 'application/json'
+          }}
+          )
         }
       });
   };
